@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FastAPI Docs Voice Agent</title>
+<style>
+  :root {
+    --bg: #f7f7f5; --panel: #ffffff; --ink: #1d1d1b; --muted: #6b6b66; --line: #e4e4df;
+    --accent: #0f766e; --accent-ink: #ffffff; --user: #eef6f5; --warn: #b45309; --err: #b91c1c;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #141413; --panel: #1d1d1b; --ink: #ecece8; --muted: #9c9c95; --line: #2e2e2b;
+            --accent: #2dd4bf; --accent-ink: #0b1f1d; --user: #17302d; --warn: #f59e0b; --err: #f87171; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { padding: 20px 24px 8px; }
+  h1 { font-size: 20px; margin: 0; }
+  header p { margin: 4px 0 0; color: var(--muted); }
+  main { display: grid; grid-template-columns: minmax(280px, 1fr) minmax(320px, 1.3fr); gap: 16px; padding: 16px 24px 24px; }
+  @media (max-width: 820px) { main { grid-template-columns: 1fr; padding: 12px 16px; } header { padding: 16px 16px 4px; } }
+  section { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; min-height: 420px; display: flex; flex-direction: column; }
+  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 12px; }
+  .controls { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+  button { background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 999px; padding: 10px 20px; font-weight: 600; cursor: pointer; }
+  button[disabled] { opacity: .5; cursor: default; }
+  #status { color: var(--muted); font-size: 14px; }
+  #transcript, #trace { overflow-y: auto; flex: 1; }
+  .msg { padding: 8px 12px; border-radius: 10px; margin: 6px 0; max-width: 92%; }
+  .msg.user { background: var(--user); margin-left: auto; }
+  .msg.ai { border: 1px solid var(--line); }
+  .turn { border-left: 2px solid var(--line); padding: 2px 0 6px 12px; margin-bottom: 14px; }
+  .ev { display: grid; grid-template-columns: 64px 1fr; gap: 8px; padding: 3px 0; font-size: 14px; }
+  .t { color: var(--muted); font-variant-numeric: tabular-nums; text-align: right; }
+  .kind { font-weight: 600; }
+  .hits { margin: 4px 0 0; padding-left: 18px; color: var(--muted); }
+  .hits a { color: var(--accent); text-decoration: none; }
+  .hits a:hover { text-decoration: underline; }
+  .err { color: var(--err); }
+  .tag { font-size: 12px; border: 1px solid var(--line); border-radius: 6px; padding: 0 6px; margin-left: 6px; color: var(--muted); }
+  .empty { color: var(--muted); }
+</style>
+</head>
+<body>
+<header>
+  <h1>FastAPI Docs Voice Agent</h1>
+  <p>Ask about FastAPI in English or Spanish. The voice says only the answer. The panel on the right shows every step behind it.</p>
+</header>
+<main>
+  <section>
+    <h2>Conversation</h2>
+    <div class="controls">
+      <button id="toggle">Start call</button>
+      <span id="status">Idle</span>
+    </div>
+    <div id="transcript"><p class="empty">Press start and allow the microphone.</p></div>
+  </section>
+  <section>
+    <h2>Live trace</h2>
+    <div id="trace"><p class="empty">Events from each turn appear here as they happen.</p></div>
+  </section>
+</main>
+<script type="module">
+  import { Conversation } from "https://cdn.jsdelivr.net/npm/@elevenlabs/client@1.26.0/+esm";
+
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  let conversation = null, feed = null;
+  const turns = new Map();
+
+  function addMessage(source, text) {
+    const box = $("transcript");
+    box.querySelector(".empty")?.remove();
+    const div = document.createElement("div");
+    div.className = `msg ${source === "user" ? "user" : "ai"}`;
+    div.textContent = text;
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  function describe(e) {
+    switch (e.type) {
+      case "user_utterance": return `<span class="kind">Heard</span> "${esc(e.text)}" <span class="tag">${esc(e.language)}</span>`;
+      case "decision": return e.action === "search"
+        ? `<span class="kind">Decided to search</span>${e.said ? ` and said "${esc(e.said)}"` : ""}`
+        : `<span class="kind">Answered directly</span> (no search needed)`;
+      case "tool_call": return `<span class="kind">search_docs</span> "${esc(e.query)}" <span class="tag">${esc(e.language)}</span>`;
+      case "retrieval_hits": return `<span class="kind">${e.hits.length} sections</span> in ${e.ms} ms <span class="tag">${esc(e.retriever)}</span>`
+        + `<ol class="hits">${e.hits.map((h) => `<li><a href="${esc(h.url)}" target="_blank" rel="noopener">${esc(h.title)} › ${esc(h.heading)}</a> <span class="tag">${esc(h.lang)} · ${h.score}</span></li>`).join("")}</ol>`;
+      case "llm_first_token": return `<span class="kind">First words</span> from Claude`;
+      case "external_tool": return `<span class="kind">Platform tool</span> ${e.calls.map((c) => esc(c.name)).join(", ")}`;
+      case "answer_done": return `<span class="kind">Answer done</span>`
+        + (e.answered_from_docs === false ? ` <span class="tag">not in the docs</span>` : "")
+        + (e.cited?.length ? ` · cited ${e.cited.map(esc).join(", ")}` : "")
+        + ` <span class="tag">${e.input_tokens + e.output_tokens} tokens · $${e.usd.toFixed(5)}</span>`;
+      case "error": return `<span class="kind err">Error</span> ${esc(e.message)}`;
+      default: return esc(e.type);
+    }
+  }
+
+  function addEvent(e) {
+    const box = $("trace");
+    box.querySelector(".empty")?.remove();
+    let turn = turns.get(e.turn_id);
+    if (!turn) {
+      turn = document.createElement("div");
+      turn.className = "turn";
+      turns.set(e.turn_id, turn);
+      box.appendChild(turn);
+    }
+    const row = document.createElement("div");
+    row.className = "ev";
+    row.innerHTML = `<span class="t">${e.t_ms} ms</span><span>${describe(e)}</span>`;
+    turn.appendChild(row);
+    box.scrollTop = box.scrollHeight;
+  }
+
+  async function start() {
+    $("toggle").disabled = true;
+    $("status").textContent = "Connecting…";
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+      const res = await fetch("/api/session");
+      if (!res.ok) throw new Error(`session ${res.status}`);
+      const { signed_url, session_id } = await res.json();
+      feed = new EventSource(`/trace/${session_id}/stream`);
+      feed.onmessage = (m) => addEvent(JSON.parse(m.data));
+      conversation = await Conversation.startSession({
+        signedUrl: signed_url,
+        customLlmExtraBody: { session_id },
+        onConnect: () => { $("status").textContent = "Listening"; $("toggle").textContent = "End call"; },
+        onDisconnect: stop,
+        onModeChange: ({ mode }) => { $("status").textContent = mode === "speaking" ? "Speaking" : "Listening"; },
+        onMessage: ({ source, message }) => addMessage(source, message),
+        onError: (err) => { $("status").textContent = `Error: ${err}`; },
+      });
+    } catch (err) {
+      $("status").textContent = `Could not start: ${err.message ?? err}`;
+      feed?.close();
+    } finally {
+      $("toggle").disabled = false;
+    }
+  }
+
+  async function stop() {
+    const c = conversation;
+    conversation = null;
+    if (c) await c.endSession();
+    setTimeout(() => feed?.close(), 3000);
+    $("status").textContent = "Call ended";
+    $("toggle").textContent = "Start call";
+  }
+
+  $("toggle").addEventListener("click", () => (conversation ? stop() : start()));
+</script>
+</body>
+</html>
