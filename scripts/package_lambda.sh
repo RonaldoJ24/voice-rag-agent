@@ -15,7 +15,10 @@ uv pip install --quiet --target "$out" -r build/requirements.txt \
   --python-platform aarch64-manylinux_2_28 --python-version 3.13 --only-binary :all:
 
 cp -R src web "$out/"
-cp data/index/chunks.jsonl data/index/bm25.json data/index/meta.json "$out/data/index/"
+# INDEX_DIR picks which chunks ship (data/index_code has the code examples inlined). The
+# bundle always reads them from data/index/, and the S3 Vectors index must match them.
+index_dir=${INDEX_DIR:-data/index}
+cp "$index_dir"/chunks.jsonl "$index_dir"/bm25.json "$index_dir"/meta.json "$out/data/index/"
 cp infra/run.sh "$out/run.sh"
 # Ship bytecode. /var/task is read-only, so without it every cold start recompiles
 # every module (anthropic alone is over a second). unchecked-hash keeps the .pyc valid

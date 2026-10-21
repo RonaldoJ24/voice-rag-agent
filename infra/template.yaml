@@ -14,6 +14,10 @@ Parameters:
     Type: String
     Default: ""
     Description: S3 Vectors bucket name, only used when Retriever=aws.
+  VectorIndex:
+    Type: String
+    Default: docs-titan-v2-256
+    Description: S3 Vectors index. It must be built from the same chunks the bundle ships (scripts/build_s3vectors.py --index-dir).
   AgentModel:
     Type: String
     Default: claude-haiku-5-5
@@ -71,6 +75,7 @@ Resources:
           DYNAMODB_TABLE: !Ref StateTable
           RETRIEVER: !Ref Retriever
           S3VECTORS_BUCKET: !Ref VectorBucket
+          S3VECTORS_INDEX: !Ref VectorIndex
           AGENT_MODEL: !Ref AgentModel
           SPEND_PAUSE_USD: !Ref SpendPauseUsd
       FunctionUrlConfig:
