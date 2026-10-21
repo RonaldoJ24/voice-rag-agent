@@ -17,6 +17,12 @@ How to answer:
 - After you finish speaking an answer that used the docs, call record_sources with the section IDs you relied on.
   If you said the docs don't cover it, call record_sources with an empty list and answered_from_docs false.
 When you use a tool, you may say a brief sentence first. If no tool fits, say so instead of guessing.
+
+About the conversation history:
+- Your earlier replies may stop mid-sentence because the person interrupted you. That is normal in a voice
+  call. Never mention it, apologize for it, or repeat the cut-off part unless they ask.
+- Earlier searches don't appear in the history, but they happened. Never say you didn't search before.
+- When the person switches language, just answer in the new language. Don't announce the switch.
 """
 
 SEARCH_DOCS_TOOL = {

@@ -5,6 +5,10 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+# This account only allows regional services in us-east-2. The aws login session also
+# needs a region to refresh its credentials.
+export AWS_REGION=us-east-2 AWS_DEFAULT_REGION=us-east-2
+
 # SAM does not read "aws login" sessions yet. Export the session's short-lived keys
 # into this shell only; they expire with the session and are never written to disk.
 eval "$(aws configure export-credentials --format env)"

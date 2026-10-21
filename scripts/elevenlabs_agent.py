@@ -18,7 +18,9 @@ API = "https://api.elevenlabs.io/v1/convai"
 VOICE_ID = (
     "DODLEQrClDo8wCz460ld"  # Lauren B, the voice already used in the explainer videos
 )
-TTS_MODEL = "eleven_flash_v2"  # ElevenLabs requires flash v2 for English agents; ES runs via the language preset
+# Eleven v4 Turbo: 90+ languages at ~100 ms, so one voice model serves EN and ES.
+# (Flash v2 is English only, so Spanish answers came out with an English accent.)
+TTS_MODEL = "eleven_v4_turbo"
 
 
 def agent_config(base_url: str, secret_id: str, model: str) -> dict:
@@ -105,7 +107,10 @@ def main() -> None:
             prompt = agent["conversation_config"]["agent"]["prompt"]
             prompt["custom_llm"]["url"] = f"{args.base_url.rstrip('/')}/v1"
             body = {
-                "conversation_config": {"agent": {"prompt": prompt}},
+                "conversation_config": {
+                    "agent": {"prompt": prompt},
+                    "tts": {"model_id": TTS_MODEL, "voice_id": VOICE_ID},
+                },
                 "platform_settings": PLATFORM_SETTINGS,
             }
             r = client.patch(f"{API}/agents/{s.elevenlabs_agent_id}", json=body)

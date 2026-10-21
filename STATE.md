@@ -30,6 +30,8 @@ Where the build stands, so any session can resume. Update after every milestone.
 - Set a $50 spend limit in the Anthropic Console.
 
 ## Facts to remember
+- Agent voice is `eleven_v4_turbo` (90+ languages, ~100 ms) since 2026-10-20; Flash v2 was English only, so Spanish had an English accent. Eleven Realtime v1 Mini was rejected: it is a complete agent with its own LLM, so Claude, search_docs and the trace panel would drop out.
+- ElevenLabs sends interrupted agent turns cut short, and internal search_docs calls never appear in the history. The prompt tells Claude not to comment on either.
 - Spend is counted in two places: `costs/spend.jsonl` (local runs, evals) and the DynamoDB item `spend/total` (deployed demo, pauses at $5). Add both when checking the $40 pause.
 - The agent must allow `platform_settings.overrides.custom_llm_extra_body`, or ElevenLabs ends every call at once with error 1008. With it on, `session_id` arrives and `/trace` requires it (no cross-visitor events).
 - Haiku 5.5 runs with thinking disabled: the spoken filler starts at ~580 ms (adaptive thinking gave a silent tool call).
