@@ -61,6 +61,7 @@ All retrievers are scored on the same queries Claude wrote for the 50 answerable
 | Local hybrid (MiniLM + BM25, RRF) | 0.44 [0.30, 0.58] | 0.96 [0.90, 1.00] | 0.66 [0.57, 0.75] |
 | Titan V2 + BM25 (RRF) | 0.58 [0.44, 0.72] | 0.96 [0.90, 1.00] | 0.74 [0.66, 0.83] |
 | **Titan V2 only (deployed)** | **0.64 [0.50, 0.76]** | **0.96 [0.90, 1.00]** | **0.78 [0.69, 0.86]** |
+| Titan V2 only, code examples inlined | 0.58 [0.44, 0.70] | 0.96 [0.90, 1.00] | 0.75 [0.67, 0.83] |
 
 - Titan alone beats the local hybrid on ranking the right section first: recall@1 +0.20 [0.02, 0.38], MRR@10 +0.13 [0.01, 0.24]. Recall@5 ties.
 - Adding BM25 to Titan doesn't help here: recall@1 −0.06 [−0.20, 0.10].
@@ -81,6 +82,7 @@ Every gold row was run through the full agent loop (same prompt, tools and greet
 
 - Sonnet minus Haiku on judge pass is +0.06 [−0.015, 0.13]. That isn't distinguishable on 68 rows, and Sonnet costs 35 times more per turn, so Haiku stays deployed.
 - Most failures are correct answers with one detail the retrieved text doesn't back. The chunker replaces code examples with placeholders, so the model fills the gap from memory. See [FAILURES.md](FAILURES.md).
+- Inlining the code examples fixed the failures it was meant to fix. With two runs per setup, Haiku went from 0.90 to 0.95 (+0.05 [0.00, 0.11]), and three of the four rows blamed on missing code passed in both runs. Sonnet didn't improve (−0.02 [−0.08, 0.03]). It costs about 6% more per turn and isn't deployed yet. Details in [FAILURES.md](FAILURES.md).
 - The judge's own error is not measured yet. 30 random judgments are waiting for human review in `eval/review/judge_spotcheck_v1.md`.
 
 ### Gold set
@@ -111,7 +113,7 @@ How the gold set was built: 25 English and 25 Spanish answerable questions writt
 
 Details, causes and fixes are in [FAILURES.md](FAILURES.md).
 
-- **Code examples are missing from the chunks.** 677 of 1607 chunks have a placeholder where the code was, which accounts for most "not grounded" judge failures.
+- **Code examples are missing from the deployed chunks.** 677 of 1607 chunks have a placeholder where the code was, which accounts for most "not grounded" judge failures. An index with the code inlined is built and evaluated but not deployed.
 - **Retrieval misses outside the top 5 (Titan):** en-02 "How do I make a route need a login?" and es-12, a form login question. In both, the OAuth2 pages outrank the general ones.
 - **Interruptions.** ElevenLabs sends an interrupted answer cut short, and internal tool calls never appear in the history it sends. Early on Claude apologized for "cut-off answers" and claimed it never searched. The prompt now tells it to ignore both.
 - **Not measured yet:** the judge's error rate (pending human spot-check), p50 and p95 latency over many calls, and credits per minute of voice.
