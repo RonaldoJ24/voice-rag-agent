@@ -22,7 +22,7 @@ Where the build stands, so any session can resume. Update after every milestone.
 ## Next
 1. Owner's real phone call after the cold-start fixes (not confirmed yet).
 2. Owner reviews 30 judge verdicts in `eval/review/judge_spotcheck_v1.md`, which gives the judge error rate.
-3. Biggest fix from FAILURES.md: inline `docs_src` code into chunks (677 of 1607 have placeholders), rebuild Titan vectors, rerun answer eval.
+3. Decide whether to deploy the code-inlined index: swap `data/index/` for `data/index_code/` (built by `build_chunks.py --code resolve` then `build_index.py`), set `S3VECTORS_INDEX=docs-titan-v2-256-code`, redeploy.
 4. Showcase items left: latency p50/p95 from ~20 calls, public replay mode, demo video, Dockerfile, CV line.
 
 ## Waiting on the owner
@@ -41,3 +41,4 @@ Where the build stands, so any session can resume. Update after every milestone.
 - ElevenLabs JS client pinned to 1.26.0 (has `customLlmExtraBody`, released 2026-09-29).
 - Spend so far: see `uv run python -c "from voice_rag_agent.costs import Ledger; from voice_rag_agent.config import get_settings as g; s=g(); print(Ledger(s.spend_ledger, s.spend_pause_usd).total())"`.
 - 2026-10-20 gold frozen (`eval-freeze-v1`, owner accepted 20 of 20 sampled rows). Answer eval on aws-dense, Opus 5.5 blind judge: Haiku 61/68 pass (0.90 [0.82, 0.96]), Sonnet 65/68 (0.96 [0.90, 1.00]), gap +0.06 [-0.015, 0.13] not significant; correct 0.98 both; Haiku $0.00057/turn, Sonnet $0.0198. Full run cost $3.25; ledger $3.66. Sonnet with between_tools thinking called record_sources before speaking and then said "."; fixed in 8d89f0a. Misses and causes in FAILURES.md.
+- 2026-10-20 code inlining: `build_chunks.py --code resolve` (ln ranges, ids kept), local index `data/index_code/` (gitignored), S3 Vectors index `docs-titan-v2-256-code` (old index kept, still deployed). Two runs per condition (`eval/compare_runs.py`): Haiku pass 0.90 to 0.95, +0.05 [0.00, 0.11], en-05/en-14/en-16 pass 2 of 2; Sonnet -0.02 [-0.08, 0.03]. Titan recall@5 same, recall@1 -0.06 n.s. Cost +6%/turn. Agent loop now adds a tools-off round at the cap (88ff7c5). Ledger $13.77.
