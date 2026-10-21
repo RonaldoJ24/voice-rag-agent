@@ -2,23 +2,28 @@
 
 A bilingual (English and Spanish) voice agent that answers questions from the FastAPI documentation, with a live trace that shows every step behind each answer: whether it decided to search, the query it wrote, the doc sections it retrieved, time to first token, and cost.
 
-ElevenLabs handles the voice. Claude decides, searches and answers through a small FastAPI proxy on AWS Lambda. Retrieval uses Titan V2 embeddings in S3 Vectors.
+ElevenLabs handles the voice. Claude decides, searches and answers through a small FastAPI proxy on AWS Lambda. Retrieval uses Titan V2 embeddings (Bedrock) in S3 Vectors, over doc chunks with their code examples inlined.
 
-All results below use the frozen 68-row gold set (tag `eval-freeze-v1`). The full list of misses and their causes is in [FAILURES.md](FAILURES.md).
+![The demo page during a recorded English call: the voice orb on the left, the live trace with the search query, retrieved sections, timings and cost on the right](docs/ui.png)
+
+All results below use the frozen 68-row gold set (tag `eval-freeze-v1`) and the deployed setup (Haiku 5.5, Titan V2, code examples inlined). The full list of misses and their causes is in [FAILURES.md](FAILURES.md).
 
 | | |
 |---|---|
-| Answers the judge passes (Opus 5.5, blind) | 61 of 68 (0.90 [0.82, 0.96]) with Haiku 5.5, 65 of 68 with Sonnet 5.5 |
-| Right doc section in the top 5 | 0.96 [0.90, 1.00] on 50 answerable questions |
-| Right doc section ranked first | 0.64 [0.50, 0.76], +0.20 [0.02, 0.38] over the local hybrid baseline |
+| Answers the judge passes (Opus 5.5, blind to the model) | 0.95, the mean of two runs (64 and 65 of 68) |
+| Right doc section ranked first / mean reciprocal rank | 0.58 / 0.75 on 50 answerable questions |
+| Right doc section in the top 5 | 0.96 [0.90, 1.00] |
 | Searches when it should / skips when it should | 60 of 60 doc questions / 8 of 8 small-talk turns |
-| Retrieval inside Lambda (Titan embed + S3 Vectors query) | 127 to 160 ms (8 searches) |
-| Claude cost per turn | about $0.0006 (Haiku 5.5) |
+| First words from Claude (the spoken filler), p50 over the eval runs | 0.6 s |
+| Claude cost per turn | about $0.0006 |
+
+The judge is Claude and the gold set was written for this project, so treat 0.95 as a measured result on this set, not a general accuracy figure. The judge's own error rate is not measured yet.
 
 ## Try it
 
-- Live demo: `https://djsuuhec353rb2swjznsdofvlu0ejmpm.lambda-url.us-east-2.on.aws/`. It needs a demo code to protect API credits. Ask the author for one.
-- Press **Start call**, allow the microphone, and ask in English or Spanish. The right panel fills in as the agent works.
+- Live demo: [djsuuhec353rb2swjznsdofvlu0ejmpm.lambda-url.us-east-2.on.aws](https://djsuuhec353rb2swjznsdofvlu0ejmpm.lambda-url.us-east-2.on.aws/).
+- **Replay EN / ES** needs no microphone and no code. It plays a session recorded through the real proxy (`scripts/record_replay.py`) with its original timings, so the captions and trace fill in as they did live.
+- **Start a call** is the live voice agent. It needs a demo code to protect API credits. Ask the author for one, allow the microphone, and ask in English or Spanish.
 
 ## How one turn works
 
@@ -60,10 +65,12 @@ All retrievers are scored on the same queries Claude wrote for the 50 answerable
 | Local embeddings only (multilingual MiniLM) | 0.48 [0.34, 0.62] | 0.92 [0.84, 0.98] | 0.65 [0.55, 0.75] |
 | Local hybrid (MiniLM + BM25, RRF) | 0.44 [0.30, 0.58] | 0.96 [0.90, 1.00] | 0.66 [0.57, 0.75] |
 | Titan V2 + BM25 (RRF) | 0.58 [0.44, 0.72] | 0.96 [0.90, 1.00] | 0.74 [0.66, 0.83] |
-| **Titan V2 only (deployed)** | **0.64 [0.50, 0.76]** | **0.96 [0.90, 1.00]** | **0.78 [0.69, 0.86]** |
-| Titan V2 only, code examples inlined | 0.58 [0.44, 0.70] | 0.96 [0.90, 1.00] | 0.75 [0.67, 0.83] |
+| Titan V2 only | 0.64 [0.50, 0.76] | 0.96 [0.90, 1.00] | 0.78 [0.69, 0.86] |
+| **Titan V2 only, code examples inlined (deployed)** | **0.58 [0.44, 0.70]** | **0.96 [0.90, 1.00]** | **0.75 [0.67, 0.83]** |
+| Local hybrid, code examples inlined | 0.42 [0.28, 0.56] | 0.94 [0.88, 1.00] | 0.62 [0.53, 0.72] |
 
-- Titan alone beats the local hybrid on ranking the right section first: recall@1 +0.20 [0.02, 0.38], MRR@10 +0.13 [0.01, 0.24]. Recall@5 ties.
+- With the deployed chunks, Titan beats the local hybrid on ranking: recall@1 +0.16 [0.00, 0.32], MRR@10 +0.13 [0.03, 0.23]. Recall@5 ties.
+- Inlining code costs a little ranking (Titan recall@1 −0.06 [−0.16, 0.04], not significant) but raises answer quality, because the model now sees the code it describes. The answer eval decides what ships, not retrieval alone.
 - Adding BM25 to Titan doesn't help here: recall@1 −0.06 [−0.20, 0.10].
 - Letting Claude rewrite the question into a search query matters more than the retriever. With the raw question, the local hybrid reaches recall@5 0.78 [0.66, 0.88], and spoken-style questions only 0.65.
 
@@ -71,7 +78,9 @@ All retrievers are scored on the same queries Claude wrote for the 50 answerable
 
 Every gold row was run through the full agent loop (same prompt, tools and greeting as the live call, `aws-dense` retrieval). Claude Opus 5.5 judged each answer without knowing the model. It saw the question, the reference answer and the retrieved sections, and decided whether the answer was correct and grounded in those sections (`eval/answer_eval.py`).
 
-| | Haiku 5.5 (deployed) | Sonnet 5.5 |
+Without code examples (first run):
+
+| | Haiku 5.5 | Sonnet 5.5 |
 |---|---|---|
 | Judge pass, 68 rows | 0.90 [0.82, 0.96] | 0.96 [0.90, 1.00] |
 | Correct, 50 answerable rows | 0.98 [0.94, 1.00] | 0.98 [0.94, 1.00] |
@@ -81,8 +90,8 @@ Every gold row was run through the full agent loop (same prompt, tools and greet
 | Claude cost per turn | $0.00057 | $0.0198 |
 
 - Sonnet minus Haiku on judge pass is +0.06 [−0.015, 0.13]. That isn't distinguishable on 68 rows, and Sonnet costs 35 times more per turn, so Haiku stays deployed.
-- Most failures are correct answers with one detail the retrieved text doesn't back. The chunker replaces code examples with placeholders, so the model fills the gap from memory. See [FAILURES.md](FAILURES.md).
-- Inlining the code examples fixed the failures it was meant to fix. With two runs per setup, Haiku went from 0.90 to 0.95 (+0.05 [0.00, 0.11]), and three of the four rows blamed on missing code passed in both runs. Sonnet didn't improve (−0.02 [−0.08, 0.03]). It costs about 6% more per turn and isn't deployed yet. Details in [FAILURES.md](FAILURES.md).
+- In that first run, most failures were correct answers with one detail the retrieved text didn't back. The chunker replaced code examples with placeholders, so the model filled the gap from memory. See [FAILURES.md](FAILURES.md).
+- Inlining the code examples fixed the failures it was meant to fix, so it is deployed. With two runs per setup, Haiku went from 0.90 to 0.95 (+0.05 [0.00, 0.11]): 64 and 65 of 68, correct 0.96 on answerable rows, grounded 0.94 and 0.96, all 10 unanswerable rows passed. Three of the four rows blamed on missing code passed in both runs. Sonnet didn't improve (−0.02 [−0.08, 0.03]). Cost rose about 6% per turn. Details in [FAILURES.md](FAILURES.md).
 - The judge's own error is not measured yet. 30 random judgments are waiting for human review in `eval/review/judge_spotcheck_v1.md`.
 
 ### Gold set
@@ -113,7 +122,7 @@ How the gold set was built: 25 English and 25 Spanish answerable questions writt
 
 Details, causes and fixes are in [FAILURES.md](FAILURES.md).
 
-- **Code examples are missing from the deployed chunks.** 677 of 1607 chunks have a placeholder where the code was, which accounts for most "not grounded" judge failures. An index with the code inlined is built and evaluated but not deployed.
+- **Code examples were missing from the chunks** (fixed and deployed). 677 of 1607 chunks had a placeholder where the code was, which caused most "not grounded" judge failures. The deployed index inlines them. To roll back to the old index, run `RETRIEVER=aws-dense S3VECTORS_BUCKET=<name> scripts/deploy.sh` without `S3VECTORS_INDEX` and `INDEX_DIR`.
 - **Retrieval misses outside the top 5 (Titan):** en-02 "How do I make a route need a login?" and es-12, a form login question. In both, the OAuth2 pages outrank the general ones.
 - **Interruptions.** ElevenLabs sends an interrupted answer cut short, and internal tool calls never appear in the history it sends. Early on Claude apologized for "cut-off answers" and claimed it never searched. The prompt now tells it to ignore both.
 - **Not measured yet:** the judge's error rate (pending human spot-check), p50 and p95 latency over many calls, and credits per minute of voice.
@@ -131,7 +140,7 @@ uv run uvicorn voice_rag_agent.app:app --port 8000
 ```
 
 - Evals: `uv run python eval/agent_query_eval.py --retriever local`, then `uv run python eval/ablation.py --retrievers local,dense,bm25`. The answer eval is `uv run python eval/answer_eval.py --models claude-haiku-5-5,claude-sonnet-5-5 --retriever aws-dense` (about $3.25 per full run: $0.04 of Haiku turns, $1.35 of Sonnet turns, the rest for the Opus judge).
-- AWS: `scripts/build_s3vectors.py --bucket <name>` builds the vector index, and `RETRIEVER=aws-dense S3VECTORS_BUCKET=<name> scripts/deploy.sh` deploys the stack (`infra/template.yaml`).
+- AWS: `build_chunks.py --code resolve --out data/chunks_code.jsonl`, `build_index.py --chunks data/chunks_code.jsonl --out data/index_code` and `build_s3vectors.py --bucket <name> --index docs-titan-v2-256-code --index-dir data/index_code` build the code-inlined chunks and vector index. `RETRIEVER=aws-dense S3VECTORS_BUCKET=<name> S3VECTORS_INDEX=docs-titan-v2-256-code INDEX_DIR=data/index_code scripts/deploy.sh` deploys the stack (`infra/template.yaml`).
 - CI runs lint, tests, gold-set validation and a CloudFormation lint on every push.
 
 ## Credits

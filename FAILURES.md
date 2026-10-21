@@ -4,6 +4,8 @@ Every miss from the frozen gold set (`eval-freeze-v1`, 68 rows), with the cause 
 
 ## Summary
 
+First run, before code inlining:
+
 | | Haiku 5.5 (deployed) | Sonnet 5.5 |
 |---|---|---|
 | Judge pass, all 68 rows | 61 of 68, 0.90 [0.82, 0.96] | 65 of 68, 0.96 [0.90, 1.00] |
@@ -26,7 +28,7 @@ Sonnet minus Haiku on judge pass: +0.06 [−0.015, 0.13]. The interval crosses z
 
 **Cause.** `scripts/build_chunks.py` swaps every code include for a placeholder such as `[code example: docs_src/events/tutorial003_py310.py]`. 677 of 1607 chunks (42%) lose their code this way. The prose around it often says "like this" and stops. So the model fills the gap from what it already knows. The facts are right, but nothing retrieved backs them.
 
-**Fix (built, not deployed).** `scripts/build_chunks.py --code resolve` now inlines the `docs_src` files from the same FastAPI commit. It honors the `ln[a:b]` line ranges, and its merge decisions come from the placeholder layout, so every section id in the frozen gold set still exists. The vectors live in a second S3 Vectors index, `docs-titan-v2-256-code`. The deployed demo still uses the old one.
+**Fix (deployed 2026-10-21).** `scripts/build_chunks.py --code resolve` now inlines the `docs_src` files from the same FastAPI commit. It honors the `ln[a:b]` line ranges, and its merge decisions come from the placeholder layout, so every section id in the frozen gold set still exists. The vectors live in a second S3 Vectors index, `docs-titan-v2-256-code`, which the demo now uses. The old index is kept for rollback.
 
 **Result.** Each condition was run twice and each question averaged over its two runs (`eval/compare_runs.py`, `eval/results/compare_code_vs_base.json`):
 
