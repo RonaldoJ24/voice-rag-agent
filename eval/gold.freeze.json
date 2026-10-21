@@ -1,0 +1,8 @@
+{
+  "tag": "eval-freeze-v1",
+  "frozen": "2026-10-20",
+  "file": "eval/gold.jsonl",
+  "sha256": "651ec056a8c667d967dd2bb21cf28d2eea3df171caa92d7adee2e05adccb6526",
+  "rows": 68,
+  "review": "Owner reviewed the stratified 20-row sample in eval/review/gold_sample_v1.md (seed 20261020) and marked all 20 correct."
+}

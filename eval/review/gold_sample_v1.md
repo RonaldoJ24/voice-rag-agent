@@ -1,5 +1,8 @@
 # Gold set review sample v1 (20 of 68 rows, seed 20261020)
 
+**Review result (2026-10-20):** the owner checked all 20 rows and marked every one correct. The gold set was frozen as `eval-freeze-v1` (see `eval/gold.freeze.json`).
+
+
 For each row, check three things and mark it OK or write the fix:
 1. The question sounds like something a real person would ask (spoken rows are casual on purpose).
 2. The gold sections really answer it (open the links).
