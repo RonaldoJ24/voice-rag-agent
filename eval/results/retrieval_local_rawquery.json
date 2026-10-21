@@ -1,0 +1,4550 @@
+{
+  "header": "RAW-QUESTION retrieval baseline (local hybrid, k=10). In production Claude rewrites the query before searching, so treat these numbers as conservative.",
+  "k": 10,
+  "same_language": {
+    "slices": {
+      "overall": {
+        "n": 50,
+        "recall@1": {
+          "mean": 0.44,
+          "lo": 0.3,
+          "hi": 0.58
+        },
+        "recall@5": {
+          "mean": 0.78,
+          "lo": 0.66,
+          "hi": 0.88
+        },
+        "mrr@10": {
+          "mean": 0.5829,
+          "lo": 0.4689,
+          "hi": 0.6922
+        }
+      },
+      "en": {
+        "n": 25,
+        "recall@1": {
+          "mean": 0.4,
+          "lo": 0.24,
+          "hi": 0.6
+        },
+        "recall@5": {
+          "mean": 0.84,
+          "lo": 0.68,
+          "hi": 0.96
+        },
+        "mrr@10": {
+          "mean": 0.59,
+          "lo": 0.45,
+          "hi": 0.7434
+        }
+      },
+      "es": {
+        "n": 25,
+        "recall@1": {
+          "mean": 0.48,
+          "lo": 0.28,
+          "hi": 0.68
+        },
+        "recall@5": {
+          "mean": 0.72,
+          "lo": 0.52,
+          "hi": 0.88
+        },
+        "mrr@10": {
+          "mean": 0.5758,
+          "lo": 0.4046,
+          "hi": 0.7447
+        }
+      },
+      "spoken": {
+        "n": 31,
+        "recall@1": {
+          "mean": 0.2903,
+          "lo": 0.129,
+          "hi": 0.4516
+        },
+        "recall@5": {
+          "mean": 0.6452,
+          "lo": 0.4839,
+          "hi": 0.8065
+        },
+        "mrr@10": {
+          "mean": 0.4428,
+          "lo": 0.3023,
+          "hi": 0.5828
+        }
+      },
+      "written": {
+        "n": 19,
+        "recall@1": {
+          "mean": 0.6842,
+          "lo": 0.4737,
+          "hi": 0.8947
+        },
+        "recall@5": {
+          "mean": 1.0,
+          "lo": 1.0,
+          "hi": 1.0
+        },
+        "mrr@10": {
+          "mean": 0.8114,
+          "lo": 0.6798,
+          "hi": 0.9298
+        }
+      }
+    },
+    "pairs": {
+      "pairs": {
+        "pair-01": {
+          "en_id": "en-01",
+          "es_id": "es-01",
+          "en_rank": 4,
+          "es_rank": null,
+          "both_hit@5": false,
+          "both_hit@1": false
+        },
+        "pair-02": {
+          "en_id": "en-03",
+          "es_id": "es-02",
+          "en_rank": 2,
+          "es_rank": 1,
+          "both_hit@5": true,
+          "both_hit@1": false
+        },
+        "pair-03": {
+          "en_id": "en-04",
+          "es_id": "es-03",
+          "en_rank": 1,
+          "es_rank": 1,
+          "both_hit@5": true,
+          "both_hit@1": true
+        },
+        "pair-04": {
+          "en_id": "en-08",
+          "es_id": "es-04",
+          "en_rank": 2,
+          "es_rank": 1,
+          "both_hit@5": true,
+          "both_hit@1": false
+        },
+        "pair-05": {
+          "en_id": "en-10",
+          "es_id": "es-05",
+          "en_rank": 2,
+          "es_rank": 2,
+          "both_hit@5": true,
+          "both_hit@1": false
+        },
+        "pair-06": {
+          "en_id": "en-18",
+          "es_id": "es-06",
+          "en_rank": 1,
+          "es_rank": 3,
+          "both_hit@5": true,
+          "both_hit@1": false
+        }
+      },
+      "both_hit@5": 5,
+      "both_hit@1": 1,
+      "n_pairs": 6
+    },
+    "per_question": [
+      {
+        "id": "en-01",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": "pair-01",
+        "question": "Hey, how do I let people upload a file to my API?",
+        "gold": [
+          "tutorial/request-files.md#request-files",
+          "tutorial/request-files.md#define-file-parameters",
+          "tutorial/request-files.md#file-parameters-with-uploadfile"
+        ],
+        "rank": 4,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.25,
+        "top5": [
+          [
+            "advanced/openapi-callbacks.md#an-app-with-callbacks",
+            "en",
+            0.029
+          ],
+          [
+            "tutorial/request-files.md#optional-file-upload",
+            "en",
+            0.0275
+          ],
+          [
+            "tutorial/request-files.md#uploadfile",
+            "en",
+            0.0246
+          ],
+          [
+            "tutorial/request-files.md#file-parameters-with-uploadfile",
+            "en",
+            0.0233
+          ],
+          [
+            "tutorial/body.md#request-body",
+            "en",
+            0.0208
+          ]
+        ]
+      },
+      {
+        "id": "en-02",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "How do I make a route need a login?",
+        "gold": [
+          "tutorial/security/first-steps.md#fastapis-oauth2passwordbearer",
+          "tutorial/security/first-steps.md#use-it",
+          "tutorial/security/first-steps.md#what-it-does",
+          "advanced/security/http-basic-auth.md#simple-http-basic-auth"
+        ],
+        "rank": null,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.0,
+        "top5": [
+          [
+            "advanced/security/http-basic-auth.md#return-the-error",
+            "en",
+            0.0315
+          ],
+          [
+            "how-to/custom-request-and-route.md#custom-apiroute-class-in-a-router",
+            "en",
+            0.0265
+          ],
+          [
+            "tutorial/security/index.md#openid-connect",
+            "en",
+            0.0251
+          ],
+          [
+            "advanced/websockets.md#create-a-websocket",
+            "en",
+            0.0241
+          ],
+          [
+            "tutorial/path-params.md#order-matters",
+            "en",
+            0.0221
+          ]
+        ]
+      },
+      {
+        "id": "en-03",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": "pair-02",
+        "question": "So I have something slow to do, and I want to reply to the user first and finish it afterwards. How?",
+        "gold": [
+          "tutorial/background-tasks.md#using-backgroundtasks",
+          "tutorial/background-tasks.md#add-the-background-task",
+          "tutorial/background-tasks.md#background-tasks"
+        ],
+        "rank": 2,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.5,
+        "top5": [
+          [
+            "deployment/concepts.md#previous-steps-before-starting",
+            "en",
+            0.0292
+          ],
+          [
+            "tutorial/background-tasks.md#background-tasks",
+            "en",
+            0.0277
+          ],
+          [
+            "advanced/security/http-basic-auth.md#timing-attacks",
+            "en",
+            0.0247
+          ],
+          [
+            "async.md#technical-details",
+            "en",
+            0.0164
+          ],
+          [
+            "tutorial/middleware.md#before-and-after-the-response",
+            "en",
+            0.0161
+          ]
+        ]
+      },
+      {
+        "id": "en-04",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": "pair-03",
+        "question": "My frontend on localhost 3000 keeps getting blocked when it calls my API. What's going on, and how do I fix it?",
+        "gold": [
+          "tutorial/cors.md#cors-cross-origin-resource-sharing",
+          "tutorial/cors.md#use-corsmiddleware",
+          "tutorial/cors.md#steps"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "tutorial/cors.md#steps",
+            "en",
+            0.0325
+          ],
+          [
+            "advanced/strict-content-type.md#example-attack",
+            "en",
+            0.0287
+          ],
+          [
+            "tutorial/cors.md#cors-cross-origin-resource-sharing",
+            "en",
+            0.0256
+          ],
+          [
+            "advanced/openapi-callbacks.md#openapi-callbacks",
+            "en",
+            0.0251
+          ],
+          [
+            "tutorial/frontend.md#use-it-with-apirouter",
+            "en",
+            0.0236
+          ]
+        ]
+      },
+      {
+        "id": "en-05",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "What do I do to send back a 404 when the item isn't there?",
+        "gold": [
+          "tutorial/handling-errors.md#use-httpexception",
+          "tutorial/handling-errors.md#handling-errors"
+        ],
+        "rank": 3,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.3333333333333333,
+        "top5": [
+          [
+            "tutorial/frontend.md#custom-404-page",
+            "en",
+            0.0302
+          ],
+          [
+            "tutorial/frontend.md#fallback-auto",
+            "en",
+            0.0301
+          ],
+          [
+            "tutorial/handling-errors.md#handling-errors",
+            "en",
+            0.0284
+          ],
+          [
+            "tutorial/handling-errors.md#the-resulting-response",
+            "en",
+            0.0278
+          ],
+          [
+            "tutorial/handling-errors.md#use-httpexception",
+            "en",
+            0.0276
+          ]
+        ]
+      },
+      {
+        "id": "en-06",
+        "lang": "en",
+        "style": "written",
+        "pair_id": null,
+        "question": "How can I require a query parameter to have a minimum length and match a regular expression?",
+        "gold": [
+          "tutorial/query-params-str-validations.md#add-more-validations",
+          "tutorial/query-params-str-validations.md#additional-validation"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "tutorial/query-params-str-validations.md#add-more-validations",
+            "en",
+            0.0328
+          ],
+          [
+            "tutorial/query-params-str-validations.md#default-values",
+            "en",
+            0.0318
+          ],
+          [
+            "tutorial/query-params-str-validations.md#add-query-to-annotated-in-the-q-parameter",
+            "en",
+            0.0315
+          ],
+          [
+            "tutorial/query-params-str-validations.md#required-parameters",
+            "en",
+            0.0294
+          ],
+          [
+            "tutorial/query-params-str-validations.md#additional-validation",
+            "en",
+            0.0282
+          ]
+        ]
+      },
+      {
+        "id": "en-07",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "How do I make sure my database session gets closed after every request?",
+        "gold": [
+          "tutorial/dependencies/dependencies-with-yield.md#a-database-dependency-with-yield",
+          "tutorial/dependencies/dependencies-with-yield.md#dependencies-with-yield",
+          "tutorial/dependencies/dependencies-with-yield.md#a-dependency-with-yield-and-try"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "tutorial/dependencies/dependencies-with-yield.md#a-database-dependency-with-yield",
+            "en",
+            0.031
+          ],
+          [
+            "tutorial/sql-databases.md#create-the-tables",
+            "en",
+            0.0269
+          ],
+          [
+            "tutorial/sql-databases.md#create-an-engine",
+            "en",
+            0.0253
+          ],
+          [
+            "advanced/advanced-dependencies.md#dependencies-with-yield-and-streamingresponse-technical-details",
+            "en",
+            0.0252
+          ],
+          [
+            "tutorial/middleware.md#before-and-after-the-response",
+            "en",
+            0.0241
+          ]
+        ]
+      },
+      {
+        "id": "en-08",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": "pair-04",
+        "question": "My main.py is getting huge. How do I split my routes into several files?",
+        "gold": [
+          "tutorial/bigger-applications.md#apirouter",
+          "tutorial/bigger-applications.md#include-the-apirouters-for-users-and-items",
+          "tutorial/bigger-applications.md#bigger-applications-multiple-files"
+        ],
+        "rank": 2,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.5,
+        "top5": [
+          [
+            "tutorial/bigger-applications.md#an-example-file-structure",
+            "en",
+            0.0323
+          ],
+          [
+            "tutorial/bigger-applications.md#include-the-apirouters-for-users-and-items",
+            "en",
+            0.0312
+          ],
+          [
+            "tutorial/bigger-applications.md#include-an-apirouter-in-another",
+            "en",
+            0.0295
+          ],
+          [
+            "tutorial/bigger-applications.md#the-main-fastapi",
+            "en",
+            0.0282
+          ],
+          [
+            "tutorial/bigger-applications.md#import-fastapi",
+            "en",
+            0.0257
+          ]
+        ]
+      },
+      {
+        "id": "en-09",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "How would I serve my images and CSS files from the app itself?",
+        "gold": [
+          "tutorial/static-files.md#static-files",
+          "tutorial/static-files.md#what-is-mounting"
+        ],
+        "rank": null,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.0,
+        "top5": [
+          [
+            "how-to/custom-docs-ui-assets.md#custom-docs-ui-static-assets-self-hosting",
+            "en",
+            0.032
+          ],
+          [
+            "tutorial/frontend.md#serve-a-frontend",
+            "en",
+            0.0301
+          ],
+          [
+            "tutorial/frontend.md#client-side-routing",
+            "en",
+            0.026
+          ],
+          [
+            "how-to/custom-docs-ui-assets.md#include-the-custom-docs",
+            "en",
+            0.0239
+          ],
+          [
+            "tutorial/bigger-applications.md#configure-the-entrypoint-in-pyproject-toml",
+            "en",
+            0.0233
+          ]
+        ]
+      },
+      {
+        "id": "en-10",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": "pair-05",
+        "question": "How do I stop the password from showing up in the response when I return a user?",
+        "gold": [
+          "tutorial/response-model.md#add-an-output-model",
+          "tutorial/response-model.md#return-type-and-data-filtering",
+          "tutorial/response-model.md#response-model-return-type"
+        ],
+        "rank": 2,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.5,
+        "top5": [
+          [
+            "tutorial/response-model.md#return-the-same-input-data",
+            "en",
+            0.0325
+          ],
+          [
+            "tutorial/response-model.md#add-an-output-model",
+            "en",
+            0.0315
+          ],
+          [
+            "tutorial/security/simple-oauth2.md#check-the-password",
+            "en",
+            0.0308
+          ],
+          [
+            "tutorial/security/oauth2-jwt.md#update-the-dependencies",
+            "en",
+            0.027
+          ],
+          [
+            "advanced/response-cookies.md#return-a-response-directly",
+            "en",
+            0.0258
+          ]
+        ]
+      },
+      {
+        "id": "en-11",
+        "lang": "en",
+        "style": "written",
+        "pair_id": null,
+        "question": "Why does my fixed route /users/me get swallowed by /users/{user_id}?",
+        "gold": [
+          "tutorial/path-params.md#order-matters"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "tutorial/path-params.md#order-matters",
+            "en",
+            0.0325
+          ],
+          [
+            "advanced/security/oauth2-scopes.md#dependency-tree-and-scopes",
+            "en",
+            0.0294
+          ],
+          [
+            "tutorial/security/get-current-user.md#other-models",
+            "en",
+            0.0292
+          ],
+          [
+            "tutorial/security/get-current-user.md#get-the-user",
+            "en",
+            0.0283
+          ],
+          [
+            "tutorial/security/simple-oauth2.md#inactive-user",
+            "en",
+            0.028
+          ]
+        ]
+      },
+      {
+        "id": "en-12",
+        "lang": "en",
+        "style": "written",
+        "pair_id": null,
+        "question": "How do I update only the fields the client actually sent, instead of overwriting the whole item?",
+        "gold": [
+          "tutorial/body-updates.md#partial-updates-with-patch",
+          "tutorial/body-updates.md#using-pydantics-exclude-unset-parameter"
+        ],
+        "rank": 3,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.3333333333333333,
+        "top5": [
+          [
+            "tutorial/body-updates.md#using-pydantics-update-parameter",
+            "en",
+            0.0302
+          ],
+          [
+            "tutorial/body-updates.md#body-updates",
+            "en",
+            0.0282
+          ],
+          [
+            "tutorial/body-updates.md#partial-updates-with-patch",
+            "en",
+            0.0276
+          ],
+          [
+            "tutorial/request-form-models.md#check-the-docs",
+            "en",
+            0.0275
+          ],
+          [
+            "tutorial/body-updates.md#using-pydantics-exclude-unset-parameter",
+            "en",
+            0.0272
+          ]
+        ]
+      },
+      {
+        "id": "en-13",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "Can FastAPI do real time two-way stuff, like a chat?",
+        "gold": [
+          "advanced/websockets.md#create-a-websocket",
+          "advanced/websockets.md#websockets"
+        ],
+        "rank": null,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.0,
+        "top5": [
+          [
+            "deployment/concepts.md#replication-processes-and-memory",
+            "en",
+            0.023
+          ],
+          [
+            "editor-support.md#editor-support",
+            "en",
+            0.0164
+          ],
+          [
+            "tutorial/query-params-str-validations.md#use-annotated-in-the-type-for-the-q-parameter",
+            "en",
+            0.0164
+          ],
+          [
+            "tutorial/bigger-applications.md#configure-the-entrypoint-in-pyproject-toml",
+            "en",
+            0.0161
+          ],
+          [
+            "about/index.md#about",
+            "en",
+            0.0159
+          ]
+        ]
+      },
+      {
+        "id": "en-14",
+        "lang": "en",
+        "style": "written",
+        "pair_id": null,
+        "question": "Where should I put code that has to run once at startup, like loading a machine learning model?",
+        "gold": [
+          "advanced/events.md#lifespan-events",
+          "advanced/events.md#lifespan-function",
+          "advanced/events.md#use-case"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "advanced/events.md#lifespan-events",
+            "en",
+            0.0297
+          ],
+          [
+            "deployment/concepts.md#restarts",
+            "en",
+            0.0271
+          ],
+          [
+            "deployment/concepts.md#run-automatically-on-startup",
+            "en",
+            0.0269
+          ],
+          [
+            "advanced/events.md#startup-event",
+            "en",
+            0.0267
+          ],
+          [
+            "fastapi-cli.md#fastapi-dev",
+            "en",
+            0.0253
+          ]
+        ]
+      },
+      {
+        "id": "en-15",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "Can an endpoint give back an HTML page instead of JSON?",
+        "gold": [
+          "advanced/custom-response.md#return-a-response",
+          "advanced/custom-response.md#htmlresponse",
+          "advanced/custom-response.md#custom-response-html-stream-file-others"
+        ],
+        "rank": 3,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.3333333333333333,
+        "top5": [
+          [
+            "tutorial/frontend.md#client-side-routing",
+            "en",
+            0.0284
+          ],
+          [
+            "advanced/custom-response.md#json-performance",
+            "en",
+            0.0268
+          ],
+          [
+            "advanced/custom-response.md#htmlresponse",
+            "en",
+            0.0252
+          ],
+          [
+            "tutorial/stream-json-lines.md#stream-json-lines-with-fastapi",
+            "en",
+            0.0244
+          ],
+          [
+            "tutorial/security/simple-oauth2.md#return-the-token",
+            "en",
+            0.0244
+          ]
+        ]
+      },
+      {
+        "id": "en-16",
+        "lang": "en",
+        "style": "written",
+        "pair_id": null,
+        "question": "My app runs behind a proxy that strips a path prefix, so the docs page breaks. How do I tell FastAPI about the prefix?",
+        "gold": [
+          "advanced/behind-a-proxy.md#providing-the-root-path",
+          "advanced/behind-a-proxy.md#proxy-with-a-stripped-path-prefix"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "advanced/behind-a-proxy.md#proxy-with-a-stripped-path-prefix",
+            "en",
+            0.0325
+          ],
+          [
+            "advanced/behind-a-proxy.md#check-the-docs-ui",
+            "en",
+            0.032
+          ],
+          [
+            "advanced/behind-a-proxy.md#about-proxies-with-a-stripped-path-prefix",
+            "en",
+            0.0318
+          ],
+          [
+            "advanced/behind-a-proxy.md#check-the-responses",
+            "en",
+            0.0302
+          ],
+          [
+            "advanced/behind-a-proxy.md#setting-the-root-path-in-the-fastapi-app",
+            "es",
+            0.029
+          ]
+        ]
+      },
+      {
+        "id": "en-17",
+        "lang": "en",
+        "style": "written",
+        "pair_id": null,
+        "question": "How do I protect an endpoint with HTTP Basic auth without leaking timing information?",
+        "gold": [
+          "advanced/security/http-basic-auth.md#simple-http-basic-auth",
+          "advanced/security/http-basic-auth.md#timing-attacks",
+          "advanced/security/http-basic-auth.md#check-the-username"
+        ],
+        "rank": 2,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.5,
+        "top5": [
+          [
+            "advanced/security/http-basic-auth.md#return-the-error",
+            "en",
+            0.0303
+          ],
+          [
+            "advanced/security/http-basic-auth.md#timing-attacks",
+            "en",
+            0.0297
+          ],
+          [
+            "advanced/security/http-basic-auth.md#simple-http-basic-auth",
+            "en",
+            0.0291
+          ],
+          [
+            "advanced/security/http-basic-auth.md#http-basic-auth",
+            "en",
+            0.0288
+          ],
+          [
+            "features.md#security-and-authentication",
+            "en",
+            0.0276
+          ]
+        ]
+      },
+      {
+        "id": "en-18",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": "pair-06",
+        "question": "Is there a way to hide the /docs page once I deploy to production?",
+        "gold": [
+          "how-to/conditional-openapi.md#conditional-openapi",
+          "how-to/conditional-openapi.md#conditional-openapi-from-settings-and-env-vars"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "how-to/conditional-openapi.md#conditional-openapi",
+            "en",
+            0.0269
+          ],
+          [
+            "tutorial/frontend.md#custom-404-page",
+            "en",
+            0.0265
+          ],
+          [
+            "how-to/custom-docs-ui-assets.md#create-a-path-operation-to-test-static-files",
+            "en",
+            0.0253
+          ],
+          [
+            "how-to/custom-docs-ui-assets.md#disable-the-automatic-docs-for-static-files",
+            "en",
+            0.0252
+          ],
+          [
+            "how-to/custom-docs-ui-assets.md#create-a-path-operation-to-test-it",
+            "en",
+            0.0246
+          ]
+        ]
+      },
+      {
+        "id": "en-19",
+        "lang": "en",
+        "style": "written",
+        "pair_id": null,
+        "question": "How can I turn off syntax highlighting in Swagger UI?",
+        "gold": [
+          "how-to/configure-swagger-ui.md#disable-syntax-highlighting"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "how-to/configure-swagger-ui.md#disable-syntax-highlighting",
+            "en",
+            0.0328
+          ],
+          [
+            "how-to/configure-swagger-ui.md#configure-swagger-ui",
+            "en",
+            0.032
+          ],
+          [
+            "how-to/configure-swagger-ui.md#change-default-swagger-ui-parameters",
+            "en",
+            0.0299
+          ],
+          [
+            "how-to/configure-swagger-ui.md#other-swagger-ui-parameters",
+            "en",
+            0.0297
+          ],
+          [
+            "tutorial/schema-extra-example.md#swagger-ui-and-openapi-specific-examples",
+            "en",
+            0.0263
+          ]
+        ]
+      },
+      {
+        "id": "en-20",
+        "lang": "en",
+        "style": "written",
+        "pair_id": null,
+        "question": "Does FastAPI work with GraphQL, and which library should I pick?",
+        "gold": [
+          "how-to/graphql.md#graphql-with-strawberry",
+          "how-to/graphql.md#graphql-libraries",
+          "how-to/graphql.md#graphql"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "how-to/graphql.md#graphql",
+            "en",
+            0.0325
+          ],
+          [
+            "how-to/graphql.md#graphql-libraries",
+            "en",
+            0.031
+          ],
+          [
+            "advanced/opentelemetry.md#install-fastapi",
+            "en",
+            0.0275
+          ],
+          [
+            "tutorial/index.md#ai-agent-skills",
+            "en",
+            0.0241
+          ],
+          [
+            "how-to/graphql.md#graphql-with-strawberry",
+            "en",
+            0.0164
+          ]
+        ]
+      },
+      {
+        "id": "en-21",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "Can you walk me through writing a Dockerfile for my FastAPI app?",
+        "gold": [
+          "deployment/docker.md#dockerfile",
+          "deployment/docker.md#build-a-docker-image-for-fastapi",
+          "deployment/docker.md#build-the-docker-image"
+        ],
+        "rank": 2,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.5,
+        "top5": [
+          [
+            "deployment/docker.md#fastapi-in-containers-docker",
+            "en",
+            0.031
+          ],
+          [
+            "deployment/docker.md#dockerfile",
+            "en",
+            0.0288
+          ],
+          [
+            "deployment/docker.md#build-a-docker-image-with-a-single-file-fastapi",
+            "en",
+            0.0269
+          ],
+          [
+            "tutorial/first-steps.md#deploy-your-app-optional",
+            "en",
+            0.0195
+          ],
+          [
+            "deployment/docker.md#create-the-fastapi-code",
+            "en",
+            0.0192
+          ]
+        ]
+      },
+      {
+        "id": "en-22",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "How do I run more than one worker so I can use all my CPU cores?",
+        "gold": [
+          "deployment/server-workers.md#multiple-workers",
+          "deployment/server-workers.md#server-workers-uvicorn-with-workers"
+        ],
+        "rank": 6,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.16666666666666666,
+        "top5": [
+          [
+            "deployment/concepts.md#replication-processes-and-memory",
+            "en",
+            0.0318
+          ],
+          [
+            "deployment/server-workers.md#deployment-concepts",
+            "en",
+            0.031
+          ],
+          [
+            "deployment/concepts.md#multiple-processes-an-example",
+            "en",
+            0.0294
+          ],
+          [
+            "deployment/docker.md#one-load-balancer-multiple-worker-containers",
+            "en",
+            0.0276
+          ],
+          [
+            "deployment/server-workers.md#recap",
+            "en",
+            0.0264
+          ]
+        ]
+      },
+      {
+        "id": "en-23",
+        "lang": "en",
+        "style": "written",
+        "pair_id": null,
+        "question": "Where do HTTPS certificates come from, and is there a free option?",
+        "gold": [
+          "deployment/https.md#lets-encrypt",
+          "deployment/https.md#about-https"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "deployment/https.md#lets-encrypt",
+            "en",
+            0.0325
+          ],
+          [
+            "deployment/https.md#about-https",
+            "en",
+            0.0306
+          ],
+          [
+            "deployment/concepts.md#security-https",
+            "en",
+            0.0299
+          ],
+          [
+            "deployment/https.md#certificate-renewal",
+            "en",
+            0.0292
+          ],
+          [
+            "tutorial/security/index.md#oauth-1",
+            "en",
+            0.0267
+          ]
+        ]
+      },
+      {
+        "id": "en-24",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "When should I write async def for my endpoints, and when just a normal def?",
+        "gold": [
+          "async.md#concurrency-and-async-await",
+          "async.md#async-and-await"
+        ],
+        "rank": 2,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.5,
+        "top5": [
+          [
+            "tutorial/dependencies/index.md#to-async-or-not-to-async",
+            "en",
+            0.0315
+          ],
+          [
+            "async.md#concurrency-and-async-await",
+            "en",
+            0.0298
+          ],
+          [
+            "async.md#other-utility-functions",
+            "en",
+            0.0297
+          ],
+          [
+            "advanced/async-tests.md#pytest-mark-anyio",
+            "en",
+            0.0294
+          ],
+          [
+            "async.md#dependencies",
+            "en",
+            0.0289
+          ]
+        ]
+      },
+      {
+        "id": "en-25",
+        "lang": "en",
+        "style": "written",
+        "pair_id": null,
+        "question": "What's the difference between fastapi dev and fastapi run?",
+        "gold": [
+          "fastapi-cli.md#fastapi-dev",
+          "fastapi-cli.md#fastapi-run",
+          "fastapi-cli.md#fastapi-cli"
+        ],
+        "rank": 3,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.3333333333333333,
+        "top5": [
+          [
+            "fastapi-cli.md#fastapi-dev-with-path-or-with-entrypoint-cli-option",
+            "en",
+            0.0315
+          ],
+          [
+            "index.md#run-it",
+            "en",
+            0.0311
+          ],
+          [
+            "fastapi-cli.md#fastapi-cli",
+            "en",
+            0.0292
+          ],
+          [
+            "tutorial/first-steps.md#fastapi-dev-with-path-or-with-entrypoint-cli-option",
+            "en",
+            0.0289
+          ],
+          [
+            "deployment/fastapicloud.md#fastapi-cloud",
+            "en",
+            0.0265
+          ]
+        ]
+      },
+      {
+        "id": "es-01",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": "pair-01",
+        "question": "Oye, ¿cómo le hago para que los usuarios suban un archivo a mi API?",
+        "gold": [
+          "tutorial/request-files.md#request-files",
+          "tutorial/request-files.md#define-file-parameters",
+          "tutorial/request-files.md#file-parameters-with-uploadfile"
+        ],
+        "rank": null,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.0,
+        "top5": [
+          [
+            "tutorial/bigger-applications.md#apirouter",
+            "es",
+            0.0311
+          ],
+          [
+            "advanced/openapi-webhooks.md#openapi-webhooks",
+            "es",
+            0.0286
+          ],
+          [
+            "how-to/custom-docs-ui-assets.md#include-the-custom-docs",
+            "es",
+            0.0265
+          ],
+          [
+            "advanced/openapi-webhooks.md#documenting-webhooks-with-fastapi-and-openapi",
+            "es",
+            0.0252
+          ],
+          [
+            "advanced/security/oauth2-scopes.md#oauth2-scopes",
+            "es",
+            0.0235
+          ]
+        ]
+      },
+      {
+        "id": "es-02",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": "pair-02",
+        "question": "Tengo una tarea pesada y quiero responderle primero al usuario y que se termine después. ¿Cómo lo hago?",
+        "gold": [
+          "tutorial/background-tasks.md#using-backgroundtasks",
+          "tutorial/background-tasks.md#add-the-background-task",
+          "tutorial/background-tasks.md#background-tasks"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "tutorial/background-tasks.md#background-tasks",
+            "es",
+            0.0305
+          ],
+          [
+            "tutorial/index.md#advanced-user-guide",
+            "es",
+            0.0301
+          ],
+          [
+            "tutorial/background-tasks.md#add-the-background-task",
+            "es",
+            0.0296
+          ],
+          [
+            "advanced/index.md#read-the-tutorial-first",
+            "es",
+            0.0288
+          ],
+          [
+            "advanced/opentelemetry.md#trace-request-operations",
+            "es",
+            0.0261
+          ]
+        ]
+      },
+      {
+        "id": "es-03",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": "pair-03",
+        "question": "Mi frontend en localhost 3000 no puede llamar a mi API porque el navegador lo bloquea. ¿Qué hago?",
+        "gold": [
+          "tutorial/cors.md#cors-cross-origin-resource-sharing",
+          "tutorial/cors.md#use-corsmiddleware",
+          "tutorial/cors.md#steps"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "tutorial/cors.md#steps",
+            "es",
+            0.0315
+          ],
+          [
+            "advanced/strict-content-type.md#example-attack",
+            "es",
+            0.0302
+          ],
+          [
+            "tutorial/handling-errors.md#handling-errors",
+            "es",
+            0.0279
+          ],
+          [
+            "tutorial/frontend.md#use-it-with-apirouter",
+            "es",
+            0.0265
+          ],
+          [
+            "advanced/openapi-callbacks.md#create-a-callback-apirouter",
+            "es",
+            0.0237
+          ]
+        ]
+      },
+      {
+        "id": "es-04",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": "pair-04",
+        "question": "Mi main.py ya quedó enorme. ¿Cómo divido mis rutas en varios archivos?",
+        "gold": [
+          "tutorial/bigger-applications.md#apirouter",
+          "tutorial/bigger-applications.md#include-the-apirouters-for-users-and-items",
+          "tutorial/bigger-applications.md#bigger-applications-multiple-files"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "tutorial/bigger-applications.md#include-the-apirouters-for-users-and-items",
+            "es",
+            0.0313
+          ],
+          [
+            "how-to/custom-docs-ui-assets.md#project-file-structure",
+            "es",
+            0.0305
+          ],
+          [
+            "deployment/docker.md#build-a-docker-image-with-a-single-file-fastapi",
+            "es",
+            0.0302
+          ],
+          [
+            "tutorial/bigger-applications.md#bigger-applications-multiple-files",
+            "es",
+            0.0301
+          ],
+          [
+            "tutorial/testing.md#testing-extended-example",
+            "es",
+            0.0293
+          ]
+        ]
+      },
+      {
+        "id": "es-05",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": "pair-05",
+        "question": "¿Cómo evito que la contraseña salga en la respuesta cuando regreso un usuario?",
+        "gold": [
+          "tutorial/response-model.md#add-an-output-model",
+          "tutorial/response-model.md#return-type-and-data-filtering",
+          "tutorial/response-model.md#response-model-return-type"
+        ],
+        "rank": 2,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.5,
+        "top5": [
+          [
+            "tutorial/response-model.md#return-the-same-input-data",
+            "es",
+            0.031
+          ],
+          [
+            "tutorial/response-model.md#add-an-output-model",
+            "es",
+            0.0308
+          ],
+          [
+            "tutorial/security/oauth2-jwt.md#check-it",
+            "es",
+            0.0303
+          ],
+          [
+            "tutorial/security/simple-oauth2.md#inactive-user",
+            "es",
+            0.028
+          ],
+          [
+            "tutorial/security/oauth2-jwt.md#why-use-password-hashing",
+            "es",
+            0.0277
+          ]
+        ]
+      },
+      {
+        "id": "es-06",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": "pair-06",
+        "question": "¿Hay forma de esconder la página de /docs cuando ya está en producción?",
+        "gold": [
+          "how-to/conditional-openapi.md#conditional-openapi",
+          "how-to/conditional-openapi.md#conditional-openapi-from-settings-and-env-vars"
+        ],
+        "rank": 3,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.3333333333333333,
+        "top5": [
+          [
+            "how-to/custom-docs-ui-assets.md#disable-the-automatic-docs-for-static-files",
+            "es",
+            0.0309
+          ],
+          [
+            "how-to/custom-docs-ui-assets.md#create-a-path-operation-to-test-static-files",
+            "es",
+            0.027
+          ],
+          [
+            "how-to/conditional-openapi.md#conditional-openapi",
+            "es",
+            0.0269
+          ],
+          [
+            "how-to/custom-docs-ui-assets.md#include-the-custom-docs",
+            "es",
+            0.0252
+          ],
+          [
+            "tutorial/frontend.md#custom-404-page",
+            "es",
+            0.0251
+          ]
+        ]
+      },
+      {
+        "id": "es-07",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "Quiero conectar mi API a una base de datos SQL, empezando con SQLite. ¿Cómo lo armo?",
+        "gold": [
+          "tutorial/sql-databases.md#sql-relational-databases",
+          "tutorial/sql-databases.md#create-an-engine",
+          "tutorial/sql-databases.md#create-the-tables"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "tutorial/sql-databases.md#sql-relational-databases",
+            "es",
+            0.0315
+          ],
+          [
+            "tutorial/sql-databases.md#create-database-tables-on-startup",
+            "es",
+            0.031
+          ],
+          [
+            "tutorial/sql-databases.md#recap",
+            "es",
+            0.0305
+          ],
+          [
+            "tutorial/sql-databases.md#create-an-engine",
+            "es",
+            0.0305
+          ],
+          [
+            "how-to/testing-database.md#testing-a-database",
+            "es",
+            0.0299
+          ]
+        ]
+      },
+      {
+        "id": "es-08",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "¿Cómo le hago pruebas a mis endpoints? ¿Con qué las corro?",
+        "gold": [
+          "tutorial/testing.md#testing",
+          "tutorial/testing.md#testing-file"
+        ],
+        "rank": null,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.0,
+        "top5": [
+          [
+            "how-to/testing-database.md#testing-a-database",
+            "es",
+            0.0287
+          ],
+          [
+            "advanced/templates.md#more-details",
+            "es",
+            0.0276
+          ],
+          [
+            "advanced/testing-events.md#testing-events-lifespan-and-startup-shutdown",
+            "es",
+            0.0269
+          ],
+          [
+            "tutorial/testing.md#testing-extended-example",
+            "es",
+            0.0252
+          ],
+          [
+            "tutorial/path-params-numeric-validations.md#number-validations-greater-than-and-less-than-or-equal",
+            "es",
+            0.0244
+          ]
+        ]
+      },
+      {
+        "id": "es-09",
+        "lang": "es",
+        "style": "written",
+        "pair_id": null,
+        "question": "¿Cómo leo una cabecera con guion, como user-agent, si en Python no puedo nombrar así una variable?",
+        "gold": [
+          "tutorial/header-params.md#automatic-conversion",
+          "tutorial/header-params.md#header-parameters"
+        ],
+        "rank": 2,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.5,
+        "top5": [
+          [
+            "python-types.md#classes-as-types",
+            "es",
+            0.0294
+          ],
+          [
+            "tutorial/header-params.md#automatic-conversion",
+            "es",
+            0.0294
+          ],
+          [
+            "advanced/settings.md#types-and-validation",
+            "es",
+            0.0282
+          ],
+          [
+            "tutorial/query-params-str-validations.md#alias-parameters",
+            "es",
+            0.0248
+          ],
+          [
+            "advanced/settings.md#creating-the-settings-only-once-with-lru-cache",
+            "es",
+            0.0236
+          ]
+        ]
+      },
+      {
+        "id": "es-10",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "¿Puedo ejecutar código en todas las peticiones, por ejemplo para medir cuánto tarda cada una?",
+        "gold": [
+          "tutorial/middleware.md#create-a-middleware",
+          "tutorial/middleware.md#before-and-after-the-response"
+        ],
+        "rank": null,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.0,
+        "top5": [
+          [
+            "advanced/opentelemetry.md#opentelemetry",
+            "es",
+            0.028
+          ],
+          [
+            "advanced/opentelemetry.md#trace-request-operations",
+            "es",
+            0.026
+          ],
+          [
+            "advanced/events.md#use-case",
+            "es",
+            0.0259
+          ],
+          [
+            "deployment/manually.md#deployment-concepts",
+            "es",
+            0.0257
+          ],
+          [
+            "advanced/additional-responses.md#additional-response-with-model",
+            "es",
+            0.0225
+          ]
+        ]
+      },
+      {
+        "id": "es-11",
+        "lang": "es",
+        "style": "written",
+        "pair_id": null,
+        "question": "¿Cómo aplico una misma dependencia a todas las rutas de mi aplicación?",
+        "gold": [
+          "tutorial/dependencies/global-dependencies.md#global-dependencies"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "tutorial/dependencies/global-dependencies.md#global-dependencies",
+            "es",
+            0.0309
+          ],
+          [
+            "tutorial/dependencies/index.md#first-steps",
+            "es",
+            0.0293
+          ],
+          [
+            "advanced/testing-dependencies.md#use-the-app-dependency-overrides-attribute",
+            "es",
+            0.0273
+          ],
+          [
+            "tutorial/dependencies/sub-dependencies.md#use-the-dependency",
+            "es",
+            0.0272
+          ],
+          [
+            "advanced/settings.md#settings-in-a-dependency",
+            "es",
+            0.0269
+          ]
+        ]
+      },
+      {
+        "id": "es-12",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "Necesito recibir el usuario y la contraseña desde un formulario, no en JSON. ¿Cómo?",
+        "gold": [
+          "tutorial/request-forms.md#form-data",
+          "tutorial/security/simple-oauth2.md#code-to-get-the-username-and-password"
+        ],
+        "rank": null,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.0,
+        "top5": [
+          [
+            "tutorial/security/simple-oauth2.md#inactive-user",
+            "es",
+            0.0303
+          ],
+          [
+            "tutorial/security/simple-oauth2.md#see-it-in-action",
+            "es",
+            0.0301
+          ],
+          [
+            "tutorial/security/oauth2-jwt.md#check-it",
+            "es",
+            0.0284
+          ],
+          [
+            "advanced/security/http-basic-auth.md#http-basic-auth",
+            "es",
+            0.0274
+          ],
+          [
+            "tutorial/request-forms.md#about-form-fields",
+            "es",
+            0.026
+          ]
+        ]
+      },
+      {
+        "id": "es-13",
+        "lang": "es",
+        "style": "written",
+        "pair_id": null,
+        "question": "¿Cómo cambio el código de estado HTTP que devuelve una ruta, por ejemplo para responder 201 al crear algo?",
+        "gold": [
+          "tutorial/response-status-code.md#response-status-code",
+          "tutorial/response-status-code.md#changing-the-default"
+        ],
+        "rank": 4,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.25,
+        "top5": [
+          [
+            "tutorial/response-status-code.md#about-http-status-codes",
+            "es",
+            0.0325
+          ],
+          [
+            "advanced/response-change-status-code.md#response-change-status-code",
+            "es",
+            0.0323
+          ],
+          [
+            "advanced/additional-status-codes.md#additional-status-codes",
+            "es",
+            0.0313
+          ],
+          [
+            "tutorial/response-status-code.md#response-status-code",
+            "es",
+            0.0308
+          ],
+          [
+            "advanced/custom-response.md#redirectresponse",
+            "es",
+            0.0286
+          ]
+        ]
+      },
+      {
+        "id": "es-14",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "¿Cómo le mando datos al navegador en tiempo real, tipo notificaciones, sin usar websockets?",
+        "gold": [
+          "tutorial/server-sent-events.md#stream-sse-with-fastapi",
+          "tutorial/server-sent-events.md#server-sent-events-sse"
+        ],
+        "rank": null,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.0,
+        "top5": [
+          [
+            "advanced/websockets.md#create-a-websocket",
+            "es",
+            0.032
+          ],
+          [
+            "advanced/websockets.md#websockets",
+            "es",
+            0.0299
+          ],
+          [
+            "advanced/websockets.md#try-it",
+            "es",
+            0.029
+          ],
+          [
+            "advanced/websockets.md#try-the-websockets-with-dependencies",
+            "es",
+            0.029
+          ],
+          [
+            "advanced/websockets.md#handling-disconnections-and-multiple-clients",
+            "es",
+            0.0267
+          ]
+        ]
+      },
+      {
+        "id": "es-15",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "¿Cómo guardo mis claves y la URL de la base de datos en un archivo .env en lugar de dejarlas en el código?",
+        "gold": [
+          "advanced/settings.md#reading-a-env-file",
+          "advanced/settings.md#the-env-file",
+          "advanced/settings.md#pydantic-settings"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "advanced/settings.md#the-env-file",
+            "es",
+            0.0308
+          ],
+          [
+            "advanced/settings.md#reading-a-env-file",
+            "es",
+            0.0301
+          ],
+          [
+            "environment-variables.md#environment-variables",
+            "es",
+            0.0265
+          ],
+          [
+            "tutorial/security/simple-oauth2.md#check-the-password",
+            "es",
+            0.0238
+          ],
+          [
+            "tutorial/security/first-steps.md#security-first-steps",
+            "es",
+            0.0164
+          ]
+        ]
+      },
+      {
+        "id": "es-16",
+        "lang": "es",
+        "style": "written",
+        "pair_id": null,
+        "question": "¿Se pueden devolver páginas HTML armadas con plantillas Jinja?",
+        "gold": [
+          "advanced/templates.md#using-jinja2templates",
+          "advanced/templates.md#templates"
+        ],
+        "rank": 2,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.5,
+        "top5": [
+          [
+            "advanced/templates.md#templates-and-static-files",
+            "es",
+            0.0313
+          ],
+          [
+            "advanced/templates.md#templates",
+            "es",
+            0.0304
+          ],
+          [
+            "advanced/templates.md#writing-templates",
+            "es",
+            0.0303
+          ],
+          [
+            "advanced/templates.md#using-jinja2templates",
+            "es",
+            0.029
+          ],
+          [
+            "advanced/custom-response.md#redirectresponse",
+            "es",
+            0.0267
+          ]
+        ]
+      },
+      {
+        "id": "es-17",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "¿Cómo le pongo una cookie a la respuesta?",
+        "gold": [
+          "advanced/response-cookies.md#response-cookies"
+        ],
+        "rank": 9,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.1111111111111111,
+        "top5": [
+          [
+            "tutorial/cookie-params.md#recap",
+            "es",
+            0.0313
+          ],
+          [
+            "tutorial/cookie-param-models.md#summary",
+            "es",
+            0.0311
+          ],
+          [
+            "tutorial/cookie-params.md#cookie-parameters",
+            "es",
+            0.0311
+          ],
+          [
+            "tutorial/cookie-param-models.md#forbid-extra-cookies",
+            "es",
+            0.0294
+          ],
+          [
+            "tutorial/cookie-param-models.md#cookies-with-a-pydantic-model",
+            "es",
+            0.029
+          ]
+        ]
+      },
+      {
+        "id": "es-18",
+        "lang": "es",
+        "style": "written",
+        "pair_id": null,
+        "question": "En mis pruebas, ¿cómo cambio una dependencia por otra para no llamar a un servicio externo de verdad?",
+        "gold": [
+          "advanced/testing-dependencies.md#use-the-app-dependency-overrides-attribute",
+          "advanced/testing-dependencies.md#testing-dependencies-with-overrides",
+          "advanced/testing-dependencies.md#use-cases-external-service"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "advanced/testing-dependencies.md#use-cases-external-service",
+            "es",
+            0.0328
+          ],
+          [
+            "advanced/testing-dependencies.md#testing-dependencies-with-overrides",
+            "es",
+            0.0318
+          ],
+          [
+            "tutorial/dependencies/sub-dependencies.md#second-dependency-dependable-and-dependant",
+            "es",
+            0.0292
+          ],
+          [
+            "advanced/settings.md#settings-in-a-dependency",
+            "es",
+            0.0262
+          ],
+          [
+            "async.md#dependencies",
+            "es",
+            0.0261
+          ]
+        ]
+      },
+      {
+        "id": "es-19",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "Quiero que mi app le avise a los sistemas de mis usuarios cuando pase algo, llamándolos yo a ellos. ¿FastAPI documenta eso?",
+        "gold": [
+          "advanced/openapi-webhooks.md#openapi-webhooks",
+          "advanced/openapi-webhooks.md#webhooks-steps"
+        ],
+        "rank": 5,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.2,
+        "top5": [
+          [
+            "tutorial/security/first-steps.md#check-it",
+            "es",
+            0.0254
+          ],
+          [
+            "tutorial/security/get-current-user.md#other-models",
+            "es",
+            0.0233
+          ],
+          [
+            "tutorial/security/index.md#in-a-hurry",
+            "es",
+            0.0227
+          ],
+          [
+            "advanced/openapi-webhooks.md#documenting-webhooks-with-fastapi-and-openapi",
+            "es",
+            0.0218
+          ],
+          [
+            "advanced/openapi-webhooks.md#openapi-webhooks",
+            "es",
+            0.0164
+          ]
+        ]
+      },
+      {
+        "id": "es-20",
+        "lang": "es",
+        "style": "written",
+        "pair_id": null,
+        "question": "¿Cómo hago para que Swagger UI no cargue sus archivos desde un CDN y mejor los sirva mi propia app?",
+        "gold": [
+          "how-to/custom-docs-ui-assets.md#custom-docs-ui-static-assets-self-hosting",
+          "how-to/custom-docs-ui-assets.md#disable-the-automatic-docs-for-static-files",
+          "how-to/custom-docs-ui-assets.md#serve-the-static-files"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "how-to/custom-docs-ui-assets.md#disable-the-automatic-docs-for-static-files",
+            "es",
+            0.0325
+          ],
+          [
+            "how-to/custom-docs-ui-assets.md#custom-docs-ui-static-assets-self-hosting",
+            "es",
+            0.031
+          ],
+          [
+            "how-to/custom-docs-ui-assets.md#download-the-files",
+            "es",
+            0.0307
+          ],
+          [
+            "how-to/configure-swagger-ui.md#configure-swagger-ui",
+            "es",
+            0.0304
+          ],
+          [
+            "how-to/configure-swagger-ui.md#change-default-swagger-ui-parameters",
+            "es",
+            0.0287
+          ]
+        ]
+      },
+      {
+        "id": "es-21",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "Tengo código con Pydantic v1, ¿hay alguna herramienta para pasarlo a v2 sin hacerlo todo a mano?",
+        "gold": [
+          "how-to/migrate-from-pydantic-v1-to-pydantic-v2.md#bump-pydantic"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "how-to/migrate-from-pydantic-v1-to-pydantic-v2.md#bump-pydantic",
+            "es",
+            0.0328
+          ],
+          [
+            "how-to/migrate-from-pydantic-v1-to-pydantic-v2.md#pydantic-v1-in-v2",
+            "es",
+            0.0315
+          ],
+          [
+            "how-to/migrate-from-pydantic-v1-to-pydantic-v2.md#pydantic-v1-and-v2-on-the-same-app",
+            "es",
+            0.0313
+          ],
+          [
+            "how-to/migrate-from-pydantic-v1-to-pydantic-v2.md#pydantic-v1-parameters",
+            "es",
+            0.0306
+          ],
+          [
+            "how-to/migrate-from-pydantic-v1-to-pydantic-v2.md#fastapi-support-for-pydantic-v1-in-v2",
+            "es",
+            0.0302
+          ]
+        ]
+      },
+      {
+        "id": "es-22",
+        "lang": "es",
+        "style": "written",
+        "pair_id": null,
+        "question": "¿Por qué conviene fijar la versión de FastAPI en mi proyecto y cómo se hace?",
+        "gold": [
+          "deployment/versions.md#pin-your-fastapi-version",
+          "deployment/versions.md#about-fastapi-versions"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "deployment/versions.md#pin-your-fastapi-version",
+            "es",
+            0.0318
+          ],
+          [
+            "tutorial/index.md#install-fastapi",
+            "es",
+            0.0303
+          ],
+          [
+            "deployment/versions.md#upgrading-the-fastapi-versions",
+            "es",
+            0.0272
+          ],
+          [
+            "tutorial/index.md#ai-agent-skills",
+            "es",
+            0.0264
+          ],
+          [
+            "deployment/versions.md#about-fastapi-versions",
+            "es",
+            0.0262
+          ]
+        ]
+      },
+      {
+        "id": "es-23",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "¿Qué pasa si mi servidor se cae? ¿Cómo hago que se levante solo?",
+        "gold": [
+          "deployment/concepts.md#restart-after-crash",
+          "deployment/concepts.md#restarts",
+          "deployment/concepts.md#example-tools-to-restart-automatically"
+        ],
+        "rank": null,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.0,
+        "top5": [
+          [
+            "deployment/concepts.md#in-a-remote-server",
+            "es",
+            0.0294
+          ],
+          [
+            "deployment/manually.md#deployment-concepts",
+            "es",
+            0.0288
+          ],
+          [
+            "deployment/manually.md#server-machine-and-server-program",
+            "es",
+            0.0261
+          ],
+          [
+            "fastapi-cli.md#fastapi-dev",
+            "es",
+            0.0254
+          ],
+          [
+            "deployment/manually.md#install-the-server-program",
+            "es",
+            0.0241
+          ]
+        ]
+      },
+      {
+        "id": "es-24",
+        "lang": "es",
+        "style": "written",
+        "pair_id": null,
+        "question": "¿Para qué sirve un entorno virtual y cómo lo creo en un proyecto de FastAPI?",
+        "gold": [
+          "virtual-environments.md#virtual-environments"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "virtual-environments.md#virtual-environments",
+            "es",
+            0.0325
+          ],
+          [
+            "tutorial/index.md#install-fastapi",
+            "es",
+            0.0313
+          ],
+          [
+            "virtual-environments.md#learn-more",
+            "es",
+            0.0302
+          ],
+          [
+            "index.md#requirements",
+            "es",
+            0.0292
+          ],
+          [
+            "tutorial/index.md#ai-agent-skills",
+            "es",
+            0.0263
+          ]
+        ]
+      },
+      {
+        "id": "es-25",
+        "lang": "es",
+        "style": "written",
+        "pair_id": null,
+        "question": "¿Qué son las variables de entorno y para qué las usa FastAPI?",
+        "gold": [
+          "environment-variables.md#environment-variables"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "environment-variables.md#environment-variables",
+            "es",
+            0.0323
+          ],
+          [
+            "environment-variables.md#learn-more",
+            "es",
+            0.0268
+          ],
+          [
+            "deployment/docker.md#what-is-a-container-image",
+            "es",
+            0.0256
+          ],
+          [
+            "index.md#requirements",
+            "es",
+            0.0233
+          ],
+          [
+            "index.md#example",
+            "es",
+            0.0215
+          ]
+        ]
+      }
+    ]
+  },
+  "cross_lingual": {
+    "slices": {
+      "overall": {
+        "n": 50,
+        "recall@1": {
+          "mean": 0.44,
+          "lo": 0.3,
+          "hi": 0.58
+        },
+        "recall@5": {
+          "mean": 0.78,
+          "lo": 0.66,
+          "hi": 0.88
+        },
+        "mrr@10": {
+          "mean": 0.5829,
+          "lo": 0.4689,
+          "hi": 0.6922
+        }
+      },
+      "en": {
+        "n": 25,
+        "recall@1": {
+          "mean": 0.4,
+          "lo": 0.24,
+          "hi": 0.6
+        },
+        "recall@5": {
+          "mean": 0.84,
+          "lo": 0.68,
+          "hi": 0.96
+        },
+        "mrr@10": {
+          "mean": 0.59,
+          "lo": 0.45,
+          "hi": 0.7434
+        }
+      },
+      "es": {
+        "n": 25,
+        "recall@1": {
+          "mean": 0.48,
+          "lo": 0.28,
+          "hi": 0.68
+        },
+        "recall@5": {
+          "mean": 0.72,
+          "lo": 0.52,
+          "hi": 0.88
+        },
+        "mrr@10": {
+          "mean": 0.5758,
+          "lo": 0.4046,
+          "hi": 0.7447
+        }
+      },
+      "spoken": {
+        "n": 31,
+        "recall@1": {
+          "mean": 0.2903,
+          "lo": 0.129,
+          "hi": 0.4516
+        },
+        "recall@5": {
+          "mean": 0.6452,
+          "lo": 0.4839,
+          "hi": 0.8065
+        },
+        "mrr@10": {
+          "mean": 0.4428,
+          "lo": 0.3023,
+          "hi": 0.5828
+        }
+      },
+      "written": {
+        "n": 19,
+        "recall@1": {
+          "mean": 0.6842,
+          "lo": 0.4737,
+          "hi": 0.8947
+        },
+        "recall@5": {
+          "mean": 1.0,
+          "lo": 1.0,
+          "hi": 1.0
+        },
+        "mrr@10": {
+          "mean": 0.8114,
+          "lo": 0.6798,
+          "hi": 0.9298
+        }
+      }
+    },
+    "pairs": {
+      "pairs": {
+        "pair-01": {
+          "en_id": "en-01",
+          "es_id": "es-01",
+          "en_rank": 4,
+          "es_rank": null,
+          "both_hit@5": false,
+          "both_hit@1": false
+        },
+        "pair-02": {
+          "en_id": "en-03",
+          "es_id": "es-02",
+          "en_rank": 2,
+          "es_rank": 1,
+          "both_hit@5": true,
+          "both_hit@1": false
+        },
+        "pair-03": {
+          "en_id": "en-04",
+          "es_id": "es-03",
+          "en_rank": 1,
+          "es_rank": 1,
+          "both_hit@5": true,
+          "both_hit@1": true
+        },
+        "pair-04": {
+          "en_id": "en-08",
+          "es_id": "es-04",
+          "en_rank": 2,
+          "es_rank": 1,
+          "both_hit@5": true,
+          "both_hit@1": false
+        },
+        "pair-05": {
+          "en_id": "en-10",
+          "es_id": "es-05",
+          "en_rank": 2,
+          "es_rank": 2,
+          "both_hit@5": true,
+          "both_hit@1": false
+        },
+        "pair-06": {
+          "en_id": "en-18",
+          "es_id": "es-06",
+          "en_rank": 1,
+          "es_rank": 3,
+          "both_hit@5": true,
+          "both_hit@1": false
+        }
+      },
+      "both_hit@5": 5,
+      "both_hit@1": 1,
+      "n_pairs": 6
+    },
+    "per_question": [
+      {
+        "id": "en-01",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": "pair-01",
+        "question": "Hey, how do I let people upload a file to my API?",
+        "gold": [
+          "tutorial/request-files.md#request-files",
+          "tutorial/request-files.md#define-file-parameters",
+          "tutorial/request-files.md#file-parameters-with-uploadfile"
+        ],
+        "rank": 4,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.25,
+        "top5": [
+          [
+            "advanced/openapi-callbacks.md#an-app-with-callbacks",
+            "en",
+            0.029
+          ],
+          [
+            "tutorial/request-files.md#optional-file-upload",
+            "en",
+            0.0275
+          ],
+          [
+            "tutorial/request-files.md#uploadfile",
+            "en",
+            0.0246
+          ],
+          [
+            "tutorial/request-files.md#file-parameters-with-uploadfile",
+            "en",
+            0.0233
+          ],
+          [
+            "tutorial/body.md#request-body",
+            "en",
+            0.0208
+          ]
+        ]
+      },
+      {
+        "id": "en-02",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "How do I make a route need a login?",
+        "gold": [
+          "tutorial/security/first-steps.md#fastapis-oauth2passwordbearer",
+          "tutorial/security/first-steps.md#use-it",
+          "tutorial/security/first-steps.md#what-it-does",
+          "advanced/security/http-basic-auth.md#simple-http-basic-auth"
+        ],
+        "rank": null,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.0,
+        "top5": [
+          [
+            "advanced/security/http-basic-auth.md#return-the-error",
+            "en",
+            0.0315
+          ],
+          [
+            "how-to/custom-request-and-route.md#custom-apiroute-class-in-a-router",
+            "es",
+            0.0265
+          ],
+          [
+            "tutorial/security/index.md#openid-connect",
+            "es",
+            0.0251
+          ],
+          [
+            "advanced/websockets.md#create-a-websocket",
+            "en",
+            0.0241
+          ],
+          [
+            "tutorial/path-params.md#order-matters",
+            "en",
+            0.0221
+          ]
+        ]
+      },
+      {
+        "id": "en-03",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": "pair-02",
+        "question": "So I have something slow to do, and I want to reply to the user first and finish it afterwards. How?",
+        "gold": [
+          "tutorial/background-tasks.md#using-backgroundtasks",
+          "tutorial/background-tasks.md#add-the-background-task",
+          "tutorial/background-tasks.md#background-tasks"
+        ],
+        "rank": 2,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.5,
+        "top5": [
+          [
+            "deployment/concepts.md#previous-steps-before-starting",
+            "en",
+            0.0292
+          ],
+          [
+            "tutorial/background-tasks.md#background-tasks",
+            "en",
+            0.0277
+          ],
+          [
+            "advanced/security/http-basic-auth.md#timing-attacks",
+            "en",
+            0.0247
+          ],
+          [
+            "async.md#technical-details",
+            "en",
+            0.0164
+          ],
+          [
+            "tutorial/middleware.md#before-and-after-the-response",
+            "en",
+            0.0161
+          ]
+        ]
+      },
+      {
+        "id": "en-04",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": "pair-03",
+        "question": "My frontend on localhost 3000 keeps getting blocked when it calls my API. What's going on, and how do I fix it?",
+        "gold": [
+          "tutorial/cors.md#cors-cross-origin-resource-sharing",
+          "tutorial/cors.md#use-corsmiddleware",
+          "tutorial/cors.md#steps"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "tutorial/cors.md#steps",
+            "en",
+            0.0325
+          ],
+          [
+            "advanced/strict-content-type.md#example-attack",
+            "en",
+            0.0287
+          ],
+          [
+            "tutorial/cors.md#cors-cross-origin-resource-sharing",
+            "en",
+            0.0256
+          ],
+          [
+            "advanced/openapi-callbacks.md#openapi-callbacks",
+            "en",
+            0.0251
+          ],
+          [
+            "tutorial/frontend.md#use-it-with-apirouter",
+            "en",
+            0.0236
+          ]
+        ]
+      },
+      {
+        "id": "en-05",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "What do I do to send back a 404 when the item isn't there?",
+        "gold": [
+          "tutorial/handling-errors.md#use-httpexception",
+          "tutorial/handling-errors.md#handling-errors"
+        ],
+        "rank": 3,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.3333333333333333,
+        "top5": [
+          [
+            "tutorial/frontend.md#custom-404-page",
+            "en",
+            0.0302
+          ],
+          [
+            "tutorial/frontend.md#fallback-auto",
+            "en",
+            0.0301
+          ],
+          [
+            "tutorial/handling-errors.md#handling-errors",
+            "en",
+            0.0284
+          ],
+          [
+            "tutorial/handling-errors.md#the-resulting-response",
+            "en",
+            0.0278
+          ],
+          [
+            "tutorial/handling-errors.md#use-httpexception",
+            "en",
+            0.0276
+          ]
+        ]
+      },
+      {
+        "id": "en-06",
+        "lang": "en",
+        "style": "written",
+        "pair_id": null,
+        "question": "How can I require a query parameter to have a minimum length and match a regular expression?",
+        "gold": [
+          "tutorial/query-params-str-validations.md#add-more-validations",
+          "tutorial/query-params-str-validations.md#additional-validation"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "tutorial/query-params-str-validations.md#add-more-validations",
+            "en",
+            0.0328
+          ],
+          [
+            "tutorial/query-params-str-validations.md#default-values",
+            "en",
+            0.0318
+          ],
+          [
+            "tutorial/query-params-str-validations.md#add-query-to-annotated-in-the-q-parameter",
+            "en",
+            0.0315
+          ],
+          [
+            "tutorial/query-params-str-validations.md#required-parameters",
+            "en",
+            0.0294
+          ],
+          [
+            "tutorial/query-params-str-validations.md#additional-validation",
+            "en",
+            0.0282
+          ]
+        ]
+      },
+      {
+        "id": "en-07",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "How do I make sure my database session gets closed after every request?",
+        "gold": [
+          "tutorial/dependencies/dependencies-with-yield.md#a-database-dependency-with-yield",
+          "tutorial/dependencies/dependencies-with-yield.md#dependencies-with-yield",
+          "tutorial/dependencies/dependencies-with-yield.md#a-dependency-with-yield-and-try"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "tutorial/dependencies/dependencies-with-yield.md#a-database-dependency-with-yield",
+            "en",
+            0.031
+          ],
+          [
+            "tutorial/sql-databases.md#create-the-tables",
+            "en",
+            0.0269
+          ],
+          [
+            "tutorial/sql-databases.md#create-an-engine",
+            "en",
+            0.0253
+          ],
+          [
+            "advanced/advanced-dependencies.md#dependencies-with-yield-and-streamingresponse-technical-details",
+            "en",
+            0.0252
+          ],
+          [
+            "tutorial/middleware.md#before-and-after-the-response",
+            "en",
+            0.0241
+          ]
+        ]
+      },
+      {
+        "id": "en-08",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": "pair-04",
+        "question": "My main.py is getting huge. How do I split my routes into several files?",
+        "gold": [
+          "tutorial/bigger-applications.md#apirouter",
+          "tutorial/bigger-applications.md#include-the-apirouters-for-users-and-items",
+          "tutorial/bigger-applications.md#bigger-applications-multiple-files"
+        ],
+        "rank": 2,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.5,
+        "top5": [
+          [
+            "tutorial/bigger-applications.md#an-example-file-structure",
+            "en",
+            0.0323
+          ],
+          [
+            "tutorial/bigger-applications.md#include-the-apirouters-for-users-and-items",
+            "en",
+            0.0312
+          ],
+          [
+            "tutorial/bigger-applications.md#include-an-apirouter-in-another",
+            "en",
+            0.0295
+          ],
+          [
+            "tutorial/bigger-applications.md#the-main-fastapi",
+            "en",
+            0.0282
+          ],
+          [
+            "tutorial/bigger-applications.md#import-fastapi",
+            "en",
+            0.0257
+          ]
+        ]
+      },
+      {
+        "id": "en-09",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "How would I serve my images and CSS files from the app itself?",
+        "gold": [
+          "tutorial/static-files.md#static-files",
+          "tutorial/static-files.md#what-is-mounting"
+        ],
+        "rank": null,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.0,
+        "top5": [
+          [
+            "how-to/custom-docs-ui-assets.md#custom-docs-ui-static-assets-self-hosting",
+            "en",
+            0.032
+          ],
+          [
+            "tutorial/frontend.md#serve-a-frontend",
+            "en",
+            0.0301
+          ],
+          [
+            "tutorial/frontend.md#client-side-routing",
+            "en",
+            0.026
+          ],
+          [
+            "how-to/custom-docs-ui-assets.md#include-the-custom-docs",
+            "es",
+            0.0239
+          ],
+          [
+            "tutorial/bigger-applications.md#configure-the-entrypoint-in-pyproject-toml",
+            "en",
+            0.0233
+          ]
+        ]
+      },
+      {
+        "id": "en-10",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": "pair-05",
+        "question": "How do I stop the password from showing up in the response when I return a user?",
+        "gold": [
+          "tutorial/response-model.md#add-an-output-model",
+          "tutorial/response-model.md#return-type-and-data-filtering",
+          "tutorial/response-model.md#response-model-return-type"
+        ],
+        "rank": 2,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.5,
+        "top5": [
+          [
+            "tutorial/response-model.md#return-the-same-input-data",
+            "en",
+            0.0325
+          ],
+          [
+            "tutorial/response-model.md#add-an-output-model",
+            "en",
+            0.0315
+          ],
+          [
+            "tutorial/security/simple-oauth2.md#check-the-password",
+            "en",
+            0.0308
+          ],
+          [
+            "tutorial/security/oauth2-jwt.md#update-the-dependencies",
+            "en",
+            0.027
+          ],
+          [
+            "advanced/response-cookies.md#return-a-response-directly",
+            "en",
+            0.0258
+          ]
+        ]
+      },
+      {
+        "id": "en-11",
+        "lang": "en",
+        "style": "written",
+        "pair_id": null,
+        "question": "Why does my fixed route /users/me get swallowed by /users/{user_id}?",
+        "gold": [
+          "tutorial/path-params.md#order-matters"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "tutorial/path-params.md#order-matters",
+            "es",
+            0.0325
+          ],
+          [
+            "advanced/security/oauth2-scopes.md#dependency-tree-and-scopes",
+            "es",
+            0.0294
+          ],
+          [
+            "tutorial/security/get-current-user.md#other-models",
+            "en",
+            0.0292
+          ],
+          [
+            "tutorial/security/get-current-user.md#get-the-user",
+            "en",
+            0.0283
+          ],
+          [
+            "tutorial/security/simple-oauth2.md#inactive-user",
+            "en",
+            0.028
+          ]
+        ]
+      },
+      {
+        "id": "en-12",
+        "lang": "en",
+        "style": "written",
+        "pair_id": null,
+        "question": "How do I update only the fields the client actually sent, instead of overwriting the whole item?",
+        "gold": [
+          "tutorial/body-updates.md#partial-updates-with-patch",
+          "tutorial/body-updates.md#using-pydantics-exclude-unset-parameter"
+        ],
+        "rank": 3,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.3333333333333333,
+        "top5": [
+          [
+            "tutorial/body-updates.md#using-pydantics-update-parameter",
+            "en",
+            0.0302
+          ],
+          [
+            "tutorial/body-updates.md#body-updates",
+            "en",
+            0.0282
+          ],
+          [
+            "tutorial/body-updates.md#partial-updates-with-patch",
+            "en",
+            0.0276
+          ],
+          [
+            "tutorial/request-form-models.md#check-the-docs",
+            "en",
+            0.0275
+          ],
+          [
+            "tutorial/body-updates.md#using-pydantics-exclude-unset-parameter",
+            "en",
+            0.0272
+          ]
+        ]
+      },
+      {
+        "id": "en-13",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "Can FastAPI do real time two-way stuff, like a chat?",
+        "gold": [
+          "advanced/websockets.md#create-a-websocket",
+          "advanced/websockets.md#websockets"
+        ],
+        "rank": null,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.0,
+        "top5": [
+          [
+            "deployment/concepts.md#replication-processes-and-memory",
+            "en",
+            0.023
+          ],
+          [
+            "editor-support.md#editor-support",
+            "es",
+            0.0164
+          ],
+          [
+            "tutorial/query-params-str-validations.md#use-annotated-in-the-type-for-the-q-parameter",
+            "en",
+            0.0164
+          ],
+          [
+            "tutorial/bigger-applications.md#configure-the-entrypoint-in-pyproject-toml",
+            "en",
+            0.0161
+          ],
+          [
+            "about/index.md#about",
+            "es",
+            0.0159
+          ]
+        ]
+      },
+      {
+        "id": "en-14",
+        "lang": "en",
+        "style": "written",
+        "pair_id": null,
+        "question": "Where should I put code that has to run once at startup, like loading a machine learning model?",
+        "gold": [
+          "advanced/events.md#lifespan-events",
+          "advanced/events.md#lifespan-function",
+          "advanced/events.md#use-case"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "advanced/events.md#lifespan-events",
+            "en",
+            0.0297
+          ],
+          [
+            "deployment/concepts.md#restarts",
+            "en",
+            0.0271
+          ],
+          [
+            "deployment/concepts.md#run-automatically-on-startup",
+            "en",
+            0.0269
+          ],
+          [
+            "advanced/events.md#startup-event",
+            "en",
+            0.0267
+          ],
+          [
+            "fastapi-cli.md#fastapi-dev",
+            "en",
+            0.0253
+          ]
+        ]
+      },
+      {
+        "id": "en-15",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "Can an endpoint give back an HTML page instead of JSON?",
+        "gold": [
+          "advanced/custom-response.md#return-a-response",
+          "advanced/custom-response.md#htmlresponse",
+          "advanced/custom-response.md#custom-response-html-stream-file-others"
+        ],
+        "rank": 3,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.3333333333333333,
+        "top5": [
+          [
+            "tutorial/frontend.md#client-side-routing",
+            "en",
+            0.0284
+          ],
+          [
+            "advanced/custom-response.md#json-performance",
+            "es",
+            0.0268
+          ],
+          [
+            "advanced/custom-response.md#htmlresponse",
+            "en",
+            0.0252
+          ],
+          [
+            "tutorial/stream-json-lines.md#stream-json-lines-with-fastapi",
+            "en",
+            0.0244
+          ],
+          [
+            "tutorial/security/simple-oauth2.md#return-the-token",
+            "en",
+            0.0244
+          ]
+        ]
+      },
+      {
+        "id": "en-16",
+        "lang": "en",
+        "style": "written",
+        "pair_id": null,
+        "question": "My app runs behind a proxy that strips a path prefix, so the docs page breaks. How do I tell FastAPI about the prefix?",
+        "gold": [
+          "advanced/behind-a-proxy.md#providing-the-root-path",
+          "advanced/behind-a-proxy.md#proxy-with-a-stripped-path-prefix"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "advanced/behind-a-proxy.md#proxy-with-a-stripped-path-prefix",
+            "en",
+            0.0325
+          ],
+          [
+            "advanced/behind-a-proxy.md#check-the-docs-ui",
+            "en",
+            0.032
+          ],
+          [
+            "advanced/behind-a-proxy.md#about-proxies-with-a-stripped-path-prefix",
+            "en",
+            0.0318
+          ],
+          [
+            "advanced/behind-a-proxy.md#check-the-responses",
+            "en",
+            0.0302
+          ],
+          [
+            "advanced/behind-a-proxy.md#setting-the-root-path-in-the-fastapi-app",
+            "es",
+            0.029
+          ]
+        ]
+      },
+      {
+        "id": "en-17",
+        "lang": "en",
+        "style": "written",
+        "pair_id": null,
+        "question": "How do I protect an endpoint with HTTP Basic auth without leaking timing information?",
+        "gold": [
+          "advanced/security/http-basic-auth.md#simple-http-basic-auth",
+          "advanced/security/http-basic-auth.md#timing-attacks",
+          "advanced/security/http-basic-auth.md#check-the-username"
+        ],
+        "rank": 2,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.5,
+        "top5": [
+          [
+            "advanced/security/http-basic-auth.md#return-the-error",
+            "es",
+            0.0303
+          ],
+          [
+            "advanced/security/http-basic-auth.md#timing-attacks",
+            "es",
+            0.0297
+          ],
+          [
+            "advanced/security/http-basic-auth.md#simple-http-basic-auth",
+            "es",
+            0.0291
+          ],
+          [
+            "advanced/security/http-basic-auth.md#http-basic-auth",
+            "es",
+            0.0288
+          ],
+          [
+            "features.md#security-and-authentication",
+            "en",
+            0.0276
+          ]
+        ]
+      },
+      {
+        "id": "en-18",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": "pair-06",
+        "question": "Is there a way to hide the /docs page once I deploy to production?",
+        "gold": [
+          "how-to/conditional-openapi.md#conditional-openapi",
+          "how-to/conditional-openapi.md#conditional-openapi-from-settings-and-env-vars"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "how-to/conditional-openapi.md#conditional-openapi",
+            "en",
+            0.0269
+          ],
+          [
+            "tutorial/frontend.md#custom-404-page",
+            "en",
+            0.0265
+          ],
+          [
+            "how-to/custom-docs-ui-assets.md#create-a-path-operation-to-test-static-files",
+            "en",
+            0.0253
+          ],
+          [
+            "how-to/custom-docs-ui-assets.md#disable-the-automatic-docs-for-static-files",
+            "en",
+            0.0252
+          ],
+          [
+            "how-to/custom-docs-ui-assets.md#create-a-path-operation-to-test-it",
+            "en",
+            0.0246
+          ]
+        ]
+      },
+      {
+        "id": "en-19",
+        "lang": "en",
+        "style": "written",
+        "pair_id": null,
+        "question": "How can I turn off syntax highlighting in Swagger UI?",
+        "gold": [
+          "how-to/configure-swagger-ui.md#disable-syntax-highlighting"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "how-to/configure-swagger-ui.md#disable-syntax-highlighting",
+            "en",
+            0.0328
+          ],
+          [
+            "how-to/configure-swagger-ui.md#configure-swagger-ui",
+            "es",
+            0.032
+          ],
+          [
+            "how-to/configure-swagger-ui.md#change-default-swagger-ui-parameters",
+            "en",
+            0.0299
+          ],
+          [
+            "how-to/configure-swagger-ui.md#other-swagger-ui-parameters",
+            "es",
+            0.0297
+          ],
+          [
+            "tutorial/schema-extra-example.md#swagger-ui-and-openapi-specific-examples",
+            "es",
+            0.0263
+          ]
+        ]
+      },
+      {
+        "id": "en-20",
+        "lang": "en",
+        "style": "written",
+        "pair_id": null,
+        "question": "Does FastAPI work with GraphQL, and which library should I pick?",
+        "gold": [
+          "how-to/graphql.md#graphql-with-strawberry",
+          "how-to/graphql.md#graphql-libraries",
+          "how-to/graphql.md#graphql"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "how-to/graphql.md#graphql",
+            "en",
+            0.0325
+          ],
+          [
+            "how-to/graphql.md#graphql-libraries",
+            "en",
+            0.031
+          ],
+          [
+            "advanced/opentelemetry.md#install-fastapi",
+            "en",
+            0.0275
+          ],
+          [
+            "tutorial/index.md#ai-agent-skills",
+            "es",
+            0.0241
+          ],
+          [
+            "how-to/graphql.md#graphql-with-strawberry",
+            "en",
+            0.0164
+          ]
+        ]
+      },
+      {
+        "id": "en-21",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "Can you walk me through writing a Dockerfile for my FastAPI app?",
+        "gold": [
+          "deployment/docker.md#dockerfile",
+          "deployment/docker.md#build-a-docker-image-for-fastapi",
+          "deployment/docker.md#build-the-docker-image"
+        ],
+        "rank": 2,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.5,
+        "top5": [
+          [
+            "deployment/docker.md#fastapi-in-containers-docker",
+            "es",
+            0.031
+          ],
+          [
+            "deployment/docker.md#dockerfile",
+            "es",
+            0.0288
+          ],
+          [
+            "deployment/docker.md#build-a-docker-image-with-a-single-file-fastapi",
+            "es",
+            0.0269
+          ],
+          [
+            "tutorial/first-steps.md#deploy-your-app-optional",
+            "en",
+            0.0195
+          ],
+          [
+            "deployment/docker.md#create-the-fastapi-code",
+            "es",
+            0.0192
+          ]
+        ]
+      },
+      {
+        "id": "en-22",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "How do I run more than one worker so I can use all my CPU cores?",
+        "gold": [
+          "deployment/server-workers.md#multiple-workers",
+          "deployment/server-workers.md#server-workers-uvicorn-with-workers"
+        ],
+        "rank": 6,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.16666666666666666,
+        "top5": [
+          [
+            "deployment/concepts.md#replication-processes-and-memory",
+            "en",
+            0.0318
+          ],
+          [
+            "deployment/server-workers.md#deployment-concepts",
+            "en",
+            0.031
+          ],
+          [
+            "deployment/concepts.md#multiple-processes-an-example",
+            "en",
+            0.0294
+          ],
+          [
+            "deployment/docker.md#one-load-balancer-multiple-worker-containers",
+            "en",
+            0.0276
+          ],
+          [
+            "deployment/server-workers.md#recap",
+            "en",
+            0.0264
+          ]
+        ]
+      },
+      {
+        "id": "en-23",
+        "lang": "en",
+        "style": "written",
+        "pair_id": null,
+        "question": "Where do HTTPS certificates come from, and is there a free option?",
+        "gold": [
+          "deployment/https.md#lets-encrypt",
+          "deployment/https.md#about-https"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "deployment/https.md#lets-encrypt",
+            "en",
+            0.0325
+          ],
+          [
+            "deployment/https.md#about-https",
+            "en",
+            0.0306
+          ],
+          [
+            "deployment/concepts.md#security-https",
+            "en",
+            0.0299
+          ],
+          [
+            "deployment/https.md#certificate-renewal",
+            "en",
+            0.0292
+          ],
+          [
+            "tutorial/security/index.md#oauth-1",
+            "en",
+            0.0267
+          ]
+        ]
+      },
+      {
+        "id": "en-24",
+        "lang": "en",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "When should I write async def for my endpoints, and when just a normal def?",
+        "gold": [
+          "async.md#concurrency-and-async-await",
+          "async.md#async-and-await"
+        ],
+        "rank": 2,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.5,
+        "top5": [
+          [
+            "tutorial/dependencies/index.md#to-async-or-not-to-async",
+            "en",
+            0.0315
+          ],
+          [
+            "async.md#concurrency-and-async-await",
+            "en",
+            0.0298
+          ],
+          [
+            "async.md#other-utility-functions",
+            "en",
+            0.0297
+          ],
+          [
+            "advanced/async-tests.md#pytest-mark-anyio",
+            "en",
+            0.0294
+          ],
+          [
+            "async.md#dependencies",
+            "es",
+            0.0289
+          ]
+        ]
+      },
+      {
+        "id": "en-25",
+        "lang": "en",
+        "style": "written",
+        "pair_id": null,
+        "question": "What's the difference between fastapi dev and fastapi run?",
+        "gold": [
+          "fastapi-cli.md#fastapi-dev",
+          "fastapi-cli.md#fastapi-run",
+          "fastapi-cli.md#fastapi-cli"
+        ],
+        "rank": 3,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.3333333333333333,
+        "top5": [
+          [
+            "fastapi-cli.md#fastapi-dev-with-path-or-with-entrypoint-cli-option",
+            "en",
+            0.0315
+          ],
+          [
+            "index.md#run-it",
+            "en",
+            0.0311
+          ],
+          [
+            "fastapi-cli.md#fastapi-cli",
+            "en",
+            0.0292
+          ],
+          [
+            "tutorial/first-steps.md#fastapi-dev-with-path-or-with-entrypoint-cli-option",
+            "en",
+            0.0289
+          ],
+          [
+            "deployment/fastapicloud.md#fastapi-cloud",
+            "en",
+            0.0265
+          ]
+        ]
+      },
+      {
+        "id": "es-01",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": "pair-01",
+        "question": "Oye, ¿cómo le hago para que los usuarios suban un archivo a mi API?",
+        "gold": [
+          "tutorial/request-files.md#request-files",
+          "tutorial/request-files.md#define-file-parameters",
+          "tutorial/request-files.md#file-parameters-with-uploadfile"
+        ],
+        "rank": null,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.0,
+        "top5": [
+          [
+            "tutorial/bigger-applications.md#apirouter",
+            "es",
+            0.0311
+          ],
+          [
+            "advanced/openapi-webhooks.md#openapi-webhooks",
+            "es",
+            0.0286
+          ],
+          [
+            "how-to/custom-docs-ui-assets.md#include-the-custom-docs",
+            "es",
+            0.0265
+          ],
+          [
+            "advanced/openapi-webhooks.md#documenting-webhooks-with-fastapi-and-openapi",
+            "es",
+            0.0252
+          ],
+          [
+            "advanced/security/oauth2-scopes.md#oauth2-scopes",
+            "es",
+            0.0235
+          ]
+        ]
+      },
+      {
+        "id": "es-02",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": "pair-02",
+        "question": "Tengo una tarea pesada y quiero responderle primero al usuario y que se termine después. ¿Cómo lo hago?",
+        "gold": [
+          "tutorial/background-tasks.md#using-backgroundtasks",
+          "tutorial/background-tasks.md#add-the-background-task",
+          "tutorial/background-tasks.md#background-tasks"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "tutorial/background-tasks.md#background-tasks",
+            "es",
+            0.0305
+          ],
+          [
+            "tutorial/index.md#advanced-user-guide",
+            "es",
+            0.0301
+          ],
+          [
+            "tutorial/background-tasks.md#add-the-background-task",
+            "es",
+            0.0296
+          ],
+          [
+            "advanced/index.md#read-the-tutorial-first",
+            "es",
+            0.0288
+          ],
+          [
+            "advanced/opentelemetry.md#trace-request-operations",
+            "es",
+            0.0261
+          ]
+        ]
+      },
+      {
+        "id": "es-03",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": "pair-03",
+        "question": "Mi frontend en localhost 3000 no puede llamar a mi API porque el navegador lo bloquea. ¿Qué hago?",
+        "gold": [
+          "tutorial/cors.md#cors-cross-origin-resource-sharing",
+          "tutorial/cors.md#use-corsmiddleware",
+          "tutorial/cors.md#steps"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "tutorial/cors.md#steps",
+            "es",
+            0.0315
+          ],
+          [
+            "advanced/strict-content-type.md#example-attack",
+            "es",
+            0.0302
+          ],
+          [
+            "tutorial/handling-errors.md#handling-errors",
+            "es",
+            0.0279
+          ],
+          [
+            "tutorial/frontend.md#use-it-with-apirouter",
+            "es",
+            0.0265
+          ],
+          [
+            "advanced/openapi-callbacks.md#create-a-callback-apirouter",
+            "es",
+            0.0237
+          ]
+        ]
+      },
+      {
+        "id": "es-04",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": "pair-04",
+        "question": "Mi main.py ya quedó enorme. ¿Cómo divido mis rutas en varios archivos?",
+        "gold": [
+          "tutorial/bigger-applications.md#apirouter",
+          "tutorial/bigger-applications.md#include-the-apirouters-for-users-and-items",
+          "tutorial/bigger-applications.md#bigger-applications-multiple-files"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "tutorial/bigger-applications.md#include-the-apirouters-for-users-and-items",
+            "es",
+            0.0313
+          ],
+          [
+            "how-to/custom-docs-ui-assets.md#project-file-structure",
+            "es",
+            0.0305
+          ],
+          [
+            "deployment/docker.md#build-a-docker-image-with-a-single-file-fastapi",
+            "es",
+            0.0302
+          ],
+          [
+            "tutorial/bigger-applications.md#bigger-applications-multiple-files",
+            "es",
+            0.0301
+          ],
+          [
+            "tutorial/testing.md#testing-extended-example",
+            "es",
+            0.0293
+          ]
+        ]
+      },
+      {
+        "id": "es-05",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": "pair-05",
+        "question": "¿Cómo evito que la contraseña salga en la respuesta cuando regreso un usuario?",
+        "gold": [
+          "tutorial/response-model.md#add-an-output-model",
+          "tutorial/response-model.md#return-type-and-data-filtering",
+          "tutorial/response-model.md#response-model-return-type"
+        ],
+        "rank": 2,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.5,
+        "top5": [
+          [
+            "tutorial/response-model.md#return-the-same-input-data",
+            "es",
+            0.031
+          ],
+          [
+            "tutorial/response-model.md#add-an-output-model",
+            "es",
+            0.0308
+          ],
+          [
+            "tutorial/security/oauth2-jwt.md#check-it",
+            "es",
+            0.0303
+          ],
+          [
+            "tutorial/security/simple-oauth2.md#inactive-user",
+            "es",
+            0.028
+          ],
+          [
+            "tutorial/security/oauth2-jwt.md#why-use-password-hashing",
+            "es",
+            0.0277
+          ]
+        ]
+      },
+      {
+        "id": "es-06",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": "pair-06",
+        "question": "¿Hay forma de esconder la página de /docs cuando ya está en producción?",
+        "gold": [
+          "how-to/conditional-openapi.md#conditional-openapi",
+          "how-to/conditional-openapi.md#conditional-openapi-from-settings-and-env-vars"
+        ],
+        "rank": 3,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.3333333333333333,
+        "top5": [
+          [
+            "how-to/custom-docs-ui-assets.md#disable-the-automatic-docs-for-static-files",
+            "es",
+            0.0309
+          ],
+          [
+            "how-to/custom-docs-ui-assets.md#create-a-path-operation-to-test-static-files",
+            "es",
+            0.027
+          ],
+          [
+            "how-to/conditional-openapi.md#conditional-openapi",
+            "es",
+            0.0269
+          ],
+          [
+            "how-to/custom-docs-ui-assets.md#include-the-custom-docs",
+            "es",
+            0.0252
+          ],
+          [
+            "tutorial/frontend.md#custom-404-page",
+            "es",
+            0.0251
+          ]
+        ]
+      },
+      {
+        "id": "es-07",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "Quiero conectar mi API a una base de datos SQL, empezando con SQLite. ¿Cómo lo armo?",
+        "gold": [
+          "tutorial/sql-databases.md#sql-relational-databases",
+          "tutorial/sql-databases.md#create-an-engine",
+          "tutorial/sql-databases.md#create-the-tables"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "tutorial/sql-databases.md#sql-relational-databases",
+            "es",
+            0.0315
+          ],
+          [
+            "tutorial/sql-databases.md#create-database-tables-on-startup",
+            "es",
+            0.031
+          ],
+          [
+            "tutorial/sql-databases.md#recap",
+            "es",
+            0.0305
+          ],
+          [
+            "tutorial/sql-databases.md#create-an-engine",
+            "es",
+            0.0305
+          ],
+          [
+            "how-to/testing-database.md#testing-a-database",
+            "es",
+            0.0299
+          ]
+        ]
+      },
+      {
+        "id": "es-08",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "¿Cómo le hago pruebas a mis endpoints? ¿Con qué las corro?",
+        "gold": [
+          "tutorial/testing.md#testing",
+          "tutorial/testing.md#testing-file"
+        ],
+        "rank": null,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.0,
+        "top5": [
+          [
+            "how-to/testing-database.md#testing-a-database",
+            "es",
+            0.0287
+          ],
+          [
+            "advanced/templates.md#more-details",
+            "es",
+            0.0276
+          ],
+          [
+            "advanced/testing-events.md#testing-events-lifespan-and-startup-shutdown",
+            "es",
+            0.0269
+          ],
+          [
+            "tutorial/testing.md#testing-extended-example",
+            "es",
+            0.0252
+          ],
+          [
+            "tutorial/path-params-numeric-validations.md#number-validations-greater-than-and-less-than-or-equal",
+            "es",
+            0.0244
+          ]
+        ]
+      },
+      {
+        "id": "es-09",
+        "lang": "es",
+        "style": "written",
+        "pair_id": null,
+        "question": "¿Cómo leo una cabecera con guion, como user-agent, si en Python no puedo nombrar así una variable?",
+        "gold": [
+          "tutorial/header-params.md#automatic-conversion",
+          "tutorial/header-params.md#header-parameters"
+        ],
+        "rank": 2,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.5,
+        "top5": [
+          [
+            "python-types.md#classes-as-types",
+            "es",
+            0.0294
+          ],
+          [
+            "tutorial/header-params.md#automatic-conversion",
+            "es",
+            0.0294
+          ],
+          [
+            "advanced/settings.md#types-and-validation",
+            "es",
+            0.0282
+          ],
+          [
+            "tutorial/query-params-str-validations.md#alias-parameters",
+            "en",
+            0.0248
+          ],
+          [
+            "advanced/settings.md#creating-the-settings-only-once-with-lru-cache",
+            "es",
+            0.0236
+          ]
+        ]
+      },
+      {
+        "id": "es-10",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "¿Puedo ejecutar código en todas las peticiones, por ejemplo para medir cuánto tarda cada una?",
+        "gold": [
+          "tutorial/middleware.md#create-a-middleware",
+          "tutorial/middleware.md#before-and-after-the-response"
+        ],
+        "rank": null,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.0,
+        "top5": [
+          [
+            "advanced/opentelemetry.md#opentelemetry",
+            "es",
+            0.028
+          ],
+          [
+            "advanced/opentelemetry.md#trace-request-operations",
+            "es",
+            0.026
+          ],
+          [
+            "advanced/events.md#use-case",
+            "es",
+            0.0259
+          ],
+          [
+            "deployment/manually.md#deployment-concepts",
+            "es",
+            0.0257
+          ],
+          [
+            "advanced/additional-responses.md#additional-response-with-model",
+            "es",
+            0.0225
+          ]
+        ]
+      },
+      {
+        "id": "es-11",
+        "lang": "es",
+        "style": "written",
+        "pair_id": null,
+        "question": "¿Cómo aplico una misma dependencia a todas las rutas de mi aplicación?",
+        "gold": [
+          "tutorial/dependencies/global-dependencies.md#global-dependencies"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "tutorial/dependencies/global-dependencies.md#global-dependencies",
+            "es",
+            0.0309
+          ],
+          [
+            "tutorial/dependencies/index.md#first-steps",
+            "es",
+            0.0293
+          ],
+          [
+            "advanced/testing-dependencies.md#use-the-app-dependency-overrides-attribute",
+            "es",
+            0.0273
+          ],
+          [
+            "tutorial/dependencies/sub-dependencies.md#use-the-dependency",
+            "es",
+            0.0272
+          ],
+          [
+            "advanced/settings.md#settings-in-a-dependency",
+            "es",
+            0.0269
+          ]
+        ]
+      },
+      {
+        "id": "es-12",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "Necesito recibir el usuario y la contraseña desde un formulario, no en JSON. ¿Cómo?",
+        "gold": [
+          "tutorial/request-forms.md#form-data",
+          "tutorial/security/simple-oauth2.md#code-to-get-the-username-and-password"
+        ],
+        "rank": null,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.0,
+        "top5": [
+          [
+            "tutorial/security/simple-oauth2.md#inactive-user",
+            "es",
+            0.0303
+          ],
+          [
+            "tutorial/security/simple-oauth2.md#see-it-in-action",
+            "es",
+            0.0301
+          ],
+          [
+            "tutorial/security/oauth2-jwt.md#check-it",
+            "es",
+            0.0284
+          ],
+          [
+            "advanced/security/http-basic-auth.md#http-basic-auth",
+            "es",
+            0.0274
+          ],
+          [
+            "tutorial/request-forms.md#about-form-fields",
+            "es",
+            0.026
+          ]
+        ]
+      },
+      {
+        "id": "es-13",
+        "lang": "es",
+        "style": "written",
+        "pair_id": null,
+        "question": "¿Cómo cambio el código de estado HTTP que devuelve una ruta, por ejemplo para responder 201 al crear algo?",
+        "gold": [
+          "tutorial/response-status-code.md#response-status-code",
+          "tutorial/response-status-code.md#changing-the-default"
+        ],
+        "rank": 4,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.25,
+        "top5": [
+          [
+            "tutorial/response-status-code.md#about-http-status-codes",
+            "es",
+            0.0325
+          ],
+          [
+            "advanced/response-change-status-code.md#response-change-status-code",
+            "es",
+            0.0323
+          ],
+          [
+            "advanced/additional-status-codes.md#additional-status-codes",
+            "es",
+            0.0313
+          ],
+          [
+            "tutorial/response-status-code.md#response-status-code",
+            "es",
+            0.0308
+          ],
+          [
+            "advanced/custom-response.md#redirectresponse",
+            "es",
+            0.0286
+          ]
+        ]
+      },
+      {
+        "id": "es-14",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "¿Cómo le mando datos al navegador en tiempo real, tipo notificaciones, sin usar websockets?",
+        "gold": [
+          "tutorial/server-sent-events.md#stream-sse-with-fastapi",
+          "tutorial/server-sent-events.md#server-sent-events-sse"
+        ],
+        "rank": null,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.0,
+        "top5": [
+          [
+            "advanced/websockets.md#create-a-websocket",
+            "es",
+            0.032
+          ],
+          [
+            "advanced/websockets.md#websockets",
+            "es",
+            0.0299
+          ],
+          [
+            "advanced/websockets.md#try-it",
+            "es",
+            0.029
+          ],
+          [
+            "advanced/websockets.md#try-the-websockets-with-dependencies",
+            "es",
+            0.029
+          ],
+          [
+            "advanced/websockets.md#handling-disconnections-and-multiple-clients",
+            "es",
+            0.0267
+          ]
+        ]
+      },
+      {
+        "id": "es-15",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "¿Cómo guardo mis claves y la URL de la base de datos en un archivo .env en lugar de dejarlas en el código?",
+        "gold": [
+          "advanced/settings.md#reading-a-env-file",
+          "advanced/settings.md#the-env-file",
+          "advanced/settings.md#pydantic-settings"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "advanced/settings.md#the-env-file",
+            "es",
+            0.0308
+          ],
+          [
+            "advanced/settings.md#reading-a-env-file",
+            "es",
+            0.0301
+          ],
+          [
+            "environment-variables.md#environment-variables",
+            "es",
+            0.0265
+          ],
+          [
+            "tutorial/security/simple-oauth2.md#check-the-password",
+            "es",
+            0.0238
+          ],
+          [
+            "tutorial/security/first-steps.md#security-first-steps",
+            "es",
+            0.0164
+          ]
+        ]
+      },
+      {
+        "id": "es-16",
+        "lang": "es",
+        "style": "written",
+        "pair_id": null,
+        "question": "¿Se pueden devolver páginas HTML armadas con plantillas Jinja?",
+        "gold": [
+          "advanced/templates.md#using-jinja2templates",
+          "advanced/templates.md#templates"
+        ],
+        "rank": 2,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.5,
+        "top5": [
+          [
+            "advanced/templates.md#templates-and-static-files",
+            "es",
+            0.0313
+          ],
+          [
+            "advanced/templates.md#templates",
+            "es",
+            0.0304
+          ],
+          [
+            "advanced/templates.md#writing-templates",
+            "es",
+            0.0303
+          ],
+          [
+            "advanced/templates.md#using-jinja2templates",
+            "es",
+            0.029
+          ],
+          [
+            "advanced/custom-response.md#redirectresponse",
+            "es",
+            0.0267
+          ]
+        ]
+      },
+      {
+        "id": "es-17",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "¿Cómo le pongo una cookie a la respuesta?",
+        "gold": [
+          "advanced/response-cookies.md#response-cookies"
+        ],
+        "rank": 9,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.1111111111111111,
+        "top5": [
+          [
+            "tutorial/cookie-params.md#recap",
+            "en",
+            0.0313
+          ],
+          [
+            "tutorial/cookie-param-models.md#summary",
+            "en",
+            0.0311
+          ],
+          [
+            "tutorial/cookie-params.md#cookie-parameters",
+            "es",
+            0.0311
+          ],
+          [
+            "tutorial/cookie-param-models.md#forbid-extra-cookies",
+            "en",
+            0.0294
+          ],
+          [
+            "tutorial/cookie-param-models.md#cookies-with-a-pydantic-model",
+            "en",
+            0.029
+          ]
+        ]
+      },
+      {
+        "id": "es-18",
+        "lang": "es",
+        "style": "written",
+        "pair_id": null,
+        "question": "En mis pruebas, ¿cómo cambio una dependencia por otra para no llamar a un servicio externo de verdad?",
+        "gold": [
+          "advanced/testing-dependencies.md#use-the-app-dependency-overrides-attribute",
+          "advanced/testing-dependencies.md#testing-dependencies-with-overrides",
+          "advanced/testing-dependencies.md#use-cases-external-service"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "advanced/testing-dependencies.md#use-cases-external-service",
+            "es",
+            0.0328
+          ],
+          [
+            "advanced/testing-dependencies.md#testing-dependencies-with-overrides",
+            "es",
+            0.0318
+          ],
+          [
+            "tutorial/dependencies/sub-dependencies.md#second-dependency-dependable-and-dependant",
+            "es",
+            0.0292
+          ],
+          [
+            "advanced/settings.md#settings-in-a-dependency",
+            "es",
+            0.0262
+          ],
+          [
+            "async.md#dependencies",
+            "es",
+            0.0261
+          ]
+        ]
+      },
+      {
+        "id": "es-19",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "Quiero que mi app le avise a los sistemas de mis usuarios cuando pase algo, llamándolos yo a ellos. ¿FastAPI documenta eso?",
+        "gold": [
+          "advanced/openapi-webhooks.md#openapi-webhooks",
+          "advanced/openapi-webhooks.md#webhooks-steps"
+        ],
+        "rank": 5,
+        "recall@1": 0.0,
+        "recall@5": 1.0,
+        "mrr@10": 0.2,
+        "top5": [
+          [
+            "tutorial/security/first-steps.md#check-it",
+            "es",
+            0.0254
+          ],
+          [
+            "tutorial/security/get-current-user.md#other-models",
+            "es",
+            0.0233
+          ],
+          [
+            "tutorial/security/index.md#in-a-hurry",
+            "es",
+            0.0227
+          ],
+          [
+            "advanced/openapi-webhooks.md#documenting-webhooks-with-fastapi-and-openapi",
+            "es",
+            0.0218
+          ],
+          [
+            "advanced/openapi-webhooks.md#openapi-webhooks",
+            "en",
+            0.0164
+          ]
+        ]
+      },
+      {
+        "id": "es-20",
+        "lang": "es",
+        "style": "written",
+        "pair_id": null,
+        "question": "¿Cómo hago para que Swagger UI no cargue sus archivos desde un CDN y mejor los sirva mi propia app?",
+        "gold": [
+          "how-to/custom-docs-ui-assets.md#custom-docs-ui-static-assets-self-hosting",
+          "how-to/custom-docs-ui-assets.md#disable-the-automatic-docs-for-static-files",
+          "how-to/custom-docs-ui-assets.md#serve-the-static-files"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "how-to/custom-docs-ui-assets.md#disable-the-automatic-docs-for-static-files",
+            "es",
+            0.0325
+          ],
+          [
+            "how-to/custom-docs-ui-assets.md#custom-docs-ui-static-assets-self-hosting",
+            "es",
+            0.031
+          ],
+          [
+            "how-to/custom-docs-ui-assets.md#download-the-files",
+            "es",
+            0.0307
+          ],
+          [
+            "how-to/configure-swagger-ui.md#configure-swagger-ui",
+            "es",
+            0.0304
+          ],
+          [
+            "how-to/configure-swagger-ui.md#change-default-swagger-ui-parameters",
+            "en",
+            0.0287
+          ]
+        ]
+      },
+      {
+        "id": "es-21",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "Tengo código con Pydantic v1, ¿hay alguna herramienta para pasarlo a v2 sin hacerlo todo a mano?",
+        "gold": [
+          "how-to/migrate-from-pydantic-v1-to-pydantic-v2.md#bump-pydantic"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "how-to/migrate-from-pydantic-v1-to-pydantic-v2.md#bump-pydantic",
+            "es",
+            0.0328
+          ],
+          [
+            "how-to/migrate-from-pydantic-v1-to-pydantic-v2.md#pydantic-v1-in-v2",
+            "es",
+            0.0315
+          ],
+          [
+            "how-to/migrate-from-pydantic-v1-to-pydantic-v2.md#pydantic-v1-and-v2-on-the-same-app",
+            "es",
+            0.0313
+          ],
+          [
+            "how-to/migrate-from-pydantic-v1-to-pydantic-v2.md#pydantic-v1-parameters",
+            "en",
+            0.0306
+          ],
+          [
+            "how-to/migrate-from-pydantic-v1-to-pydantic-v2.md#fastapi-support-for-pydantic-v1-in-v2",
+            "es",
+            0.0302
+          ]
+        ]
+      },
+      {
+        "id": "es-22",
+        "lang": "es",
+        "style": "written",
+        "pair_id": null,
+        "question": "¿Por qué conviene fijar la versión de FastAPI en mi proyecto y cómo se hace?",
+        "gold": [
+          "deployment/versions.md#pin-your-fastapi-version",
+          "deployment/versions.md#about-fastapi-versions"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "deployment/versions.md#pin-your-fastapi-version",
+            "es",
+            0.0318
+          ],
+          [
+            "tutorial/index.md#install-fastapi",
+            "es",
+            0.0303
+          ],
+          [
+            "deployment/versions.md#upgrading-the-fastapi-versions",
+            "es",
+            0.0272
+          ],
+          [
+            "tutorial/index.md#ai-agent-skills",
+            "es",
+            0.0264
+          ],
+          [
+            "deployment/versions.md#about-fastapi-versions",
+            "en",
+            0.0262
+          ]
+        ]
+      },
+      {
+        "id": "es-23",
+        "lang": "es",
+        "style": "spoken",
+        "pair_id": null,
+        "question": "¿Qué pasa si mi servidor se cae? ¿Cómo hago que se levante solo?",
+        "gold": [
+          "deployment/concepts.md#restart-after-crash",
+          "deployment/concepts.md#restarts",
+          "deployment/concepts.md#example-tools-to-restart-automatically"
+        ],
+        "rank": null,
+        "recall@1": 0.0,
+        "recall@5": 0.0,
+        "mrr@10": 0.0,
+        "top5": [
+          [
+            "deployment/concepts.md#in-a-remote-server",
+            "es",
+            0.0294
+          ],
+          [
+            "deployment/manually.md#deployment-concepts",
+            "es",
+            0.0288
+          ],
+          [
+            "deployment/manually.md#server-machine-and-server-program",
+            "es",
+            0.0261
+          ],
+          [
+            "fastapi-cli.md#fastapi-dev",
+            "es",
+            0.0254
+          ],
+          [
+            "deployment/manually.md#install-the-server-program",
+            "es",
+            0.0241
+          ]
+        ]
+      },
+      {
+        "id": "es-24",
+        "lang": "es",
+        "style": "written",
+        "pair_id": null,
+        "question": "¿Para qué sirve un entorno virtual y cómo lo creo en un proyecto de FastAPI?",
+        "gold": [
+          "virtual-environments.md#virtual-environments"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "virtual-environments.md#virtual-environments",
+            "es",
+            0.0325
+          ],
+          [
+            "tutorial/index.md#install-fastapi",
+            "es",
+            0.0313
+          ],
+          [
+            "virtual-environments.md#learn-more",
+            "en",
+            0.0302
+          ],
+          [
+            "index.md#requirements",
+            "es",
+            0.0292
+          ],
+          [
+            "tutorial/index.md#ai-agent-skills",
+            "es",
+            0.0263
+          ]
+        ]
+      },
+      {
+        "id": "es-25",
+        "lang": "es",
+        "style": "written",
+        "pair_id": null,
+        "question": "¿Qué son las variables de entorno y para qué las usa FastAPI?",
+        "gold": [
+          "environment-variables.md#environment-variables"
+        ],
+        "rank": 1,
+        "recall@1": 1.0,
+        "recall@5": 1.0,
+        "mrr@10": 1.0,
+        "top5": [
+          [
+            "environment-variables.md#environment-variables",
+            "es",
+            0.0323
+          ],
+          [
+            "environment-variables.md#learn-more",
+            "es",
+            0.0268
+          ],
+          [
+            "deployment/docker.md#what-is-a-container-image",
+            "es",
+            0.0256
+          ],
+          [
+            "index.md#requirements",
+            "es",
+            0.0233
+          ],
+          [
+            "index.md#example",
+            "es",
+            0.0215
+          ]
+        ]
+      }
+    ],
+    "top1_other_language_chunk": {
+      "en": 3,
+      "es": 1
+    }
+  },
+  "unanswerable_vs_answerable_top1": {
+    "answerable_top1_mean": 0.03085,
+    "answerable_top1_min": 0.02297,
+    "unanswerable_top1_mean": 0.02769,
+    "unanswerable_top1_max": 0.03227
+  }
+}
