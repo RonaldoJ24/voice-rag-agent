@@ -18,7 +18,7 @@ API = "https://api.elevenlabs.io/v1/convai"
 VOICE_ID = (
     "DODLEQrClDo8wCz460ld"  # Lauren B, the voice already used in the explainer videos
 )
-TTS_MODEL = "eleven_flash_v2_5"  # lowest-latency multilingual TTS (EN and ES)
+TTS_MODEL = "eleven_flash_v2"  # ElevenLabs requires flash v2 for English agents; ES runs via the language preset
 
 
 def agent_config(base_url: str, secret_id: str, model: str) -> dict:
@@ -32,12 +32,20 @@ def agent_config(base_url: str, secret_id: str, model: str) -> dict:
                     "prompt": "Answers come from the custom LLM, which follows its own instructions.",
                     "llm": "custom-llm",
                     "custom_llm": {
-                        "url": f"{base_url.rstrip('/')}/v1/chat/completions",
+                        "url": f"{base_url.rstrip('/')}/v1",
                         "model_id": model,
                         "api_key": {"secret_id": secret_id},
                         "api_type": "chat_completions",
                     },
-                    "built_in_tools": {"end_call": {}, "language_detection": {}},
+                    "built_in_tools": {
+                        name: {
+                            "type": "system",
+                            "name": name,
+                            "description": "",
+                            "params": {"system_tool_type": name},
+                        }
+                        for name in ("end_call", "language_detection")
+                    },
                 },
             },
             "language_presets": {
@@ -85,25 +93,34 @@ def main() -> None:
                 .raise_for_status()
                 .json()
             )
-            llm = agent["conversation_config"]["agent"]["prompt"]["custom_llm"]
-            llm["url"] = f"{args.base_url.rstrip('/')}/v1/chat/completions"
-            body = {"conversation_config": {"agent": {"prompt": {"custom_llm": llm}}}}
-            client.patch(
-                f"{API}/agents/{s.elevenlabs_agent_id}", json=body
-            ).raise_for_status()
-            print(f"Updated agent {s.elevenlabs_agent_id} -> {llm['url']}")
+            prompt = agent["conversation_config"]["agent"]["prompt"]
+            prompt["custom_llm"]["url"] = f"{args.base_url.rstrip('/')}/v1"
+            body = {"conversation_config": {"agent": {"prompt": prompt}}}
+            r = client.patch(f"{API}/agents/{s.elevenlabs_agent_id}", json=body)
+            if r.status_code >= 400:
+                raise SystemExit(f"Update failed {r.status_code}: {r.text[:800]}")
+            print(
+                f"Updated agent {s.elevenlabs_agent_id} -> {prompt['custom_llm']['url']}"
+            )
             return
 
-        secret = client.post(
-            f"{API}/secrets",
-            json={
-                "type": "new",
-                "name": "voice-rag-proxy-bearer",
-                "value": s.proxy_bearer_token,
-            },
+        existing = (
+            client.get(f"{API}/secrets").raise_for_status().json().get("secrets", [])
         )
-        secret.raise_for_status()
-        secret_id = secret.json()["secret_id"]
+        secret_id = next(
+            (x["secret_id"] for x in existing if x["name"] == "voice-rag-proxy-bearer"),
+            None,
+        )
+        if not secret_id:
+            secret = client.post(
+                f"{API}/secrets",
+                json={
+                    "type": "new",
+                    "name": "voice-rag-proxy-bearer",
+                    "value": s.proxy_bearer_token,
+                },
+            )
+            secret_id = secret.raise_for_status().json()["secret_id"]
         created = client.post(
             f"{API}/agents/create",
             json=agent_config(args.base_url, secret_id, s.agent_model),

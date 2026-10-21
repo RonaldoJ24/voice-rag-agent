@@ -124,8 +124,13 @@
       const res = await fetch("/api/session");
       if (!res.ok) throw new Error(`session ${res.status}`);
       const { signed_url, session_id } = await res.json();
-      feed = new EventSource(`/trace/${session_id}/stream`);
-      feed.onmessage = (m) => addEvent(JSON.parse(m.data));
+      // Follow every session and keep this call's events. "latest" covers the case where
+      // ElevenLabs does not forward customLlmExtraBody (only one call runs at a time).
+      feed = new EventSource("/trace/*/stream");
+      feed.onmessage = (m) => {
+        const e = JSON.parse(m.data);
+        if (e.session_id === session_id || e.session_id === "latest") addEvent(e);
+      };
       conversation = await Conversation.startSession({
         signedUrl: signed_url,
         customLlmExtraBody: { session_id },

@@ -2,6 +2,7 @@
 
 import asyncio
 import json
+import logging
 import secrets
 import uuid
 from contextlib import asynccontextmanager
@@ -45,6 +46,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Voice RAG agent", lifespan=lifespan)
+log = logging.getLogger("uvicorn.error")
 
 
 def _check_bearer(authorization: str | None) -> None:
@@ -61,6 +63,7 @@ async def chat_completions(
     _check_bearer(authorization)
     body = await request.json()
     extra = body.get("elevenlabs_extra_body") or {}
+    log.info("custom LLM request: extra body keys %s", sorted(extra))
     session_id = str(
         extra.get("session_id") or extra.get("conversation_id") or "latest"
     )
