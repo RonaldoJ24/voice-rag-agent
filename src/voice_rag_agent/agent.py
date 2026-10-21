@@ -174,6 +174,24 @@ class VoiceAgent:
                     break
 
                 searches = [b for b in tool_uses if b.name == "search_docs"]
+                if not searches and tool_uses and not preamble.strip():
+                    # Sonnet with thinking records sources before saying the answer, then
+                    # ends the turn with ".". The tool result tells it to speak now.
+                    convo += [
+                        {"role": "assistant", "content": final.content},
+                        {
+                            "role": "user",
+                            "content": [
+                                {
+                                    "type": "tool_result",
+                                    "tool_use_id": b.id,
+                                    "content": "Recorded. The caller has not heard the answer yet. Say it now.",
+                                }
+                                for b in tool_uses
+                            ],
+                        },
+                    ]
+                    continue
                 if not searches:
                     if round_no == 1 and not tool_uses:
                         trace.emit(
