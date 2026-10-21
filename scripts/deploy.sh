@@ -5,6 +5,10 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+# SAM does not read "aws login" sessions yet. Export the session's short-lived keys
+# into this shell only; they expire with the session and are never written to disk.
+eval "$(aws configure export-credentials --format env)"
+
 scripts/package_lambda.sh
 uv run --quiet scripts/push_secrets.py
 sam deploy \
