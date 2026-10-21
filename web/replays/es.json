@@ -1,0 +1,806 @@
+{
+ "lang": "es",
+ "greeting": "¡Hola! Pregúntame lo que quieras sobre FastAPI.",
+ "turns": [
+  {
+   "user": "¿Dónde pongo código que corre una vez al iniciar la app, como cargar un modelo?",
+   "chunks": [
+    [
+     2968,
+     "Déjame revisar la"
+    ],
+    [
+     2968,
+     " documentación."
+    ],
+    [
+     2968,
+     " "
+    ],
+    [
+     2968,
+     "Para"
+    ],
+    [
+     2968,
+     " código"
+    ],
+    [
+     2968,
+     " que corre una s"
+    ],
+    [
+     2968,
+     "ola vez al iniciar"
+    ],
+    [
+     2968,
+     ","
+    ],
+    [
+     2968,
+     " como cargar un modelo"
+    ],
+    [
+     2968,
+     ", FastAPI recom"
+    ],
+    [
+     2968,
+     "ienda usar un lif"
+    ],
+    [
+     2968,
+     "espan"
+    ],
+    [
+     2968,
+     ": una función as"
+    ],
+    [
+     2968,
+     "íncrona que rec"
+    ],
+    [
+     2968,
+     "ibe"
+    ],
+    [
+     2968,
+     " la app,"
+    ],
+    [
+     2968,
+     " "
+    ],
+    [
+     2968,
+     "ejecuta el código antes"
+    ],
+    [
+     2968,
+     " del"
+    ],
+    [
+     2968,
+     " yield al"
+    ],
+    [
+     2968,
+     " ar"
+    ],
+    [
+     2968,
+     "rancar, y después del"
+    ],
+    [
+     2968,
+     " yield al c"
+    ],
+    [
+     2968,
+     "errar. Así"
+    ],
+    [
+     2968,
+     " el"
+    ],
+    [
+     2968,
+     " modelo se car"
+    ],
+    [
+     2968,
+     "ga una vez y"
+    ],
+    [
+     2968,
+     " que"
+    ],
+    [
+     2968,
+     "da dis"
+    ],
+    [
+     2968,
+     "ponible para todos los requests"
+    ],
+    [
+     2968,
+     ". L"
+    ],
+    [
+     2968,
+     "o enc"
+    ],
+    [
+     2968,
+     "uentras en la página"
+    ],
+    [
+     2968,
+     " de"
+    ],
+    [
+     2968,
+     " Eventos de Lifesp"
+    ],
+    [
+     2968,
+     "an de"
+    ],
+    [
+     2968,
+     " la documentación av"
+    ],
+    [
+     2968,
+     "anzada."
+    ],
+    [
+     2968,
+     " Los"
+    ],
+    [
+     2968,
+     " eventos "
+    ],
+    [
+     2968,
+     "startup y shutd"
+    ],
+    [
+     2968,
+     "own ant"
+    ],
+    [
+     2968,
+     "iguos están"
+    ],
+    [
+     2968,
+     " mar"
+    ],
+    [
+     2968,
+     "cados como obsoletos"
+    ],
+    [
+     2968,
+     "."
+    ]
+   ],
+   "events": [
+    {
+     "session_id": "replay-es-38c26d",
+     "cursor": "01792563667699568000",
+     "turn_id": "b0e182c0",
+     "type": "user_utterance",
+     "t_ms": 0,
+     "text": "¿Dónde pongo código que corre una vez al iniciar la app, como cargar un modelo?",
+     "language": "es"
+    },
+    {
+     "session_id": "replay-es-38c26d",
+     "cursor": "01792563668333669000",
+     "turn_id": "b0e182c0",
+     "type": "llm_first_token",
+     "t_ms": 634,
+     "round": 1
+    },
+    {
+     "session_id": "replay-es-38c26d",
+     "cursor": "01792563668556540000",
+     "turn_id": "b0e182c0",
+     "type": "decision",
+     "t_ms": 857,
+     "action": "search",
+     "said": "Déjame revisar la documentación."
+    },
+    {
+     "session_id": "replay-es-38c26d",
+     "cursor": "01792563668556727000",
+     "turn_id": "b0e182c0",
+     "type": "tool_call",
+     "t_ms": 857,
+     "tool": "search_docs",
+     "query": "lifespan events startup shutdown",
+     "language": "es"
+    },
+    {
+     "session_id": "replay-es-38c26d",
+     "cursor": "01792563668871563000",
+     "turn_id": "b0e182c0",
+     "type": "retrieval_hits",
+     "t_ms": 1172,
+     "retriever": "aws-titan-dense",
+     "ms": 315,
+     "hits": [
+      {
+       "section_id": "advanced/events.md#sub-applications",
+       "page": "advanced/events.md",
+       "lang": "es",
+       "title": "Eventos de Lifespan",
+       "heading": "Sub Aplicaciones",
+       "url": "https://fastapi.tiangolo.com/es/advanced/events/#sub-applications",
+       "score": 0.0164
+      },
+      {
+       "section_id": "advanced/events.md#technical-details",
+       "page": "advanced/events.md",
+       "lang": "es",
+       "title": "Eventos de Lifespan",
+       "heading": "Detalles Técnicos",
+       "url": "https://fastapi.tiangolo.com/es/advanced/events/#technical-details",
+       "score": 0.0161
+      },
+      {
+       "section_id": "advanced/events.md#startup-and-shutdown-together",
+       "page": "advanced/events.md",
+       "lang": "es",
+       "title": "Eventos de Lifespan",
+       "heading": "`startup` y `shutdown` juntos",
+       "url": "https://fastapi.tiangolo.com/es/advanced/events/#startup-and-shutdown-together",
+       "score": 0.0159
+      },
+      {
+       "section_id": "advanced/events.md#lifespan-events",
+       "page": "advanced/events.md",
+       "lang": "es",
+       "title": "Eventos de Lifespan",
+       "heading": "Eventos de Lifespan",
+       "url": "https://fastapi.tiangolo.com/es/advanced/events/#lifespan-events",
+       "score": 0.0154
+      },
+      {
+       "section_id": "advanced/events.md#alternative-events-deprecated",
+       "page": "advanced/events.md",
+       "lang": "es",
+       "title": "Eventos de Lifespan",
+       "heading": "Eventos Alternativos (obsoleto)",
+       "url": "https://fastapi.tiangolo.com/es/advanced/events/#alternative-events-deprecated",
+       "score": 0.0152
+      }
+     ]
+    },
+    {
+     "session_id": "replay-es-38c26d",
+     "cursor": "01792563670665929000",
+     "turn_id": "b0e182c0",
+     "type": "answer_done",
+     "t_ms": 2966,
+     "text": "Déjame revisar la documentación. Para código que corre una sola vez al iniciar, como cargar un modelo, FastAPI recomienda usar un lifespan: una función asíncrona que recibe la app, ejecuta el código antes del yield al arrancar, y después del yield al cerrar. Así el modelo se carga una vez y queda disponible para todos los requests. Lo encuentras en la página de Eventos de Lifespan de la documentación avanzada. Los eventos startup y shutdown antiguos están marcados como obsoletos.",
+     "cited": [
+      "advanced/events.md#lifespan-events",
+      "advanced/events.md#alternative-events-deprecated"
+     ],
+     "answered_from_docs": true,
+     "input_tokens": 4137,
+     "output_tokens": 386,
+     "usd": 0.000607,
+     "first_token_ms": 634,
+     "model": "claude-haiku-5-5"
+    }
+   ]
+  },
+  {
+   "user": "¿Y cómo lo pruebo?",
+   "chunks": [
+    [
+     2880,
+     "Dé"
+    ],
+    [
+     2880,
+     "jame bu"
+    ],
+    [
+     2880,
+     "scar"
+    ],
+    [
+     2880,
+     "lo en la documentación."
+    ],
+    [
+     2880,
+     " "
+    ],
+    [
+     2880,
+     "Para probarlo, us"
+    ],
+    [
+     2880,
+     "as el T"
+    ],
+    [
+     2880,
+     "estClient de"
+    ],
+    [
+     2880,
+     " F"
+    ],
+    [
+     2880,
+     "astAPI d"
+    ],
+    [
+     2880,
+     "entro de un b"
+    ],
+    [
+     2880,
+     "loque \""
+    ],
+    [
+     2880,
+     "with\"."
+    ],
+    [
+     2880,
+     " Al entrar al"
+    ],
+    [
+     2880,
+     " bloque se"
+    ],
+    [
+     2880,
+     " "
+    ],
+    [
+     2880,
+     "ejecuta el lifesp"
+    ],
+    [
+     2880,
+     "an, así que el modelo"
+    ],
+    [
+     2880,
+     " "
+    ],
+    [
+     2880,
+     "ya está"
+    ],
+    [
+     2880,
+     " cargado c"
+    ],
+    [
+     2880,
+     "uando haces tus requests"
+    ],
+    [
+     2880,
+     ". Al"
+    ],
+    [
+     2880,
+     " salir del"
+    ],
+    [
+     2880,
+     " bloque se ejecu"
+    ],
+    [
+     2880,
+     "ta la parte de lim"
+    ],
+    [
+     2880,
+     "pieza después"
+    ],
+    [
+     2880,
+     " del yield."
+    ],
+    [
+     2880,
+     " Está"
+    ],
+    [
+     2880,
+     " en"
+    ],
+    [
+     2880,
+     " la página de Testing de"
+    ],
+    [
+     2880,
+     " eventos l"
+    ],
+    [
+     2880,
+     "ifespan, d"
+    ],
+    [
+     2880,
+     "entro de la gu"
+    ],
+    [
+     2880,
+     "ía av"
+    ],
+    [
+     2880,
+     "anzada."
+    ]
+   ],
+   "events": [
+    {
+     "session_id": "replay-es-38c26d",
+     "cursor": "01792563670667675000",
+     "turn_id": "a01b02b6",
+     "type": "user_utterance",
+     "t_ms": 0,
+     "text": "¿Y cómo lo pruebo?",
+     "language": "es"
+    },
+    {
+     "session_id": "replay-es-38c26d",
+     "cursor": "01792563671324122000",
+     "turn_id": "a01b02b6",
+     "type": "llm_first_token",
+     "t_ms": 656,
+     "round": 1
+    },
+    {
+     "session_id": "replay-es-38c26d",
+     "cursor": "01792563671630316000",
+     "turn_id": "a01b02b6",
+     "type": "decision",
+     "t_ms": 962,
+     "action": "search",
+     "said": "Déjame buscarlo en la documentación."
+    },
+    {
+     "session_id": "replay-es-38c26d",
+     "cursor": "01792563671630485000",
+     "turn_id": "a01b02b6",
+     "type": "tool_call",
+     "t_ms": 962,
+     "tool": "search_docs",
+     "query": "testing lifespan events TestClient",
+     "language": "es"
+    },
+    {
+     "session_id": "replay-es-38c26d",
+     "cursor": "01792563671961197000",
+     "turn_id": "a01b02b6",
+     "type": "retrieval_hits",
+     "t_ms": 1293,
+     "retriever": "aws-titan-dense",
+     "ms": 330,
+     "hits": [
+      {
+       "section_id": "advanced/testing-events.md#testing-events-lifespan-and-startup-shutdown",
+       "page": "advanced/testing-events.md",
+       "lang": "es",
+       "title": "Eventos al escribir pruebas: lifespan y startup - shutdown",
+       "heading": "Eventos al escribir pruebas: lifespan y startup - shutdown",
+       "url": "https://fastapi.tiangolo.com/es/advanced/testing-events/#testing-events-lifespan-and-startup-shutdown",
+       "score": 0.0164
+      },
+      {
+       "section_id": "advanced/events.md#technical-details",
+       "page": "advanced/events.md",
+       "lang": "es",
+       "title": "Eventos de Lifespan",
+       "heading": "Detalles Técnicos",
+       "url": "https://fastapi.tiangolo.com/es/advanced/events/#technical-details",
+       "score": 0.0159
+      },
+      {
+       "section_id": "advanced/events.md#sub-applications",
+       "page": "advanced/events.md",
+       "lang": "es",
+       "title": "Eventos de Lifespan",
+       "heading": "Sub Aplicaciones",
+       "url": "https://fastapi.tiangolo.com/es/advanced/events/#sub-applications",
+       "score": 0.0156
+      },
+      {
+       "section_id": "advanced/events.md#lifespan-events",
+       "page": "advanced/events.md",
+       "lang": "es",
+       "title": "Eventos de Lifespan",
+       "heading": "Eventos de Lifespan",
+       "url": "https://fastapi.tiangolo.com/es/advanced/events/#lifespan-events",
+       "score": 0.0154
+      },
+      {
+       "section_id": "advanced/events.md#lifespan-function",
+       "page": "advanced/events.md",
+       "lang": "es",
+       "title": "Eventos de Lifespan",
+       "heading": "Función de Lifespan",
+       "url": "https://fastapi.tiangolo.com/es/advanced/events/#lifespan-function",
+       "score": 0.0152
+      }
+     ]
+    },
+    {
+     "session_id": "replay-es-38c26d",
+     "cursor": "01792563673545567000",
+     "turn_id": "a01b02b6",
+     "type": "answer_done",
+     "t_ms": 2878,
+     "text": "Déjame buscarlo en la documentación. Para probarlo, usas el TestClient de FastAPI dentro de un bloque \"with\". Al entrar al bloque se ejecuta el lifespan, así que el modelo ya está cargado cuando haces tus requests. Al salir del bloque se ejecuta la parte de limpieza después del yield. Está en la página de Testing de eventos lifespan, dentro de la guía avanzada.",
+     "cited": [
+      "advanced/testing-events.md#testing-events-lifespan-and-startup-shutdown",
+      "advanced/events.md#lifespan-events",
+      "advanced/events.md#lifespan-function"
+     ],
+     "answered_from_docs": true,
+     "input_tokens": 5251,
+     "output_tokens": 369,
+     "usd": 0.00071,
+     "first_token_ms": 656,
+     "model": "claude-haiku-5-5"
+    }
+   ]
+  },
+  {
+   "user": "¿Cómo cobro pagos con Stripe en mi backend?",
+   "chunks": [
+    [
+     2797,
+     "Déjame revisar la"
+    ],
+    [
+     2797,
+     " documentación."
+    ],
+    [
+     2797,
+     " "
+    ],
+    [
+     2797,
+     "La"
+    ],
+    [
+     2797,
+     " documentación de"
+    ],
+    [
+     2797,
+     " FastAPI no c"
+    ],
+    [
+     2797,
+     "ubre la"
+    ],
+    [
+     2797,
+     " integración con Stripe."
+    ],
+    [
+     2797,
+     " L"
+    ],
+    [
+     2797,
+     "o que s"
+    ],
+    [
+     2797,
+     "í encont"
+    ],
+    [
+     2797,
+     "ré son"
+    ],
+    [
+     2797,
+     " tem"
+    ],
+    [
+     2797,
+     "as generales como"
+    ],
+    [
+     2797,
+     " se"
+    ],
+    [
+     2797,
+     "guridad y autenticación"
+    ],
+    [
+     2797,
+     ", call"
+    ],
+    [
+     2797,
+     "backs de"
+    ],
+    [
+     2797,
+     " OpenAPI y la"
+    ],
+    [
+     2797,
+     " l"
+    ],
+    [
+     2797,
+     "ista de esquemas,"
+    ],
+    [
+     2797,
+     " pero n"
+    ],
+    [
+     2797,
+     "ada específ"
+    ],
+    [
+     2797,
+     "ico sobre p"
+    ],
+    [
+     2797,
+     "agos. Para e"
+    ],
+    [
+     2797,
+     "so te con"
+    ],
+    [
+     2797,
+     "viene rev"
+    ],
+    [
+     2797,
+     "isar la documentación o"
+    ],
+    [
+     2797,
+     "ficial de Stripe."
+    ]
+   ],
+   "events": [
+    {
+     "session_id": "replay-es-38c26d",
+     "cursor": "01792563673547780000",
+     "turn_id": "6ebbb445",
+     "type": "user_utterance",
+     "t_ms": 0,
+     "text": "¿Cómo cobro pagos con Stripe en mi backend?",
+     "language": "es"
+    },
+    {
+     "session_id": "replay-es-38c26d",
+     "cursor": "01792563674122754000",
+     "turn_id": "6ebbb445",
+     "type": "llm_first_token",
+     "t_ms": 575,
+     "round": 1
+    },
+    {
+     "session_id": "replay-es-38c26d",
+     "cursor": "01792563674362319000",
+     "turn_id": "6ebbb445",
+     "type": "decision",
+     "t_ms": 814,
+     "action": "search",
+     "said": "Déjame revisar la documentación."
+    },
+    {
+     "session_id": "replay-es-38c26d",
+     "cursor": "01792563674362542000",
+     "turn_id": "6ebbb445",
+     "type": "tool_call",
+     "t_ms": 814,
+     "tool": "search_docs",
+     "query": "Stripe payments integration",
+     "language": "es"
+    },
+    {
+     "session_id": "replay-es-38c26d",
+     "cursor": "01792563674659769000",
+     "turn_id": "6ebbb445",
+     "type": "retrieval_hits",
+     "t_ms": 1112,
+     "retriever": "aws-titan-dense",
+     "ms": 297,
+     "hits": [
+      {
+       "section_id": "how-to/separate-openapi-schemas.md#same-schema-for-input-and-output-models-in-docs",
+       "page": "how-to/separate-openapi-schemas.md",
+       "lang": "es",
+       "title": "Separación de Esquemas OpenAPI para Entrada y Salida o No",
+       "heading": "Mismo Esquema para Modelos de Entrada y Salida en la Documentación",
+       "url": "https://fastapi.tiangolo.com/es/how-to/separate-openapi-schemas/#same-schema-for-input-and-output-models-in-docs",
+       "score": 0.0164
+      },
+      {
+       "section_id": "alternatives.md#apispec",
+       "page": "alternatives.md",
+       "lang": "es",
+       "title": "Alternativas, Inspiración y Comparaciones",
+       "heading": "APISpec",
+       "url": "https://fastapi.tiangolo.com/es/alternatives/#apispec",
+       "score": 0.0161
+      },
+      {
+       "section_id": "advanced/openapi-callbacks.md#documenting-the-callback",
+       "page": "advanced/openapi-callbacks.md",
+       "lang": "es",
+       "title": "Callbacks de OpenAPI",
+       "heading": "Documentar el callback",
+       "url": "https://fastapi.tiangolo.com/es/advanced/openapi-callbacks/#documenting-the-callback",
+       "score": 0.0159
+      },
+      {
+       "section_id": "index.md#sponsors",
+       "page": "index.md",
+       "lang": "es",
+       "title": "FastAPI",
+       "heading": "Sponsors",
+       "url": "https://fastapi.tiangolo.com/es/#sponsors",
+       "score": 0.0156
+      },
+      {
+       "section_id": "features.md#security-and-authentication",
+       "page": "features.md",
+       "lang": "es",
+       "title": "Funcionalidades",
+       "heading": "Seguridad y autenticación",
+       "url": "https://fastapi.tiangolo.com/es/features/#security-and-authentication",
+       "score": 0.0154
+      }
+     ]
+    },
+    {
+     "session_id": "replay-es-38c26d",
+     "cursor": "01792563676342747000",
+     "turn_id": "6ebbb445",
+     "type": "answer_done",
+     "t_ms": 2795,
+     "text": "Déjame revisar la documentación. La documentación de FastAPI no cubre la integración con Stripe. Lo que sí encontré son temas generales como seguridad y autenticación, callbacks de OpenAPI y la lista de esquemas, pero nada específico sobre pagos. Para eso te conviene revisar la documentación oficial de Stripe.",
+     "cited": [],
+     "answered_from_docs": false,
+     "input_tokens": 6488,
+     "output_tokens": 275,
+     "usd": 0.000786,
+     "first_token_ms": 575,
+     "model": "claude-haiku-5-5"
+    }
+   ]
+  }
+ ],
+ "recorded": {
+  "date": "2026-10-21",
+  "model": "claude-haiku-5-5",
+  "retriever": "aws-dense",
+  "s3vectors_index": "docs-titan-v2-256-code",
+  "input": "typed text through the proxy (no speech recognition)"
+ }
+}

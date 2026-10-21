@@ -172,6 +172,17 @@ async def health(request: Request):
     )
 
 
+REPLAYS = {"en", "es"}
+
+
+@app.get("/replays/{name}.json")
+async def replay(name: str):
+    """Recorded sessions for the page's replay mode (scripts/record_replay.py)."""
+    if name not in REPLAYS:
+        raise HTTPException(status_code=404)
+    return FileResponse(ROOT / "web" / "replays" / f"{name}.json")
+
+
 @app.get("/")
 async def index():
     # no-store: a phone that kept an old copy would poll an API that has moved on.

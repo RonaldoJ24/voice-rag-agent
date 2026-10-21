@@ -1,0 +1,580 @@
+{
+ "lang": "en",
+ "greeting": "Hi! Ask me anything about FastAPI.",
+ "turns": [
+  {
+   "user": "Hi! What can you help me with?",
+   "chunks": [
+    [
+     1548,
+     "I can help you with quest"
+    ],
+    [
+     1548,
+     "ions about FastAPI,"
+    ],
+    [
+     1548,
+     " the"
+    ],
+    [
+     1548,
+     " Python fram"
+    ],
+    [
+     1548,
+     "ework for building web APIs."
+    ],
+    [
+     1548,
+     " I"
+    ],
+    [
+     1548,
+     " answ"
+    ],
+    [
+     1548,
+     "er using"
+    ],
+    [
+     1548,
+     " its"
+    ],
+    [
+     1548,
+     " official documentation, so you"
+    ],
+    [
+     1548,
+     " can ask about routes"
+    ],
+    [
+     1548,
+     ", request"
+    ],
+    [
+     1548,
+     " bodies, d"
+    ],
+    [
+     1548,
+     "ependenc"
+    ],
+    [
+     1548,
+     "ies, auth"
+    ],
+    [
+     1548,
+     "entication, or anything else in"
+    ],
+    [
+     1548,
+     " the docs. What would you like"
+    ],
+    [
+     1548,
+     " to know?"
+    ]
+   ],
+   "events": [
+    {
+     "session_id": "replay-en-a8d325",
+     "cursor": "01792563658320558000",
+     "turn_id": "abd11d42",
+     "type": "user_utterance",
+     "t_ms": 23,
+     "text": "Hi! What can you help me with?",
+     "language": "en"
+    },
+    {
+     "session_id": "replay-en-a8d325",
+     "cursor": "01792563659522727000",
+     "turn_id": "abd11d42",
+     "type": "llm_first_token",
+     "t_ms": 1226,
+     "round": 1
+    },
+    {
+     "session_id": "replay-en-a8d325",
+     "cursor": "01792563659843454000",
+     "turn_id": "abd11d42",
+     "type": "decision",
+     "t_ms": 1546,
+     "action": "answer_directly",
+     "said": "I can help you with questions about FastAPI, the Python framework for building web APIs. I answer using its official documentation, so you can ask about routes, request bodies, dependencies, authentication, or anything else in the docs. What would you like to know?"
+    },
+    {
+     "session_id": "replay-en-a8d325",
+     "cursor": "01792563659843671000",
+     "turn_id": "abd11d42",
+     "type": "answer_done",
+     "t_ms": 1547,
+     "text": "I can help you with questions about FastAPI, the Python framework for building web APIs. I answer using its official documentation, so you can ask about routes, request bodies, dependencies, authentication, or anything else in the docs. What would you like to know?",
+     "cited": [],
+     "answered_from_docs": null,
+     "input_tokens": 1272,
+     "output_tokens": 77,
+     "usd": 0.000166,
+     "first_token_ms": 1226,
+     "model": "claude-haiku-5-5"
+    }
+   ]
+  },
+  {
+   "user": "How do I let people upload a file to my API?",
+   "chunks": [
+    [
+     4696,
+     "Let me check the docs."
+    ],
+    [
+     4696,
+     " "
+    ],
+    [
+     4696,
+     "To acc"
+    ],
+    [
+     4696,
+     "ept an"
+    ],
+    [
+     4696,
+     " upload, decl"
+    ],
+    [
+     4696,
+     "are a par"
+    ],
+    [
+     4696,
+     "ameter with"
+    ],
+    [
+     4696,
+     " the type U"
+    ],
+    [
+     4696,
+     "ploadFile and w"
+    ],
+    [
+     4696,
+     "rap it in File,"
+    ],
+    [
+     4696,
+     " im"
+    ],
+    [
+     4696,
+     "ported from fastapi. The"
+    ],
+    [
+     4696,
+     " client"
+    ],
+    [
+     4696,
+     " then"
+    ],
+    [
+     4696,
+     " sends the file as form data."
+    ],
+    [
+     4696,
+     " Inside your function"
+    ],
+    [
+     4696,
+     " you can read"
+    ],
+    [
+     4696,
+     " its filename,"
+    ],
+    [
+     4696,
+     " content type, and cont"
+    ],
+    [
+     4696,
+     "ents."
+    ],
+    [
+     4696,
+     " You'"
+    ],
+    [
+     4696,
+     "ll also"
+    ],
+    [
+     4696,
+     " need to install the"
+    ],
+    [
+     4696,
+     " python-multipart package first."
+    ],
+    [
+     4696,
+     " The details"
+    ],
+    [
+     4696,
+     " are on"
+    ],
+    [
+     4696,
+     " the Request Files page of"
+    ],
+    [
+     4696,
+     " the tutorial."
+    ]
+   ],
+   "events": [
+    {
+     "session_id": "replay-en-a8d325",
+     "cursor": "01792563659845485000",
+     "turn_id": "7ec0d358",
+     "type": "user_utterance",
+     "t_ms": 0,
+     "text": "How do I let people upload a file to my API?",
+     "language": "en"
+    },
+    {
+     "session_id": "replay-en-a8d325",
+     "cursor": "01792563661091710000",
+     "turn_id": "7ec0d358",
+     "type": "llm_first_token",
+     "t_ms": 1246,
+     "round": 1
+    },
+    {
+     "session_id": "replay-en-a8d325",
+     "cursor": "01792563661312865000",
+     "turn_id": "7ec0d358",
+     "type": "decision",
+     "t_ms": 1467,
+     "action": "search",
+     "said": "Let me check the docs."
+    },
+    {
+     "session_id": "replay-en-a8d325",
+     "cursor": "01792563661313033000",
+     "turn_id": "7ec0d358",
+     "type": "tool_call",
+     "t_ms": 1467,
+     "tool": "search_docs",
+     "query": "upload files request files",
+     "language": "en"
+    },
+    {
+     "session_id": "replay-en-a8d325",
+     "cursor": "01792563662933480000",
+     "turn_id": "7ec0d358",
+     "type": "retrieval_hits",
+     "t_ms": 3088,
+     "retriever": "aws-titan-dense",
+     "ms": 1621,
+     "hits": [
+      {
+       "section_id": "tutorial/request-files.md#request-files",
+       "page": "tutorial/request-files.md",
+       "lang": "en",
+       "title": "Request Files",
+       "heading": "Request Files",
+       "url": "https://fastapi.tiangolo.com/tutorial/request-files/#request-files",
+       "score": 0.0164
+      },
+      {
+       "section_id": "tutorial/request-files.md#uploadfile",
+       "page": "tutorial/request-files.md",
+       "lang": "en",
+       "title": "Request Files",
+       "heading": "`UploadFile`",
+       "url": "https://fastapi.tiangolo.com/tutorial/request-files/#uploadfile",
+       "score": 0.0159
+      },
+      {
+       "section_id": "tutorial/request-forms-and-files.md#recap",
+       "page": "tutorial/request-forms-and-files.md",
+       "lang": "en",
+       "title": "Request Forms and Files",
+       "heading": "Recap",
+       "url": "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/#recap",
+       "score": 0.0156
+      },
+      {
+       "section_id": "tutorial/request-files.md#optional-file-upload",
+       "page": "tutorial/request-files.md",
+       "lang": "en",
+       "title": "Request Files",
+       "heading": "Optional File Upload",
+       "url": "https://fastapi.tiangolo.com/tutorial/request-files/#optional-file-upload",
+       "score": 0.0152
+      },
+      {
+       "section_id": "tutorial/request-forms-and-files.md#request-forms-and-files",
+       "page": "tutorial/request-forms-and-files.md",
+       "lang": "en",
+       "title": "Request Forms and Files",
+       "heading": "Request Forms and Files",
+       "url": "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/#request-forms-and-files",
+       "score": 0.0149
+      }
+     ]
+    },
+    {
+     "session_id": "replay-en-a8d325",
+     "cursor": "01792563664539944000",
+     "turn_id": "7ec0d358",
+     "type": "answer_done",
+     "t_ms": 4694,
+     "text": "Let me check the docs. To accept an upload, declare a parameter with the type UploadFile and wrap it in File, imported from fastapi. The client then sends the file as form data. Inside your function you can read its filename, content type, and contents. You'll also need to install the python-multipart package first. The details are on the Request Files page of the tutorial.",
+     "cited": [
+      "tutorial/request-files.md#request-files",
+      "tutorial/request-files.md#uploadfile"
+     ],
+     "answered_from_docs": true,
+     "input_tokens": 5611,
+     "output_tokens": 295,
+     "usd": 0.000709,
+     "first_token_ms": 1246,
+     "model": "claude-haiku-5-5"
+    }
+   ]
+  },
+  {
+   "user": "Can I accept several files in one request?",
+   "chunks": [
+    [
+     3155,
+     "Let me check the docs."
+    ],
+    [
+     3155,
+     " "
+    ],
+    [
+     3155,
+     "Yes."
+    ],
+    [
+     3155,
+     " You"
+    ],
+    [
+     3155,
+     " decl"
+    ],
+    [
+     3155,
+     "are a list type"
+    ],
+    [
+     3155,
+     ", such"
+    ],
+    [
+     3155,
+     " as a list of U"
+    ],
+    [
+     3155,
+     "ploadFile, and F"
+    ],
+    [
+     3155,
+     "astAPI g"
+    ],
+    [
+     3155,
+     "ives you all the uploaded"
+    ],
+    [
+     3155,
+     " files as"
+    ],
+    [
+     3155,
+     " a list. The client"
+    ],
+    [
+     3155,
+     " sends each file under"
+    ],
+    [
+     3155,
+     " the same form field name"
+    ],
+    [
+     3155,
+     ". The Request Files page has"
+    ],
+    [
+     3155,
+     " a full"
+    ],
+    [
+     3155,
+     " example with a list"
+    ],
+    [
+     3155,
+     " of U"
+    ],
+    [
+     3155,
+     "ploadFile objects. You"
+    ],
+    [
+     3155,
+     " can also mix files and reg"
+    ],
+    [
+     3155,
+     "ular form fields in one request,"
+    ],
+    [
+     3155,
+     " as"
+    ],
+    [
+     3155,
+     " described on the Request Forms"
+    ],
+    [
+     3155,
+     " and Files page."
+    ]
+   ],
+   "events": [
+    {
+     "session_id": "replay-en-a8d325",
+     "cursor": "01792563664542191000",
+     "turn_id": "642bde6f",
+     "type": "user_utterance",
+     "t_ms": 0,
+     "text": "Can I accept several files in one request?",
+     "language": "en"
+    },
+    {
+     "session_id": "replay-en-a8d325",
+     "cursor": "01792563665445825000",
+     "turn_id": "642bde6f",
+     "type": "llm_first_token",
+     "t_ms": 903,
+     "round": 1
+    },
+    {
+     "session_id": "replay-en-a8d325",
+     "cursor": "01792563665668228000",
+     "turn_id": "642bde6f",
+     "type": "decision",
+     "t_ms": 1126,
+     "action": "search",
+     "said": "Let me check the docs."
+    },
+    {
+     "session_id": "replay-en-a8d325",
+     "cursor": "01792563665668478000",
+     "turn_id": "642bde6f",
+     "type": "tool_call",
+     "t_ms": 1126,
+     "tool": "search_docs",
+     "query": "multiple file uploads in one request",
+     "language": "en"
+    },
+    {
+     "session_id": "replay-en-a8d325",
+     "cursor": "01792563666020410000",
+     "turn_id": "642bde6f",
+     "type": "retrieval_hits",
+     "t_ms": 1478,
+     "retriever": "aws-titan-dense",
+     "ms": 352,
+     "hits": [
+      {
+       "section_id": "tutorial/request-files.md#multiple-file-uploads-with-additional-metadata",
+       "page": "tutorial/request-files.md",
+       "lang": "en",
+       "title": "Request Files",
+       "heading": "Multiple File Uploads with Additional Metadata",
+       "url": "https://fastapi.tiangolo.com/tutorial/request-files/#multiple-file-uploads-with-additional-metadata",
+       "score": 0.0164
+      },
+      {
+       "section_id": "tutorial/request-files.md#optional-file-upload",
+       "page": "tutorial/request-files.md",
+       "lang": "en",
+       "title": "Request Files",
+       "heading": "Optional File Upload",
+       "url": "https://fastapi.tiangolo.com/tutorial/request-files/#optional-file-upload",
+       "score": 0.0159
+      },
+      {
+       "section_id": "tutorial/request-forms-and-files.md#request-forms-and-files",
+       "page": "tutorial/request-forms-and-files.md",
+       "lang": "en",
+       "title": "Request Forms and Files",
+       "heading": "Request Forms and Files",
+       "url": "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/#request-forms-and-files",
+       "score": 0.0154
+      },
+      {
+       "section_id": "tutorial/request-files.md#request-files",
+       "page": "tutorial/request-files.md",
+       "lang": "en",
+       "title": "Request Files",
+       "heading": "Request Files",
+       "url": "https://fastapi.tiangolo.com/tutorial/request-files/#request-files",
+       "score": 0.0149
+      },
+      {
+       "section_id": "tutorial/request-forms-and-files.md#recap",
+       "page": "tutorial/request-forms-and-files.md",
+       "lang": "en",
+       "title": "Request Forms and Files",
+       "heading": "Recap",
+       "url": "https://fastapi.tiangolo.com/tutorial/request-forms-and-files/#recap",
+       "score": 0.0145
+      }
+     ]
+    },
+    {
+     "session_id": "replay-en-a8d325",
+     "cursor": "01792563667695689000",
+     "turn_id": "642bde6f",
+     "type": "answer_done",
+     "t_ms": 3153,
+     "text": "Let me check the docs. Yes. You declare a list type, such as a list of UploadFile, and FastAPI gives you all the uploaded files as a list. The client sends each file under the same form field name. The Request Files page has a full example with a list of UploadFile objects. You can also mix files and regular form fields in one request, as described on the Request Forms and Files page.",
+     "cited": [
+      "tutorial/request-files.md#multiple-file-uploads-with-additional-metadata",
+      "tutorial/request-files.md#multiple-file-uploads",
+      "tutorial/request-forms-and-files.md#request-forms-and-files"
+     ],
+     "answered_from_docs": true,
+     "input_tokens": 5690,
+     "output_tokens": 352,
+     "usd": 0.000745,
+     "first_token_ms": 903,
+     "model": "claude-haiku-5-5"
+    }
+   ]
+  }
+ ],
+ "recorded": {
+  "date": "2026-10-21",
+  "model": "claude-haiku-5-5",
+  "retriever": "aws-dense",
+  "s3vectors_index": "docs-titan-v2-256-code",
+  "input": "typed text through the proxy (no speech recognition)"
+ }
+}

@@ -2101,3 +2101,14 @@
 {"ts": 1792560629.856, "model": "claude-opus-5-5", "purpose": "eval_judge", "input_tokens": 767, "output_tokens": 67, "usd": 0.004408}
 {"ts": 1792560629.949, "model": "claude-opus-5-5", "purpose": "eval_judge", "input_tokens": 835, "output_tokens": 73, "usd": 0.0048}
 {"ts": 1792560630.453, "model": "claude-opus-5-5", "purpose": "eval_judge", "input_tokens": 783, "output_tokens": 65, "usd": 0.004432}
+{"ts": 1792563659.843, "model": "claude-haiku-5-5", "purpose": "agent_turn", "input_tokens": 1272, "output_tokens": 77, "usd": 0.000166}
+{"ts": 1792563661.313, "model": "claude-haiku-5-5", "purpose": "agent_turn", "input_tokens": 1366, "output_tokens": 82, "usd": 0.000178}
+{"ts": 1792563664.539, "model": "claude-haiku-5-5", "purpose": "agent_turn", "input_tokens": 4245, "output_tokens": 213, "usd": 0.000531}
+{"ts": 1792563665.668, "model": "claude-haiku-5-5", "purpose": "agent_turn", "input_tokens": 1491, "output_tokens": 87, "usd": 0.000193}
+{"ts": 1792563667.695, "model": "claude-haiku-5-5", "purpose": "agent_turn", "input_tokens": 4199, "output_tokens": 265, "usd": 0.000552}
+{"ts": 1792563668.556, "model": "claude-haiku-5-5", "purpose": "agent_turn", "input_tokens": 1304, "output_tokens": 92, "usd": 0.000176}
+{"ts": 1792563670.666, "model": "claude-haiku-5-5", "purpose": "agent_turn", "input_tokens": 2833, "output_tokens": 294, "usd": 0.00043}
+{"ts": 1792563671.63, "model": "claude-haiku-5-5", "purpose": "agent_turn", "input_tokens": 1505, "output_tokens": 95, "usd": 0.000198}
+{"ts": 1792563673.545, "model": "claude-haiku-5-5", "purpose": "agent_turn", "input_tokens": 3746, "output_tokens": 274, "usd": 0.000512}
+{"ts": 1792563674.362, "model": "claude-haiku-5-5", "purpose": "agent_turn", "input_tokens": 1680, "output_tokens": 89, "usd": 0.000212}
+{"ts": 1792563676.342, "model": "claude-haiku-5-5", "purpose": "agent_turn", "input_tokens": 4808, "output_tokens": 186, "usd": 0.000574}
