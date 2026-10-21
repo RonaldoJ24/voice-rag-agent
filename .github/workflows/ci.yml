@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      # The "local" group (fastembed + ONNX) is only for building the local index.
+      - name: Install
+        run: uv sync --locked --no-group local
+
+      - name: Lint
+        run: |
+          uv run ruff check .
+          uv run ruff format --check .
+
+      - name: Tests
+        run: uv run pytest -q
+
+      - name: Gold set matches the corpus
+        run: uv run python eval/validate_gold.py
+
+      - name: CloudFormation template
+        run: uvx cfn-lint infra/template.yaml
