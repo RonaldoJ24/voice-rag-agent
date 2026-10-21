@@ -1,0 +1,11 @@
+{
+  "repo": "fastapi/fastapi",
+  "sha": "b2ce629ace6bdd152d577e5f5e256a079ac1e4fd",
+  "fetched": "2026-10-20",
+  "license": "MIT",
+  "counts": {
+    "docs_en_md": 156,
+    "docs_es_md": 125,
+    "docs_src_files": 469
+  }
+}
