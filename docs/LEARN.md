@@ -74,8 +74,32 @@ Tell Claude the bucket name. Claude will write the script that embeds every docs
 
 **Interview takeaway:** the dimension (256) and the distance metric (cosine) are fixed when the index is created, and they have to match the embedding model you query with.
 
-## 4. What Claude handles (skim, no action)
+## 4. How the Lambda deploy works (read, about 5 minutes)
+
+Claude runs `scripts/deploy.sh` once your CLI is signed in. These are the pieces of `infra/template.yaml` worth being able to explain:
+
+- **Lambda Web Adapter.** A layer that runs `run.sh`, which starts uvicorn, and forwards each Lambda request to it as normal HTTP. The FastAPI app runs unchanged, with no Mangum handler and no code written for Lambda.
+- **Function URL with `InvokeMode: RESPONSE_STREAM`.** A public HTTPS endpoint without API Gateway. Streaming matters here: ElevenLabs starts speaking on the first tokens, and API Gateway REST APIs buffer the whole response.
+- **DynamoDB for state.** Each request can land on a different Lambda instance, so trace events and the spend total can't stay in memory. One table with 5 read and 5 write units stays inside the always-free tier.
+- **SSM Parameter Store for secrets.** `scripts/push_secrets.py` stores the API keys as SecureStrings, and the function reads them at cold start. They never appear in the template, CloudFormation outputs, or the Lambda console's environment tab.
+- **Least-privilege IAM.** The function role can read only its own parameters, write only its table, call only the Titan embedding model, and query only S3 Vectors.
+- **A fallback that doesn't depend on Bedrock.** `Retriever=bm25` (the default) needs nothing beyond the bundle and scored recall@5 0.92 against 0.94 for the hybrid. `Retriever=aws` switches to Titan and S3 Vectors after step 2 works.
+- **Spend guard.** The deployed demo stops calling Claude after $5 (`SpendPauseUsd`), and visitors need the demo code that `push_secrets.py` writes to `.env`.
+
+To look at it yourself after a deploy:
+
+```bash
+aws cloudformation describe-stacks --stack-name voice-rag-agent --region us-east-1 --query "Stacks[0].Outputs"
+```
+
+```bash
+aws logs tail /voice-rag-agent/proxy --region us-east-1 --since 10m
+```
+
+**Interview takeaway:** "Stateless compute, state in DynamoDB, secrets in Parameter Store, streaming through a Function URL, and a cost ceiling enforced in code" is the whole architecture in one sentence.
+
+## 5. What Claude handles (skim, no action)
 
 - `src/voice_rag_agent/`: the FastAPI proxy ElevenLabs calls, the agent loop, retrievers and trace events.
-- `scripts/`: corpus build, index build, ElevenLabs agent setup.
-- `infra/`: the SAM template that deploys the proxy to Lambda (day 2). Claude explains the template when it lands.
+- `scripts/`: corpus build, index build, ElevenLabs agent setup, Lambda packaging and deploy.
+- `infra/`: the SAM template described in section 4.
