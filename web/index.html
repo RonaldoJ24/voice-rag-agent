@@ -75,13 +75,26 @@
     while (polling) {
       try {
         const res = await fetch(`/trace?session_id=${sessionId}&after=${cursor}`);
-        const { events, cursor: next } = await res.json();
-        cursor = next;
-        events.forEach(addEvent);
-      } catch { /* keep polling; one failed poll is not worth stopping the call */ }
+        if (res.ok) {
+          const { events, cursor: next } = await res.json();
+          // Draw first, then move the cursor, so a failed draw retries instead of losing events.
+          events.forEach(addEvent);
+          cursor = next;
+        }
+      } catch (err) {
+        console.warn("trace poll failed", err); // keep polling; one failure is not worth stopping for
+      }
       await new Promise((r) => setTimeout(r, 600));
     }
   }
+
+  // Each Lambda instance serves one request at a time, and a call needs at least two
+  // at once (the streamed answer and these trace polls). Waking a few instances before the
+  // call means ElevenLabs never waits on a cold start, which it gives up on after ~4 s.
+  function warmUp(n = 3) {
+    for (let i = 0; i < n; i++) fetch(`/health?warm=${i}`).catch(() => {});
+  }
+  warmUp();
 
   async function demoCode(retry) {
     let code = new URLSearchParams(location.search).get("code");
@@ -133,7 +146,10 @@
     }
   }
 
+  const seen = new Set();
   function addEvent(e) {
+    if (seen.has(e.cursor)) return; // a retried poll can return events already drawn
+    seen.add(e.cursor);
     const box = $("trace");
     box.querySelector(".empty")?.remove();
     let turn = turns.get(e.turn_id);
@@ -155,6 +171,7 @@
     $("status").textContent = "Connecting…";
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
+      warmUp();
       const { signed_url, session_id, cursor } = await getSession();
       follow(session_id, cursor);
       conversation = await Conversation.startSession({

@@ -17,6 +17,10 @@ uv pip install --quiet --target "$out" -r build/requirements.txt \
 cp -R src web "$out/"
 cp data/index/chunks.jsonl data/index/bm25.json data/index/meta.json "$out/data/index/"
 cp infra/run.sh "$out/run.sh"
+# Ship bytecode. /var/task is read-only, so without it every cold start recompiles
+# every module (anthropic alone is over a second). unchecked-hash keeps the .pyc valid
+# even though zipping changes file times.
 find "$out" -name __pycache__ -prune -exec rm -rf {} +
+uv run --quiet python -m compileall -q -j 0 --invalidation-mode unchecked-hash "$out" || true
 
 echo "Bundle: $(du -sh "$out" | cut -f1) unzipped (Lambda limit 250 MB with layers)"

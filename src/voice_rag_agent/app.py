@@ -169,4 +169,7 @@ async def health(request: Request):
 
 @app.get("/")
 async def index():
-    return FileResponse(ROOT / "web" / "index.html")
+    # no-store: a phone that kept an old copy would poll an API that has moved on.
+    return FileResponse(
+        ROOT / "web" / "index.html", headers={"Cache-Control": "no-store"}
+    )

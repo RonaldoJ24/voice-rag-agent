@@ -30,6 +30,8 @@ Where the build stands, so any session can resume. Update after every milestone.
 - Set a $50 spend limit in the Anthropic Console.
 
 ## Facts to remember
+- Cold starts were the "waits for the whole answer" problem: ElevenLabs gives up on the Custom LLM after ~4 s and retries (`agents_llm_service_failed_attempts_latency` in conversation turn metrics), and each Lambda instance serves one request, so the answer stream and trace polls need two. Fixes (2026-10-20): bytecode shipped in the bundle, 2048 MB, page warms 3 instances on load and on Start. Cold init is now ~4 s (3 s imports, 1 s startup).
+- index.html is served `Cache-Control: no-store`; a phone that kept an old copy polled `/trace` without session_id (422) and drew nothing.
 - Agent voice is `eleven_v4_turbo` (90+ languages, ~100 ms) since 2026-10-20; Flash v2 was English only, so Spanish had an English accent. Eleven Realtime v1 Mini was rejected: it is a complete agent with its own LLM, so Claude, search_docs and the trace panel would drop out.
 - ElevenLabs sends interrupted agent turns cut short, and internal search_docs calls never appear in the history. The prompt tells Claude not to comment on either.
 - Spend is counted in two places: `costs/spend.jsonl` (local runs, evals) and the DynamoDB item `spend/total` (deployed demo, pauses at $5). Add both when checking the $40 pause.

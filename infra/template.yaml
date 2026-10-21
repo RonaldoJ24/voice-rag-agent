@@ -51,7 +51,8 @@ Resources:
       Handler: run.sh
       Runtime: python3.13
       Architectures: [arm64]
-      MemorySize: 1024
+      # More memory also means more CPU, which roughly halves cold start time.
+      MemorySize: 2048
       Timeout: 60
       Layers:
         - !Sub arn:aws:lambda:${AWS::Region}:753240598075:layer:LambdaAdapterLayerArm64:30
