@@ -25,6 +25,13 @@ def build_retriever(name: str) -> Retriever:
         from .retrieval.local import LocalHybridRetriever
 
         return LocalHybridRetriever.load(get_settings().index_dir)
+    if name == "aws":
+        from .retrieval.aws import AwsHybridRetriever
+
+        s = get_settings()
+        return AwsHybridRetriever.load(
+            s.index_dir, s.s3vectors_bucket, s.s3vectors_index, s.aws_region
+        )
     raise ValueError(f"Unknown retriever {name!r}")
 
 
