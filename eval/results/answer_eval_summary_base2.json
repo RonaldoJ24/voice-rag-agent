@@ -1,0 +1,287 @@
+{
+  "gold": "eval-freeze-v1",
+  "retriever": "aws-titan-dense",
+  "index_dir": "/Users/rjruiz/Documents/Personal/voice-rag-agent/data/index",
+  "s3vectors_index": "docs-titan-v2-256",
+  "judge": "claude-opus-5-5",
+  "rows": 68,
+  "models": {
+    "claude-haiku-5-5": {
+      "judge_pass": {
+        "overall": {
+          "n": 68,
+          "mean": 0.897,
+          "ci95": [
+            0.824,
+            0.956
+          ]
+        },
+        "kind=answerable": {
+          "n": 50,
+          "mean": 0.86,
+          "ci95": [
+            0.76,
+            0.94
+          ]
+        },
+        "kind=smalltalk": {
+          "n": 8,
+          "mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "kind=unanswerable": {
+          "n": 10,
+          "mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "lang=en": {
+          "n": 34,
+          "mean": 0.853,
+          "ci95": [
+            0.706,
+            0.971
+          ]
+        },
+        "lang=es": {
+          "n": 34,
+          "mean": 0.941,
+          "ci95": [
+            0.853,
+            1.0
+          ]
+        }
+      },
+      "checks": {
+        "abstained": {
+          "n": 10,
+          "mean": 0.5,
+          "ci95": [
+            0.2,
+            0.8
+          ]
+        },
+        "cited_gold_section": {
+          "n": 50,
+          "mean": 0.96,
+          "ci95": [
+            0.9,
+            1.0
+          ]
+        },
+        "claimed_docs_answer": {
+          "n": 50,
+          "mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "language_matches": {
+          "n": 68,
+          "mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "no_urls_or_code": {
+          "n": 68,
+          "mean": 0.956,
+          "ci95": [
+            0.897,
+            1.0
+          ]
+        },
+        "searched": {
+          "n": 60,
+          "mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "skipped_search": {
+          "n": 8,
+          "mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "cost": {
+        "turns": 68,
+        "usd_total": 0.0383,
+        "usd_per_turn": 0.000564,
+        "first_token_ms_p50": 594,
+        "first_token_ms_p90": 732,
+        "turns_with_errors": 0
+      },
+      "judge_correct_answerable": {
+        "n": 50,
+        "mean": 0.94,
+        "ci95": [
+          0.86,
+          1.0
+        ]
+      },
+      "judge_grounded_answerable": {
+        "n": 50,
+        "mean": 0.9,
+        "ci95": [
+          0.82,
+          0.98
+        ]
+      }
+    },
+    "claude-sonnet-5-5": {
+      "judge_pass": {
+        "overall": {
+          "n": 68,
+          "mean": 0.941,
+          "ci95": [
+            0.882,
+            0.985
+          ]
+        },
+        "kind=answerable": {
+          "n": 50,
+          "mean": 0.94,
+          "ci95": [
+            0.88,
+            1.0
+          ]
+        },
+        "kind=smalltalk": {
+          "n": 8,
+          "mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "kind=unanswerable": {
+          "n": 10,
+          "mean": 0.9,
+          "ci95": [
+            0.7,
+            1.0
+          ]
+        },
+        "lang=en": {
+          "n": 34,
+          "mean": 0.941,
+          "ci95": [
+            0.853,
+            1.0
+          ]
+        },
+        "lang=es": {
+          "n": 34,
+          "mean": 0.941,
+          "ci95": [
+            0.853,
+            1.0
+          ]
+        }
+      },
+      "checks": {
+        "abstained": {
+          "n": 10,
+          "mean": 0.8,
+          "ci95": [
+            0.5,
+            1.0
+          ]
+        },
+        "cited_gold_section": {
+          "n": 50,
+          "mean": 0.98,
+          "ci95": [
+            0.94,
+            1.0
+          ]
+        },
+        "claimed_docs_answer": {
+          "n": 50,
+          "mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "language_matches": {
+          "n": 68,
+          "mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "no_urls_or_code": {
+          "n": 68,
+          "mean": 0.956,
+          "ci95": [
+            0.897,
+            1.0
+          ]
+        },
+        "searched": {
+          "n": 60,
+          "mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "skipped_search": {
+          "n": 8,
+          "mean": 1.0,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        }
+      },
+      "cost": {
+        "turns": 68,
+        "usd_total": 1.3578,
+        "usd_per_turn": 0.019968,
+        "first_token_ms_p50": 924,
+        "first_token_ms_p90": 1130,
+        "turns_with_errors": 0
+      },
+      "judge_correct_answerable": {
+        "n": 50,
+        "mean": 0.96,
+        "ci95": [
+          0.9,
+          1.0
+        ]
+      },
+      "judge_grounded_answerable": {
+        "n": 50,
+        "mean": 0.98,
+        "ci95": [
+          0.94,
+          1.0
+        ]
+      }
+    }
+  },
+  "judge_and_eval_usd": 3.2247,
+  "paired_pass_diff": {
+    "which": "claude-sonnet-5-5 minus claude-haiku-5-5",
+    "diff": 0.044,
+    "ci95": [
+      -0.015,
+      0.103
+    ]
+  }
+}

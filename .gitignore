@@ -16,3 +16,4 @@ logs/
 build/
 samconfig.toml
 data/index_code/
+data/chunks_code.jsonl

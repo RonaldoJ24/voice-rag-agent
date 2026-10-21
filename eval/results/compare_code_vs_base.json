@@ -1,0 +1,154 @@
+{
+  "a": [
+    "",
+    "base2"
+  ],
+  "b": [
+    "code",
+    "code2"
+  ],
+  "models": {
+    "claude-haiku-5-5": {
+      "pass_a": 0.897,
+      "pass_b": 0.949,
+      "pass_b_minus_a": {
+        "diff": 0.051,
+        "ci95": [
+          0.0,
+          0.11
+        ],
+        "n_questions": 68
+      },
+      "correct_b_minus_a": {
+        "diff": 0.0,
+        "ci95": [
+          -0.06,
+          0.07
+        ],
+        "n_questions": 50
+      },
+      "grounded_b_minus_a": {
+        "diff": 0.04,
+        "ci95": [
+          -0.04,
+          0.12
+        ],
+        "n_questions": 50
+      },
+      "flips_within_a": 6,
+      "flips_within_b": 3,
+      "flips_between": [
+        7,
+        6
+      ],
+      "predicted_rows": {
+        "en-02": {
+          "a": [
+            false,
+            false
+          ],
+          "b": [
+            false,
+            false
+          ]
+        },
+        "en-05": {
+          "a": [
+            false,
+            false
+          ],
+          "b": [
+            true,
+            true
+          ]
+        },
+        "en-14": {
+          "a": [
+            false,
+            false
+          ],
+          "b": [
+            true,
+            true
+          ]
+        },
+        "en-16": {
+          "a": [
+            false,
+            true
+          ],
+          "b": [
+            true,
+            true
+          ]
+        }
+      },
+      "input_tokens_b_over_a": 1.074,
+      "usd_per_turn": {
+        "a": 0.000565,
+        "b": 0.000597
+      }
+    },
+    "claude-sonnet-5-5": {
+      "pass_a": 0.949,
+      "pass_b": 0.926,
+      "pass_b_minus_a": {
+        "diff": -0.022,
+        "ci95": [
+          -0.081,
+          0.029
+        ],
+        "n_questions": 68
+      },
+      "correct_b_minus_a": {
+        "diff": -0.04,
+        "ci95": [
+          -0.09,
+          0.0
+        ],
+        "n_questions": 50
+      },
+      "grounded_b_minus_a": {
+        "diff": -0.01,
+        "ci95": [
+          -0.07,
+          0.05
+        ],
+        "n_questions": 50
+      },
+      "flips_within_a": 1,
+      "flips_within_b": 2,
+      "flips_between": [
+        4,
+        5
+      ],
+      "predicted_rows": {
+        "en-02": {
+          "a": [
+            false,
+            false
+          ],
+          "b": [
+            false,
+            false
+          ]
+        },
+        "en-14": {
+          "a": [
+            false,
+            false
+          ],
+          "b": [
+            true,
+            true
+          ]
+        }
+      },
+      "input_tokens_b_over_a": 1.075,
+      "usd_per_turn": {
+        "a": 0.019894,
+        "b": 0.020936
+      }
+    }
+  }
+}
