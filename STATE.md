@@ -15,7 +15,7 @@ Where the build stands, so any session can resume. Update after every milestone.
 - Live panel polls `/trace?after=<cursor>`; `/api/session` returns the starting cursor and checks `X-Demo-Code`.
 
 ## In progress
-- Deploy blocked (2026-10-20): account 784514617897 is still in AWS verification. Bedrock says "Your account is currently being verified" and service control policies deny Lambda, DynamoDB, CloudFormation, S3 Vectors, SSM, Secrets Manager and EC2. IAM, S3, Logs and Bedrock list calls work. Nothing was created. Rerun `scripts/deploy.sh` once verification clears; if the denies stay after it clears, check the SCPs attached to this account in the management account (Organizations > Policies).
+- Deploy blocked (2026-10-20). Verification cleared for Bedrock (Titan V2 embed call works), but SCP `p-3rzlv6oc` from the management account 767866852456 still explicitly denies Lambda, DynamoDB, CloudFormation, SSM, Secrets Manager, S3 Vectors and EC2 on account 784514617897. The owner has to inspect or detach it in Organizations > Policies. Nothing was created.
 
 ## Next
 1. Owner's first real voice call on http://localhost:8000 (server + cloudflared quick tunnel must be running; quick-tunnel URL changes on restart, then rerun `scripts/elevenlabs_agent.py --base-url <url>`).
