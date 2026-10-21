@@ -111,8 +111,11 @@ async def chat_completions(
 
 
 @app.get("/trace")
-async def trace_feed(request: Request, after: str = "", session_id: str | None = None):
-    """Events newer than cursor `after`. The live panel polls this during a call."""
+async def trace_feed(request: Request, session_id: str, after: str = ""):
+    """One session's events newer than cursor `after`. The live panel polls this.
+
+    session_id is required so one visitor never sees another visitor's questions.
+    """
     events = await run_in_threadpool(request.app.state.bus.since, after, session_id)
     cursor = events[-1]["cursor"] if events else after
     return {"events": events, "cursor": cursor}

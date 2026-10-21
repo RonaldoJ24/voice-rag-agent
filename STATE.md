@@ -20,7 +20,7 @@ Where the build stands, so any session can resume. Update after every milestone.
 - Region: an SCP (`p-3rzlv6oc`) limits this Free plan account to us-east-2 for regional services. Everything the stack needs works there.
 
 ## Next
-1. Owner's first real voice call on the Function URL (demo code is DEMO_ACCESS_CODE in .env). Check `aws logs tail /voice-rag-agent/proxy --region us-east-2` for `extra body keys` to see whether session_id arrives.
+1. Owner's first real voice call on the Function URL (demo code is DEMO_ACCESS_CODE in .env). A text-only WebSocket session through the signed URL already passed end to end (2026-10-20).
 2. Gold set v1 (60 questions + 8 small-talk turns), frozen with tag `eval-freeze-v1`.
 3. After `aws login`: `scripts/deploy.sh`, curl `/health` from outside (403 means the Function URL permission is wrong), `scripts/smoke_proxy.py --base-url <url>`, compare first-token time with 966 ms via tunnel, point the ElevenLabs agent at the Function URL. Then Titan probe, `build_s3vectors.py`, eval with `--retriever aws`, redeploy with `RETRIEVER=aws`.
 4. Answer eval (Haiku vs Sonnet, Opus judge), voice eval, README results.
@@ -31,7 +31,7 @@ Where the build stands, so any session can resume. Update after every milestone.
 
 ## Facts to remember
 - Spend is counted in two places: `costs/spend.jsonl` (local runs, evals) and the DynamoDB item `spend/total` (deployed demo, pauses at $5). Add both when checking the $40 pause.
-- `/trace` with no session filter returns every visitor's events. Once the first real call shows whether `session_id` arrives in `elevenlabs_extra_body`, filter server side and drop the "latest" fallback.
+- The agent must allow `platform_settings.overrides.custom_llm_extra_body`, or ElevenLabs ends every call at once with error 1008. With it on, `session_id` arrives and `/trace` requires it (no cross-visitor events).
 - Haiku 5.5 runs with thinking disabled: the spoken filler starts at ~580 ms (adaptive thinking gave a silent tool call).
 - ElevenLabs JS client pinned to 1.26.0 (has `customLlmExtraBody`, released 2026-09-29).
 - Spend so far: see `uv run python -c "from voice_rag_agent.costs import Ledger; from voice_rag_agent.config import get_settings as g; s=g(); print(Ledger(s.spend_ledger, s.spend_pause_usd).total())"`.

@@ -61,8 +61,17 @@ def agent_config(base_url: str, secret_id: str, model: str) -> dict:
             "tts": {"model_id": TTS_MODEL, "voice_id": VOICE_ID},
             "conversation": {"max_duration_seconds": 180},
         },
-        "platform_settings": {"auth": {"enable_auth": True}},
+        "platform_settings": PLATFORM_SETTINGS,
     }
+
+
+# Private agent (signed URLs only). The page tags each call with customLlmExtraBody
+# {"session_id"} so the trace panel can follow it; ElevenLabs ends the call with error
+# 1008 unless the agent allows that override.
+PLATFORM_SETTINGS = {
+    "auth": {"enable_auth": True},
+    "overrides": {"custom_llm_extra_body": True},
+}
 
 
 def save_env(key: str, value: str) -> None:
@@ -95,7 +104,10 @@ def main() -> None:
             )
             prompt = agent["conversation_config"]["agent"]["prompt"]
             prompt["custom_llm"]["url"] = f"{args.base_url.rstrip('/')}/v1"
-            body = {"conversation_config": {"agent": {"prompt": prompt}}}
+            body = {
+                "conversation_config": {"agent": {"prompt": prompt}},
+                "platform_settings": PLATFORM_SETTINGS,
+            }
             r = client.patch(f"{API}/agents/{s.elevenlabs_agent_id}", json=body)
             if r.status_code >= 400:
                 raise SystemExit(f"Update failed {r.status_code}: {r.text[:800]}")
