@@ -124,6 +124,32 @@ def test_tiny_section_merges_into_next_and_keeps_first_id():
     assert "Short intro." in recs[0]["text"] and "w119" in recs[0]["text"]
 
 
+def test_resolve_honors_line_ranges(tmp_path):
+    src = tmp_path / "docs_src" / "demo"
+    src.mkdir(parents=True)
+    (src / "app.py").write_text("\n".join(f"x{i} = {i}" for i in range(1, 31)))
+    md = f"# T {{ #t }}\n\n{{* ../../docs_src/demo/app.py ln[3:4,10:10] hl[3] *}}\n\n{words(70)}\n"
+    text = bc.chunk_page(md, "p.md", "en", "resolve", tmp_path)[0]["text"]
+    assert "x3 = 3\nx4 = 4\n# ...\nx10 = 10\n```" in text
+    assert "x2 = 2" not in text and "x5 = 5" not in text
+
+
+def test_inlined_code_does_not_change_section_ids(tmp_path):
+    """A tiny section that grows with its code must still merge, so gold ids stay valid."""
+    src = tmp_path / "docs_src" / "demo"
+    src.mkdir(parents=True)
+    (src / "app.py").write_text("\n".join(f"value_{i} = {i}" for i in range(50)))
+    md = (
+        f"# T {{ #t }}\n\nShort intro.\n\n{{* ../../docs_src/demo/app.py *}}\n\n"
+        f"## Big {{ #big }}\n\n{words(120)}\n"
+    )
+    ids = {
+        mode: {r["section_id"] for r in bc.chunk_page(md, "p.md", "en", mode, tmp_path)}
+        for mode in ("placeholder", "resolve")
+    }
+    assert ids["placeholder"] == ids["resolve"] == {"p.md#t"}
+
+
 # ---- BM25 -------------------------------------------------------------------
 
 

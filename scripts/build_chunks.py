@@ -56,6 +56,7 @@ HTML_TAG = re.compile(
 FENCE_NOISE = re.compile(r"</?(?:font|span|b|u|strong)(?:\s[^>]*)?>", re.IGNORECASE)
 IMAGE = re.compile(r"!\[[^\]]*\]\([^)]*\)")
 LINK = re.compile(r"\[([^\]]+)\]\([^)]*\)")
+LINE_RANGES = re.compile(r"\bln\[([\d:,\s]+)\]")
 LANG_BY_SUFFIX = {".py": "python", ".js": "javascript", ".html": "html", ".css": "css"}
 
 
@@ -76,11 +77,31 @@ def clean_inline(text: str) -> str:
     return "".join(parts)
 
 
-def read_include(rel: str, mode: str, raw: Path) -> str | None:
+def pick_lines(lines: list[str], opts: str) -> list[str]:
+    """Apply an include's `ln[a:b,c:d]` ranges (1-based, inclusive); no ranges keeps all."""
+    m = LINE_RANGES.search(opts)
+    if not m:
+        return lines
+    picked: list[str] = []
+    for part in m[1].split(","):
+        a, _, b = part.strip().partition(":")
+        if not a:
+            continue
+        start, end = int(a), int(b or a)
+        if picked:
+            picked.append("# ...")
+        picked += lines[start - 1 : end]
+    return picked
+
+
+def read_include(
+    rel: str, mode: str, raw: Path, opts: str = "", fenced: bool = True
+) -> str | None:
     """Return the replacement text for a code include, or None if it is unusable.
 
     The include path points at the repo-level docs_src/; anything before
-    `docs_src/` is dropped and the result must stay inside `raw`.
+    `docs_src/` is dropped and the result must stay inside `raw`. Inside an
+    existing fence (`fenced=False`) the code comes back without its own fence.
     """
     _, sep, tail = rel.partition("docs_src/")
     if not sep:
@@ -91,10 +112,14 @@ def read_include(rel: str, mode: str, raw: Path) -> str | None:
     path = (raw / "docs_src" / src).resolve()
     if not path.is_relative_to(raw.resolve()) or not path.is_file():
         return f"[code example: docs_src/{src}]"
-    lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+    lines = pick_lines(
+        path.read_text(encoding="utf-8", errors="replace").splitlines(), opts
+    )
     body = "\n".join(lines[:CODE_LINES])
     if len(lines) > CODE_LINES:
         body += "\n# ..."
+    if not fenced:
+        return body
     lang = LANG_BY_SUFFIX.get(path.suffix, "")
     return f"```{lang}\n{body}\n```"
 
@@ -142,7 +167,7 @@ def parse_page(
                 drop_fence = False
             elif not drop_fence:
                 inc = INCLUDE_OLD.match(line)
-                replacement = inc and read_include(inc[1], "placeholder", raw)
+                replacement = inc and read_include(inc[1], code_mode, raw, fenced=False)
                 out(replacement or FENCE_NOISE.sub("", line))
             continue
         if m := FENCE.match(line):
@@ -170,7 +195,8 @@ def parse_page(
             continue
 
         if m := INCLUDE_NEW.match(line) or INCLUDE_OLD.match(line):
-            replacement = read_include(m[1], code_mode, raw)
+            opts = m[2] if m.re is INCLUDE_NEW else ""
+            replacement = read_include(m[1], code_mode, raw, opts)
             if replacement:
                 out("")
                 for part in replacement.split("\n"):
@@ -268,34 +294,49 @@ def page_url(page: str, lang: str, anchor: str) -> str:
     return f"{SITE}{'es/' if lang == 'es' else ''}{path}#{anchor}"
 
 
+def with_carry(
+    carry: tuple[str, str, list[str]] | None, sec: Section
+) -> tuple[str, str, list[str]]:
+    """Section as (anchor, heading, blocks), prefixed by a carried tiny section."""
+    blocks = split_blocks(sec.lines)
+    if not carry:
+        return sec.anchor, sec.heading, blocks
+    anchor, heading, cblocks = carry
+    return anchor, heading, [*cblocks, *([sec.heading] if sec.heading else []), *blocks]
+
+
+def merge_flags(sections: list[Section]) -> list[bool]:
+    """True for each section that is too small and carries into the next one."""
+    flags, carry = [], None
+    for sec in sections:
+        entry = with_carry(carry, sec)
+        small = sum(map(count_tokens, entry[2])) < MIN_SECTION_TOKENS
+        carries = small and sec is not sections[-1]
+        flags.append(carries)
+        carry = entry if carries else None
+    return flags
+
+
 def chunk_page(
     md: str, page: str, lang: str, code_mode: str = "placeholder", raw: Path = RAW
 ) -> list[dict]:
     """Chunk one markdown page into records ready for chunks.jsonl."""
     title, sections = parse_page(md, code_mode, raw)
     title = title or Path(page).stem
+    # Merge decisions always use placeholder sizes, so inlining code never changes
+    # which section_ids exist (the frozen gold set refers to them).
+    _, shape = parse_page(md, "placeholder", raw)
+    assert len(shape) == len(sections), page
+    carried = merge_flags(shape)
 
     # Merge tiny sections into the next one; the merged chunk keeps the first section_id.
     merged: list[tuple[str, str, list[str]]] = []  # (anchor, heading, blocks)
     carry: tuple[str, str, list[str]] | None = None
-    for sec in sections:
-        blocks = split_blocks(sec.lines)
-        if carry:
-            anchor, heading, cblocks = carry
-            blocks = (
-                [*cblocks, sec.heading, *blocks] if sec.heading else [*cblocks, *blocks]
-            )
-            sec_entry = (anchor, heading, blocks)
-        else:
-            sec_entry = (sec.anchor, sec.heading, blocks)
-        carry = None
-        if (
-            sum(map(count_tokens, sec_entry[2])) < MIN_SECTION_TOKENS
-            and sec is not sections[-1]
-        ):
-            carry = sec_entry
-        else:
-            merged.append(sec_entry)
+    for sec, carries in zip(sections, carried, strict=True):
+        entry = with_carry(carry, sec)
+        carry = entry if carries else None
+        if not carries:
+            merged.append(entry)
 
     records = []
     for anchor, heading, blocks in merged:
