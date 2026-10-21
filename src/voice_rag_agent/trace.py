@@ -30,7 +30,7 @@ EVENT_TYPES = {
 }
 
 
-def _cursor() -> str:
+def trace_cursor() -> str:
     return f"{time.time_ns():020d}"
 
 
@@ -43,7 +43,7 @@ class MemoryTraceBus:
     def emit(self, session_id: str, event: dict) -> None:
         assert event["type"] in EVENT_TYPES, event["type"]
         with self._lock:
-            event = {"session_id": session_id, "cursor": _cursor(), **event}
+            event = {"session_id": session_id, "cursor": trace_cursor(), **event}
             self._events.append(event)
         if self._log_path:
             self._log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -66,7 +66,7 @@ class DynamoTraceBus:
 
     def emit(self, session_id: str, event: dict) -> None:
         assert event["type"] in EVENT_TYPES, event["type"]
-        event = {"session_id": session_id, "cursor": _cursor(), **event}
+        event = {"session_id": session_id, "cursor": trace_cursor(), **event}
         self._table.put_item(
             Item={
                 "pk": "trace",
@@ -82,6 +82,9 @@ class DynamoTraceBus:
         response = self._table.query(
             KeyConditionExpression=Key("pk").eq("trace") & Key("sk").gt(cursor or "0"),
             Limit=200,
+            # A cursor may already point past an event that an eventually consistent
+            # read has not seen yet; that event would never show up.
+            ConsistentRead=True,
         )
         events = [json.loads(item["body"]) for item in response["Items"]]
         return [e for e in events if session_id in (None, e["session_id"])]

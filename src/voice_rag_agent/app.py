@@ -16,7 +16,7 @@ from .config import ROOT, get_settings
 from .costs import DynamoLedger, Ledger
 from .openai_compat import ChunkWriter, to_anthropic, tools_to_anthropic
 from .retrieval.base import Retriever
-from .trace import DynamoTraceBus, MemoryTraceBus, TurnTrace
+from .trace import DynamoTraceBus, MemoryTraceBus, TurnTrace, trace_cursor
 
 
 def build_retriever(name: str) -> Retriever:
@@ -24,6 +24,10 @@ def build_retriever(name: str) -> Retriever:
         from .retrieval.local import LocalHybridRetriever
 
         return LocalHybridRetriever.load(get_settings().index_dir)
+    if name == "bm25":
+        from .retrieval.local import Bm25Retriever
+
+        return Bm25Retriever.load(get_settings().index_dir)
     if name == "aws":
         from .retrieval.aws import AwsHybridRetriever
 
@@ -139,7 +143,12 @@ async def new_session(x_demo_code: str | None = Header(default=None)):
         )
     if r.status_code != 200:
         raise HTTPException(status_code=502, detail="could not get a signed URL")
-    return {"signed_url": r.json()["signed_url"], "session_id": uuid.uuid4().hex[:12]}
+    return {
+        "signed_url": r.json()["signed_url"],
+        "session_id": uuid.uuid4().hex[:12],
+        # The panel polls from here, so older calls never show up in this one.
+        "cursor": trace_cursor(),
+    }
 
 
 @app.get("/health")

@@ -13,3 +13,5 @@ eval/runs/*.jsonl
 .pytest_cache/
 .DS_Store
 logs/
+build/
+samconfig.toml

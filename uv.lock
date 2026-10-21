@@ -1392,7 +1392,6 @@ dependencies = [
     { name = "anthropic" },
     { name = "boto3" },
     { name = "fastapi" },
-    { name = "fastembed" },
     { name = "httpx" },
     { name = "numpy" },
     { name = "pydantic-settings" },
@@ -1405,13 +1404,15 @@ dev = [
     { name = "pytest-asyncio" },
     { name = "ruff" },
 ]
+local = [
+    { name = "fastembed" },
+]
 
 [package.metadata]
 requires-dist = [
     { name = "anthropic", specifier = ">=1.17.0" },
     { name = "boto3", specifier = ">=1.43.116" },
     { name = "fastapi", specifier = ">=0.156.4" },
-    { name = "fastembed", specifier = ">=0.9.0" },
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "numpy", specifier = ">=2.5.4" },
     { name = "pydantic-settings", specifier = ">=2.16.1" },
@@ -1424,6 +1425,7 @@ dev = [
     { name = "pytest-asyncio", specifier = ">=1.4.0" },
     { name = "ruff", specifier = ">=0.17.1" },
 ]
+local = [{ name = "fastembed", specifier = ">=0.9.0" }]
 
 [[package]]
 name = "watchfiles"

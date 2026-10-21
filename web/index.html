@@ -70,8 +70,7 @@
 
   // Poll the trace endpoint instead of holding a stream open. On Lambda each poll can
   // land on a different instance, and the shared store keeps them consistent.
-  async function follow(sessionId) {
-    let cursor = "";
+  async function follow(sessionId, cursor) {
     polling = true;
     while (polling) {
       try {
@@ -159,8 +158,8 @@
     $("status").textContent = "Connecting…";
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
-      const { signed_url, session_id } = await getSession();
-      follow(session_id);
+      const { signed_url, session_id, cursor } = await getSession();
+      follow(session_id, cursor);
       conversation = await Conversation.startSession({
         signedUrl: signed_url,
         customLlmExtraBody: { session_id },

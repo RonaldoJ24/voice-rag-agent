@@ -1,5 +1,6 @@
 """Settings read from the environment (and .env when present)."""
 
+import os
 from functools import lru_cache
 from pathlib import Path
 
@@ -43,6 +44,25 @@ class Settings(BaseSettings):
     demo_access_code: str = ""
 
 
+def load_ssm_secrets(prefix: str) -> None:
+    """On Lambda, secrets live in SSM Parameter Store as SecureStrings, not in the template.
+
+    /voice-rag-agent/ANTHROPIC_API_KEY becomes the ANTHROPIC_API_KEY environment variable.
+    """
+    import boto3
+
+    pages = (
+        boto3.client("ssm")
+        .get_paginator("get_parameters_by_path")
+        .paginate(Path=prefix, WithDecryption=True)
+    )
+    for page in pages:
+        for param in page["Parameters"]:
+            os.environ.setdefault(param["Name"].removeprefix(prefix), param["Value"])
+
+
 @lru_cache
 def get_settings() -> Settings:
+    if prefix := os.environ.get("SSM_SECRETS_PREFIX"):
+        load_ssm_secrets(prefix)
     return Settings()

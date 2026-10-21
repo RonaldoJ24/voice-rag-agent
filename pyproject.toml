@@ -10,7 +10,6 @@ dependencies = [
     "anthropic>=1.17.0",
     "boto3>=1.43.116",
     "fastapi>=0.156.4",
-    "fastembed>=0.9.0",
     "httpx>=0.28.1",
     "numpy>=2.5.4",
     "pydantic-settings>=2.16.1",
@@ -22,8 +21,15 @@ requires = ["uv_build>=0.11.27,<0.12.0"]
 build-backend = "uv_build"
 
 [dependency-groups]
+# Local dense embeddings. Too big for Lambda, which uses Titan or BM25 instead.
+local = [
+    "fastembed>=0.9.0",
+]
 dev = [
     "pytest>=9.1.1",
     "pytest-asyncio>=1.4.0",
     "ruff>=0.17.1",
 ]
+
+[tool.uv]
+default-groups = ["dev", "local"]

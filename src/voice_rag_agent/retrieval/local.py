@@ -278,3 +278,33 @@ class LocalHybridRetriever:
             text=c["text"],
             score=float(score),
         )
+
+
+def load_text_index(index_dir: str | Path) -> tuple[list[dict], BM25]:
+    """Chunks and BM25 only, for retrievers that do not keep dense vectors locally."""
+    d = Path(index_dir)
+    d = d if d.is_absolute() else ROOT / d
+    chunks = [
+        json.loads(line)
+        for line in (d / "chunks.jsonl").read_text(encoding="utf-8").splitlines()
+    ]
+    return chunks, BM25.from_json(json.loads((d / "bm25.json").read_text()))
+
+
+class Bm25Retriever(LocalHybridRetriever):
+    """Keyword search only. Fallback for Lambda when Bedrock embeddings are unavailable."""
+
+    name = "bm25"
+
+    def __init__(self, chunks: list[dict], bm25: BM25):
+        super().__init__(chunks, np.zeros((len(chunks), 1), np.float32), bm25, None)
+
+    @classmethod
+    def load(cls, index_dir: str | Path = "data/index") -> "Bm25Retriever":
+        return cls(*load_text_index(index_dir))
+
+    def _candidates(self, query: str) -> tuple[dict[int, float], np.ndarray]:
+        sparse = self.bm25.scores(tokenize(query))
+        ranking = [int(i) for i in np.argsort(-sparse)[:POOL] if sparse[i] > 0]
+        # BM25 scores stand in for dense ones when picking a same-language chunk.
+        return rrf([ranking]), sparse

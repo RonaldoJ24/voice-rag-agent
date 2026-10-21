@@ -11,7 +11,7 @@ from pathlib import Path
 import boto3
 import numpy as np
 
-from .local import BM25, POOL, ROOT, LocalHybridRetriever, rrf, tokenize
+from .local import BM25, POOL, LocalHybridRetriever, load_text_index, rrf, tokenize
 
 TITAN_MODEL = "amazon.titan-embed-text-v2:0"
 DIMENSIONS = 256
@@ -52,13 +52,7 @@ class AwsHybridRetriever(LocalHybridRetriever):
     def load(
         cls, index_dir: str | Path, bucket: str, index: str, region: str
     ) -> "AwsHybridRetriever":
-        d = Path(index_dir)
-        d = d if d.is_absolute() else ROOT / d
-        chunks = [
-            json.loads(line)
-            for line in (d / "chunks.jsonl").read_text(encoding="utf-8").splitlines()
-        ]
-        bm25 = BM25.from_json(json.loads((d / "bm25.json").read_text()))
+        chunks, bm25 = load_text_index(index_dir)
         return cls(chunks, bm25, bucket, index, region)
 
     def _candidates(self, query: str) -> tuple[dict[int, float], np.ndarray]:
