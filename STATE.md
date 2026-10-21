@@ -15,7 +15,7 @@ Where the build stands, so any session can resume. Update after every milestone.
 - Live panel polls `/trace?after=<cursor>`; `/api/session` returns the starting cursor and checks `X-Demo-Code`.
 
 ## In progress
-- Deployed 2026-10-20 to us-east-2 (stack `voice-rag-agent`): https://djsuuhec353rb2swjznsdofvlu0ejmpm.lambda-url.us-east-2.on.aws/ . BM25 retriever, DynamoDB state, SSM secrets, spend pause $5. ElevenLabs agent now points at this URL; the cloudflared tunnel is retired.
+- Live since 2026-10-21 in us-east-2 (stack `voice-rag-agent`): https://djsuuhec353rb2swjznsdofvlu0ejmpm.lambda-url.us-east-2.on.aws/ . `aws-dense` retriever on the code-inlined index `docs-titan-v2-256-code`, redesigned page with replay mode, DynamoDB state, SSM secrets, spend pause $5. ElevenLabs agent points at this URL. (First deploy on 2026-10-20 used BM25, then the placeholder Titan index.)
 - Measured on Lambda: cold page load 6.2 s, warm /health 0.3 s; first token 980 ms (ES) and 487 ms (EN) vs 966 ms via tunnel; ~$0.0006 per turn.
 - Region: an SCP (`p-3rzlv6oc`) limits this Free plan account to us-east-2 for regional services. Everything the stack needs works there.
 
