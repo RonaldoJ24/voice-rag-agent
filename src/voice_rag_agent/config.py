@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     retriever: str = "local"
     index_dir: Path = ROOT / "data" / "index"
     top_k: int = 5
-    aws_region: str = "us-east-1"
+    aws_region: str = "us-east-2"
     s3vectors_bucket: str = ""
     s3vectors_index: str = "docs-titan-v2-256"
 

@@ -13,7 +13,7 @@ Claude builds the server, the evals and the deployment scripts. These steps are 
 Long-lived access keys are the most common way AWS accounts leak. `aws login` reuses your browser console session and gives the CLI short-lived credentials instead.
 
 ```bash
-aws login --region us-east-1
+aws login --region us-east-2
 ```
 
 A browser tab opens. Approve it, then check who the CLI thinks you are:
@@ -22,7 +22,9 @@ A browser tab opens. Approve it, then check who the CLI thinks you are:
 aws sts get-caller-identity
 ```
 
-You should see your 12-digit account ID and an ARN. **Why us-east-1:** your console opened in us-east-2 (Ohio), but us-east-1 (N. Virginia) gets new Bedrock models and S3 Vectors first, and that's where this project lives. In the console, switch the region at the top right when you look at these services.
+You should see your 12-digit account ID and an ARN. **Why us-east-2:** a service control policy on this Free plan account allows regional services only in us-east-2 (Ohio), the region the console opened in. In us-east-2 every Lambda, DynamoDB and CloudFormation call fails with "explicit deny in a service control policy". Titan V2 and S3 Vectors are both available in us-east-2.
+
+**Interview takeaway:** an `AccessDenied` that mentions a service control policy can't be fixed with IAM in the account. It comes from the organization above it, and region allowlists are a common reason.
 
 **Interview takeaway:** "I use short-lived credentials from `aws login` or IAM Identity Center, never root access keys."
 
@@ -37,14 +39,14 @@ Bedrock is AWS's catalog of hosted models behind one API. Three ideas matter:
 List the Amazon embedding models:
 
 ```bash
-aws bedrock list-foundation-models --region us-east-1 --by-provider amazon \
+aws bedrock list-foundation-models --region us-east-2 --by-provider amazon \
   --query "modelSummaries[?contains(modelId, 'embed')].modelId"
 ```
 
 Turn a Spanish sentence into a 256-number vector with Titan Text Embeddings V2:
 
 ```bash
-aws bedrock-runtime invoke-model --region us-east-1 \
+aws bedrock-runtime invoke-model --region us-east-2 \
   --model-id amazon.titan-embed-text-v2:0 \
   --cli-binary-format raw-in-base64-out \
   --body '{"inputText":"¿Cómo subo archivos en FastAPI?","dimensions":256,"normalize":true}' \
@@ -62,12 +64,12 @@ S3 Vectors stores embeddings in a special S3 bucket and answers "find the neares
 Pick a short unique suffix (your initials plus 4 digits), then:
 
 ```bash
-aws s3vectors create-vector-bucket --region us-east-1 --vector-bucket-name fastapi-docs-vectors-SUFFIX
+aws s3vectors create-vector-bucket --region us-east-2 --vector-bucket-name fastapi-docs-vectors-SUFFIX
 
-aws s3vectors create-index --region us-east-1 --vector-bucket-name fastapi-docs-vectors-SUFFIX \
+aws s3vectors create-index --region us-east-2 --vector-bucket-name fastapi-docs-vectors-SUFFIX \
   --index-name docs-titan-v2-256 --data-type float32 --dimension 256 --distance-metric cosine
 
-aws s3vectors list-indexes --region us-east-1 --vector-bucket-name fastapi-docs-vectors-SUFFIX
+aws s3vectors list-indexes --region us-east-2 --vector-bucket-name fastapi-docs-vectors-SUFFIX
 ```
 
 Tell Claude the bucket name. Claude will write the script that embeds every docs chunk with Titan and uploads it, then compares that index with the local one on the same questions.
@@ -89,11 +91,11 @@ Claude runs `scripts/deploy.sh` once your CLI is signed in. These are the pieces
 To look at it yourself after a deploy:
 
 ```bash
-aws cloudformation describe-stacks --stack-name voice-rag-agent --region us-east-1 --query "Stacks[0].Outputs"
+aws cloudformation describe-stacks --stack-name voice-rag-agent --region us-east-2 --query "Stacks[0].Outputs"
 ```
 
 ```bash
-aws logs tail /voice-rag-agent/proxy --region us-east-1 --since 10m
+aws logs tail /voice-rag-agent/proxy --region us-east-2 --since 10m
 ```
 
 **Interview takeaway:** "Stateless compute, state in DynamoDB, secrets in Parameter Store, streaming through a Function URL, and a cost ceiling enforced in code" is the whole architecture in one sentence.

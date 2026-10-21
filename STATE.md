@@ -15,16 +15,18 @@ Where the build stands, so any session can resume. Update after every milestone.
 - Live panel polls `/trace?after=<cursor>`; `/api/session` returns the starting cursor and checks `X-Demo-Code`.
 
 ## In progress
-- Deploy blocked (2026-10-20). Verification cleared for Bedrock (Titan V2 embed call works), but SCP `p-3rzlv6oc` from the management account 767866852456 still explicitly denies Lambda, DynamoDB, CloudFormation, SSM, Secrets Manager, S3 Vectors and EC2 on account 784514617897. The owner has to inspect or detach it in Organizations > Policies. Nothing was created.
+- Deployed 2026-10-20 to us-east-2 (stack `voice-rag-agent`): https://djsuuhec353rb2swjznsdofvlu0ejmpm.lambda-url.us-east-2.on.aws/ . BM25 retriever, DynamoDB state, SSM secrets, spend pause $5. ElevenLabs agent now points at this URL; the cloudflared tunnel is retired.
+- Measured on Lambda: cold page load 6.2 s, warm /health 0.3 s; first token 980 ms (ES) and 487 ms (EN) vs 966 ms via tunnel; ~$0.0006 per turn.
+- Region: an SCP (`p-3rzlv6oc`) limits this Free plan account to us-east-2 for regional services. Everything the stack needs works there.
 
 ## Next
-1. Owner's first real voice call on http://localhost:8000 (server + cloudflared quick tunnel must be running; quick-tunnel URL changes on restart, then rerun `scripts/elevenlabs_agent.py --base-url <url>`).
+1. Owner's first real voice call on the Function URL (demo code is DEMO_ACCESS_CODE in .env). Check `aws logs tail /voice-rag-agent/proxy --region us-east-2` for `extra body keys` to see whether session_id arrives.
 2. Gold set v1 (60 questions + 8 small-talk turns), frozen with tag `eval-freeze-v1`.
 3. After `aws login`: `scripts/deploy.sh`, curl `/health` from outside (403 means the Function URL permission is wrong), `scripts/smoke_proxy.py --base-url <url>`, compare first-token time with 966 ms via tunnel, point the ElevenLabs agent at the Function URL. Then Titan probe, `build_s3vectors.py`, eval with `--retriever aws`, redeploy with `RETRIEVER=aws`.
 4. Answer eval (Haiku vs Sonnet, Opus judge), voice eval, README results.
 
 ## Waiting on the owner
-- `aws login --region us-east-1` and docs/LEARN.md steps 2 and 3.
+- docs/LEARN.md steps 2 and 3 in us-east-2 (Titan probe, S3 Vectors bucket).
 - Set a $50 spend limit in the Anthropic Console.
 
 ## Facts to remember

@@ -20,7 +20,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--bucket", required=True)
     parser.add_argument("--index", default=f"docs-titan-v2-{DIMENSIONS}")
-    parser.add_argument("--region", default="us-east-1")
+    parser.add_argument("--region", default="us-east-2")
     args = parser.parse_args()
 
     chunks = [
