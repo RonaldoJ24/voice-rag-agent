@@ -1,7 +1,5 @@
 """HTTP surface: the Custom LLM endpoint ElevenLabs calls, the trace feed, and the demo page."""
 
-import asyncio
-import json
 import logging
 import secrets
 import uuid
@@ -10,14 +8,15 @@ from contextlib import asynccontextmanager
 import anthropic
 import httpx
 from fastapi import FastAPI, Header, HTTPException, Request
+from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 
 from .agent import TurnResult, VoiceAgent
 from .config import ROOT, get_settings
-from .costs import Ledger
+from .costs import DynamoLedger, Ledger
 from .openai_compat import ChunkWriter, to_anthropic, tools_to_anthropic
 from .retrieval.base import Retriever
-from .trace import TraceBus, TurnTrace
+from .trace import DynamoTraceBus, MemoryTraceBus, TurnTrace
 
 
 def build_retriever(name: str) -> Retriever:
@@ -35,14 +34,27 @@ def build_retriever(name: str) -> Retriever:
     raise ValueError(f"Unknown retriever {name!r}")
 
 
+def build_state(s):
+    """Trace store and spend ledger for this deployment (see Settings.state_backend)."""
+    if s.state_backend == "local":
+        return MemoryTraceBus(log_path=s.trace_log), Ledger(
+            s.spend_ledger, s.spend_pause_usd
+        )
+    if s.state_backend == "dynamodb":
+        return DynamoTraceBus(s.dynamodb_table, s.aws_region), DynamoLedger(
+            s.dynamodb_table, s.aws_region, s.spend_pause_usd
+        )
+    raise ValueError(f"Unknown state backend {s.state_backend!r}")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     s = get_settings()
-    app.state.bus = TraceBus(log_path=s.trace_log)
+    app.state.bus, ledger = build_state(s)
     app.state.agent = VoiceAgent(
         client=anthropic.AsyncAnthropic(api_key=s.anthropic_api_key or None),
         retriever=build_retriever(s.retriever),
-        ledger=Ledger(s.spend_ledger, s.spend_pause_usd),
+        ledger=ledger,
         model=s.agent_model,
         effort=s.agent_effort,
         max_tokens=s.agent_max_tokens,
@@ -94,42 +106,29 @@ async def chat_completions(
     )
 
 
+@app.get("/trace")
+async def trace_feed(request: Request, after: str = "", session_id: str | None = None):
+    """Events newer than cursor `after`. The live panel polls this during a call."""
+    events = await run_in_threadpool(request.app.state.bus.since, after, session_id)
+    cursor = events[-1]["cursor"] if events else after
+    return {"events": events, "cursor": cursor}
+
+
 @app.get("/trace/{session_id}")
-async def trace_poll(session_id: str, request: Request, after: int = 0):
-    """Polling fallback: events after index `after`."""
-    bus: TraceBus = request.app.state.bus
-    if session_id == "latest" and bus.latest_session:
-        session_id = bus.latest_session
-    return {"session_id": session_id, "events": bus.events(session_id, after)}
-
-
-@app.get("/trace/{session_id}/stream")
-async def trace_stream(session_id: str, request: Request):
-    """Server-sent events for the live panel. Use session "*" to follow every session."""
-    bus: TraceBus = request.app.state.bus
-    queue = bus.subscribe(session_id)
-
-    async def events():
-        try:
-            yield ": connected\n\n"
-            while not await request.is_disconnected():
-                try:
-                    event = await asyncio.wait_for(queue.get(), timeout=15)
-                    yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
-                except TimeoutError:
-                    yield ": keepalive\n\n"
-        finally:
-            bus.unsubscribe(session_id, queue)
-
-    return StreamingResponse(
-        events(), media_type="text/event-stream", headers={"Cache-Control": "no-cache"}
-    )
+async def trace_session(session_id: str, request: Request):
+    """Every stored event of one session (used by the smoke scripts)."""
+    events = await run_in_threadpool(request.app.state.bus.since, "", session_id)
+    return {"session_id": session_id, "events": events}
 
 
 @app.get("/api/session")
-async def new_session():
+async def new_session(x_demo_code: str | None = Header(default=None)):
     """Signed URL for the private ElevenLabs agent plus a session ID that tags this call's trace."""
     s = get_settings()
+    if s.demo_access_code and not secrets.compare_digest(
+        x_demo_code or "", s.demo_access_code
+    ):
+        raise HTTPException(status_code=401, detail="wrong demo code")
     if not (s.elevenlabs_api_key and s.elevenlabs_agent_id):
         raise HTTPException(status_code=503, detail="ElevenLabs agent not configured")
     async with httpx.AsyncClient(timeout=10) as client:
@@ -151,7 +150,7 @@ async def health(request: Request):
             "ok": True,
             "model": agent.model,
             "retriever": agent.retriever.name,
-            "spent_usd": round(agent.ledger.total(), 4),
+            "spent_usd": round(await run_in_threadpool(agent.ledger.total), 4),
         }
     )
 

@@ -66,7 +66,45 @@
 
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
-  let conversation = null, feed = null;
+  let conversation = null, polling = false;
+
+  // Poll the trace endpoint instead of holding a stream open. On Lambda each poll can
+  // land on a different instance, and the shared store keeps them consistent.
+  async function follow(sessionId) {
+    let cursor = "";
+    polling = true;
+    while (polling) {
+      try {
+        const res = await fetch(`/trace?after=${cursor}`);
+        const { events, cursor: next } = await res.json();
+        cursor = next;
+        // "latest" covers the case where ElevenLabs does not forward customLlmExtraBody.
+        for (const e of events) {
+          if (e.session_id === sessionId || e.session_id === "latest") addEvent(e);
+        }
+      } catch { /* keep polling; one failed poll is not worth stopping the call */ }
+      await new Promise((r) => setTimeout(r, 600));
+    }
+  }
+
+  async function demoCode(retry) {
+    let code = new URLSearchParams(location.search).get("code");
+    try { code ??= localStorage.getItem("demo-code"); } catch {}
+    if (!code || retry) code = prompt("Demo access code") ?? "";
+    try { localStorage.setItem("demo-code", code); } catch {}
+    return code;
+  }
+
+  async function getSession() {
+    for (const retry of [false, true]) {
+      const res = await fetch("/api/session", { headers: { "X-Demo-Code": await demoCode(retry) } });
+      if (res.status !== 401) {
+        if (!res.ok) throw new Error(`session ${res.status}`);
+        return res.json();
+      }
+    }
+    throw new Error("wrong demo code");
+  }
   const turns = new Map();
 
   function addMessage(source, text) {
@@ -121,16 +159,8 @@
     $("status").textContent = "Connecting…";
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
-      const res = await fetch("/api/session");
-      if (!res.ok) throw new Error(`session ${res.status}`);
-      const { signed_url, session_id } = await res.json();
-      // Follow every session and keep this call's events. "latest" covers the case where
-      // ElevenLabs does not forward customLlmExtraBody (only one call runs at a time).
-      feed = new EventSource("/trace/*/stream");
-      feed.onmessage = (m) => {
-        const e = JSON.parse(m.data);
-        if (e.session_id === session_id || e.session_id === "latest") addEvent(e);
-      };
+      const { signed_url, session_id } = await getSession();
+      follow(session_id);
       conversation = await Conversation.startSession({
         signedUrl: signed_url,
         customLlmExtraBody: { session_id },
@@ -142,7 +172,7 @@
       });
     } catch (err) {
       $("status").textContent = `Could not start: ${err.message ?? err}`;
-      feed?.close();
+      polling = false;
     } finally {
       $("toggle").disabled = false;
     }
@@ -152,7 +182,7 @@
     const c = conversation;
     conversation = null;
     if (c) await c.endSession();
-    setTimeout(() => feed?.close(), 3000);
+    setTimeout(() => { polling = false; }, 3000);
     $("status").textContent = "Call ended";
     $("toggle").textContent = "Start call";
   }
