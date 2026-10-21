@@ -1,14 +1,22 @@
 """Trace events: one schema feeds the live panel, the eval logs and the latency tables.
 
-Every event is {"session_id", "turn_id", "type", "t_ms", ...payload}, where t_ms is
-milliseconds since the turn started (the moment the proxy received the request).
+Every event is {"session_id", "turn_id", "type", "t_ms", "cursor", ...payload}, where t_ms
+is milliseconds since the turn started (the moment the proxy received the request) and
+cursor orders events across sessions. Readers poll with the last cursor they saw.
+
+Two stores with the same interface: in memory for local runs, DynamoDB on Lambda, where
+the request that writes events and the one that streams them can land on different
+instances.
 """
 
-import asyncio
 import json
+import logging
+import threading
 import time
-from collections import defaultdict, deque
+from collections import deque
 from pathlib import Path
+
+log = logging.getLogger(__name__)
 
 EVENT_TYPES = {
     "user_utterance",
@@ -22,45 +30,67 @@ EVENT_TYPES = {
 }
 
 
-class TraceBus:
-    """In-memory store plus live subscribers. Swapped for DynamoDB on AWS."""
+def _cursor() -> str:
+    return f"{time.time_ns():020d}"
 
-    def __init__(self, log_path: Path | None = None, keep_per_session: int = 500):
-        self._events: dict[str, deque] = defaultdict(
-            lambda: deque(maxlen=keep_per_session)
-        )
-        self._subscribers: dict[str, set[asyncio.Queue]] = defaultdict(set)
+
+class MemoryTraceBus:
+    def __init__(self, log_path: Path | None = None, keep: int = 5000):
+        self._events: deque = deque(maxlen=keep)
+        self._lock = threading.Lock()
         self._log_path = log_path
-        self.latest_session: str | None = None
 
     def emit(self, session_id: str, event: dict) -> None:
         assert event["type"] in EVENT_TYPES, event["type"]
-        event = {"session_id": session_id, **event}
-        self._events[session_id].append(event)
-        self.latest_session = session_id
-        for queue in list(self._subscribers[session_id]) + list(self._subscribers["*"]):
-            queue.put_nowait(event)
+        with self._lock:
+            event = {"session_id": session_id, "cursor": _cursor(), **event}
+            self._events.append(event)
         if self._log_path:
             self._log_path.parent.mkdir(parents=True, exist_ok=True)
             with self._log_path.open("a") as f:
                 f.write(json.dumps(event, ensure_ascii=False) + "\n")
 
-    def events(self, session_id: str, after: int = 0) -> list[dict]:
-        return list(self._events.get(session_id, []))[after:]
+    def since(self, cursor: str = "", session_id: str | None = None) -> list[dict]:
+        with self._lock:
+            events = [e for e in self._events if e["cursor"] > cursor]
+        return [e for e in events if session_id in (None, e["session_id"])]
 
-    def subscribe(self, session_id: str) -> asyncio.Queue:
-        queue: asyncio.Queue = asyncio.Queue()
-        self._subscribers[session_id].add(queue)
-        return queue
 
-    def unsubscribe(self, session_id: str, queue: asyncio.Queue) -> None:
-        self._subscribers[session_id].discard(queue)
+class DynamoTraceBus:
+    """One partition ("trace") sorted by cursor. Fine for a demo; items expire after 7 days."""
+
+    def __init__(self, table_name: str, region: str):
+        import boto3
+
+        self._table = boto3.resource("dynamodb", region_name=region).Table(table_name)
+
+    def emit(self, session_id: str, event: dict) -> None:
+        assert event["type"] in EVENT_TYPES, event["type"]
+        event = {"session_id": session_id, "cursor": _cursor(), **event}
+        self._table.put_item(
+            Item={
+                "pk": "trace",
+                "sk": event["cursor"],
+                "body": json.dumps(event, ensure_ascii=False),
+                "expires_at": int(time.time()) + 7 * 86400,
+            }
+        )
+
+    def since(self, cursor: str = "", session_id: str | None = None) -> list[dict]:
+        from boto3.dynamodb.conditions import Key
+
+        response = self._table.query(
+            KeyConditionExpression=Key("pk").eq("trace") & Key("sk").gt(cursor or "0"),
+            Limit=200,
+        )
+        events = [json.loads(item["body"]) for item in response["Items"]]
+        return [e for e in events if session_id in (None, e["session_id"])]
 
 
 class TurnTrace:
     """Helper bound to one turn so callers only pass the payload."""
 
-    def __init__(self, bus: TraceBus, session_id: str, turn_id: str):
+    def __init__(self, bus, session_id: str, turn_id: str):
         self.bus, self.session_id, self.turn_id = bus, session_id, turn_id
         self.start = time.perf_counter()
 
@@ -69,5 +99,8 @@ class TurnTrace:
 
     def emit(self, type_: str, **payload) -> dict:
         event = {"turn_id": self.turn_id, "type": type_, "t_ms": self.ms(), **payload}
-        self.bus.emit(self.session_id, event)
+        try:
+            self.bus.emit(self.session_id, event)
+        except Exception:  # tracing must never break the spoken answer
+            log.exception("could not store trace event %s", type_)
         return event

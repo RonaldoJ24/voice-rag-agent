@@ -3,6 +3,7 @@
 import json
 import time
 from dataclasses import dataclass
+from decimal import Decimal
 from pathlib import Path
 
 # USD per 1M tokens, first-party Claude API (checked 2026-10-20).
@@ -32,6 +33,13 @@ class SpendLimitReached(RuntimeError):
     pass
 
 
+def _check(spent: float, pause_usd: float) -> None:
+    if spent >= pause_usd:
+        raise SpendLimitReached(
+            f"Spent ${spent:.2f}, pause threshold is ${pause_usd:.2f}"
+        )
+
+
 def cost_usd(model: str, usage) -> float:
     """Cost of one response, from its `usage` object."""
     p = PRICES[model]
@@ -57,11 +65,7 @@ class Ledger:
             return sum(json.loads(line)["usd"] for line in f if line.strip())
 
     def check(self) -> None:
-        spent = self.total()
-        if spent >= self.pause_usd:
-            raise SpendLimitReached(
-                f"Spent ${spent:.2f}, pause threshold is ${self.pause_usd:.2f}"
-            )
+        _check(self.total(), self.pause_usd)
 
     def record(self, model: str, usage, purpose: str) -> float:
         usd = cost_usd(model, usage)
@@ -76,4 +80,39 @@ class Ledger:
         }
         with self.path.open("a") as f:
             f.write(json.dumps(row) + "\n")
+        return usd
+
+
+SPEND_KEY = {"pk": "spend", "sk": "total"}
+
+
+class DynamoLedger:
+    """Running total in one DynamoDB item, updated atomically by every Lambda instance.
+
+    Counts only what the deployed demo spends; local runs and evals stay in the JSONL file.
+    """
+
+    def __init__(self, table_name: str, region: str, pause_usd: float):
+        import boto3
+
+        self._table = boto3.resource("dynamodb", region_name=region).Table(table_name)
+        self.pause_usd = pause_usd
+
+    def total(self) -> float:
+        item = self._table.get_item(Key=SPEND_KEY).get("Item") or {}
+        return float(item.get("usd", 0))
+
+    def check(self) -> None:
+        _check(self.total(), self.pause_usd)
+
+    def record(self, model: str, usage, purpose: str) -> float:
+        usd = cost_usd(model, usage)
+        self._table.update_item(
+            Key=SPEND_KEY,
+            UpdateExpression="ADD usd :usd, responses :one",
+            ExpressionAttributeValues={
+                ":usd": Decimal(str(round(usd, 8))),
+                ":one": 1,
+            },
+        )
         return usd

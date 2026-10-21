@@ -35,6 +35,13 @@ class Settings(BaseSettings):
 
     trace_log: Path = ROOT / "logs" / "traces.jsonl"
 
+    # "local" keeps trace events in memory and spend in costs/spend.jsonl. "dynamodb" keeps
+    # both in one table, which Lambda needs because each request may hit a new instance.
+    state_backend: str = "local"
+    dynamodb_table: str = ""
+    # Visitors type this code before /api/session hands out a signed URL. Empty = open.
+    demo_access_code: str = ""
+
 
 @lru_cache
 def get_settings() -> Settings:

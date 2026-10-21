@@ -11,7 +11,7 @@ from voice_rag_agent.config import get_settings
 from voice_rag_agent.costs import Ledger
 from voice_rag_agent.openai_compat import ChunkWriter
 from voice_rag_agent.retrieval.base import Hit
-from voice_rag_agent.trace import TraceBus, TurnTrace
+from voice_rag_agent.trace import MemoryTraceBus, TurnTrace
 
 
 class FakeRetriever:
@@ -35,7 +35,7 @@ class FakeRetriever:
 
 async def main(question: str):
     s = get_settings()
-    bus = TraceBus()
+    bus = MemoryTraceBus()
     agent = VoiceAgent(
         anthropic.AsyncAnthropic(),
         FakeRetriever(),
@@ -53,7 +53,7 @@ async def main(question: str):
         result,
     ):
         pass
-    for e in bus.events("smoke"):
+    for e in bus.since("", "smoke"):
         print(
             json.dumps(
                 {k: v for k, v in e.items() if k not in ("session_id", "turn_id")},

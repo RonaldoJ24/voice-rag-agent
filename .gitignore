@@ -12,3 +12,4 @@ eval/runs/*.jsonl
 .ruff_cache/
 .pytest_cache/
 .DS_Store
+logs/
