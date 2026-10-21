@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+!.env.example
+data/raw/
+data/index/
+data/cache/
+.aws-sam/
+eval/runs/*.jsonl
+.ruff_cache/
+.pytest_cache/
+.DS_Store
