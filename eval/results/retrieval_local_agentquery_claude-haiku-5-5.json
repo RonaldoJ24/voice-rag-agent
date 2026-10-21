@@ -1,0 +1,938 @@
+{
+  "summary": {
+    "model": "claude-haiku-5-5",
+    "retriever": "local-hybrid",
+    "note": "Claude writes the search query (production path). A row that did not search counts as a miss.",
+    "decision": [
+      {
+        "metric": "searched_when_doc_question",
+        "n": 60,
+        "mean": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "metric": "skipped_search_on_smalltalk",
+        "n": 8,
+        "mean": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "metric": "spoke_filler_before_search",
+        "n": 60,
+        "mean": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      }
+    ],
+    "retrieval": [
+      {
+        "slice": "overall",
+        "metric": "recall@1",
+        "n": 50,
+        "mean": 0.48,
+        "ci95": [
+          0.34,
+          0.62
+        ]
+      },
+      {
+        "slice": "overall",
+        "metric": "recall@5",
+        "n": 50,
+        "mean": 0.94,
+        "ci95": [
+          0.86,
+          1.0
+        ]
+      },
+      {
+        "slice": "overall",
+        "metric": "mrr@10",
+        "n": 50,
+        "mean": 0.677,
+        "ci95": [
+          0.584,
+          0.765
+        ]
+      },
+      {
+        "slice": "lang=en",
+        "metric": "recall@1",
+        "n": 25,
+        "mean": 0.56,
+        "ci95": [
+          0.36,
+          0.76
+        ]
+      },
+      {
+        "slice": "lang=en",
+        "metric": "recall@5",
+        "n": 25,
+        "mean": 0.96,
+        "ci95": [
+          0.88,
+          1.0
+        ]
+      },
+      {
+        "slice": "lang=en",
+        "metric": "mrr@10",
+        "n": 25,
+        "mean": 0.724,
+        "ci95": [
+          0.594,
+          0.847
+        ]
+      },
+      {
+        "slice": "lang=es",
+        "metric": "recall@1",
+        "n": 25,
+        "mean": 0.4,
+        "ci95": [
+          0.2,
+          0.6
+        ]
+      },
+      {
+        "slice": "lang=es",
+        "metric": "recall@5",
+        "n": 25,
+        "mean": 0.92,
+        "ci95": [
+          0.8,
+          1.0
+        ]
+      },
+      {
+        "slice": "lang=es",
+        "metric": "mrr@10",
+        "n": 25,
+        "mean": 0.63,
+        "ci95": [
+          0.503,
+          0.76
+        ]
+      },
+      {
+        "slice": "style=spoken",
+        "metric": "recall@1",
+        "n": 31,
+        "mean": 0.355,
+        "ci95": [
+          0.194,
+          0.516
+        ]
+      },
+      {
+        "slice": "style=spoken",
+        "metric": "recall@5",
+        "n": 31,
+        "mean": 0.903,
+        "ci95": [
+          0.774,
+          1.0
+        ]
+      },
+      {
+        "slice": "style=spoken",
+        "metric": "mrr@10",
+        "n": 31,
+        "mean": 0.581,
+        "ci95": [
+          0.466,
+          0.703
+        ]
+      },
+      {
+        "slice": "style=written",
+        "metric": "recall@1",
+        "n": 19,
+        "mean": 0.684,
+        "ci95": [
+          0.474,
+          0.895
+        ]
+      },
+      {
+        "slice": "style=written",
+        "metric": "recall@5",
+        "n": 19,
+        "mean": 1.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      {
+        "slice": "style=written",
+        "metric": "mrr@10",
+        "n": 19,
+        "mean": 0.833,
+        "ci95": [
+          0.719,
+          0.939
+        ]
+      }
+    ]
+  },
+  "rows": [
+    {
+      "id": "en-01",
+      "searched": true,
+      "query": "upload files request files",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "spoken",
+      "rank": 2
+    },
+    {
+      "id": "en-02",
+      "searched": true,
+      "query": "require login route security dependency",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "spoken",
+      "rank": 2
+    },
+    {
+      "id": "en-03",
+      "searched": true,
+      "query": "background tasks respond before slow work finishes",
+      "query_lang": "en",
+      "said": "Let me check the docs on that.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "spoken",
+      "rank": 1
+    },
+    {
+      "id": "en-04",
+      "searched": true,
+      "query": "CORS middleware allow origins",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "spoken",
+      "rank": 1
+    },
+    {
+      "id": "en-05",
+      "searched": true,
+      "query": "raise HTTPException 404 not found",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "spoken",
+      "rank": 1
+    },
+    {
+      "id": "en-06",
+      "searched": true,
+      "query": "query parameters string validations min_length regex",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "written",
+      "rank": 1
+    },
+    {
+      "id": "en-07",
+      "searched": true,
+      "query": "dependencies with yield close database session after request",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "spoken",
+      "rank": 1
+    },
+    {
+      "id": "en-08",
+      "searched": true,
+      "query": "APIRouter split routes into multiple files",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "spoken",
+      "rank": 2
+    },
+    {
+      "id": "en-09",
+      "searched": true,
+      "query": "serve static files images CSS",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "spoken",
+      "rank": 5
+    },
+    {
+      "id": "en-10",
+      "searched": true,
+      "query": "response_model exclude password from output",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "spoken",
+      "rank": 1
+    },
+    {
+      "id": "en-11",
+      "searched": true,
+      "query": "path order fixed path before path parameter",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "written",
+      "rank": 1
+    },
+    {
+      "id": "en-12",
+      "searched": true,
+      "query": "partial updates with exclude_unset",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "written",
+      "rank": 1
+    },
+    {
+      "id": "en-13",
+      "searched": true,
+      "query": "WebSockets two-way real time communication",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "spoken",
+      "rank": 1
+    },
+    {
+      "id": "en-14",
+      "searched": true,
+      "query": "lifespan startup code load model before application starts",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "written",
+      "rank": 1
+    },
+    {
+      "id": "en-15",
+      "searched": true,
+      "query": "return HTML response custom response class",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "spoken",
+      "rank": 2
+    },
+    {
+      "id": "en-16",
+      "searched": true,
+      "query": "behind a proxy root_path path prefix",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "written",
+      "rank": 1
+    },
+    {
+      "id": "en-17",
+      "searched": true,
+      "query": "HTTP Basic auth secrets compare_digest timing attacks",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "written",
+      "rank": 1
+    },
+    {
+      "id": "en-18",
+      "searched": true,
+      "query": "disable docs in production",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "spoken",
+      "rank": 7
+    },
+    {
+      "id": "en-19",
+      "searched": true,
+      "query": "Swagger UI syntax highlighting turn off",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "written",
+      "rank": 1
+    },
+    {
+      "id": "en-20",
+      "searched": true,
+      "query": "GraphQL",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "written",
+      "rank": 2
+    },
+    {
+      "id": "en-21",
+      "searched": true,
+      "query": "Dockerfile FastAPI",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "spoken",
+      "rank": 3
+    },
+    {
+      "id": "en-22",
+      "searched": true,
+      "query": "run multiple workers CPU cores",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "spoken",
+      "rank": 4
+    },
+    {
+      "id": "en-23",
+      "searched": true,
+      "query": "HTTPS certificates",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "written",
+      "rank": 1
+    },
+    {
+      "id": "en-24",
+      "searched": true,
+      "query": "async def or def path operation functions",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "spoken",
+      "rank": 3
+    },
+    {
+      "id": "en-25",
+      "searched": true,
+      "query": "fastapi dev vs fastapi run",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "written",
+      "rank": 3
+    },
+    {
+      "id": "es-01",
+      "searched": true,
+      "query": "subir archivos request files",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "spoken",
+      "rank": 2
+    },
+    {
+      "id": "es-02",
+      "searched": true,
+      "query": "background tasks respond before finishing",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "spoken",
+      "rank": 1
+    },
+    {
+      "id": "es-03",
+      "searched": true,
+      "query": "CORS middleware origins",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "spoken",
+      "rank": 2
+    },
+    {
+      "id": "es-04",
+      "searched": true,
+      "query": "dividir rutas en varios archivos APIRouter",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "spoken",
+      "rank": 2
+    },
+    {
+      "id": "es-05",
+      "searched": true,
+      "query": "response model excluir contraseña",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "spoken",
+      "rank": 1
+    },
+    {
+      "id": "es-06",
+      "searched": true,
+      "query": "desactivar docs en producción docs_url",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "spoken",
+      "rank": null
+    },
+    {
+      "id": "es-07",
+      "searched": true,
+      "query": "conectar FastAPI con base de datos SQL SQLite",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "spoken",
+      "rank": 1
+    },
+    {
+      "id": "es-08",
+      "searched": true,
+      "query": "probar endpoints pruebas TestClient",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "spoken",
+      "rank": 4
+    },
+    {
+      "id": "es-09",
+      "searched": true,
+      "query": "Header parameters underscore convert",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "written",
+      "rank": 2
+    },
+    {
+      "id": "es-10",
+      "searched": true,
+      "query": "middleware ejecutar código en cada petición",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "spoken",
+      "rank": 3
+    },
+    {
+      "id": "es-11",
+      "searched": true,
+      "query": "dependencias globales para todas las rutas",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "written",
+      "rank": 2
+    },
+    {
+      "id": "es-12",
+      "searched": true,
+      "query": "formulario usuario contraseña Form",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "spoken",
+      "rank": 6
+    },
+    {
+      "id": "es-13",
+      "searched": true,
+      "query": "código de estado de respuesta en la ruta status_code",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "written",
+      "rank": 1
+    },
+    {
+      "id": "es-14",
+      "searched": true,
+      "query": "server-sent events streaming respuesta",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "spoken",
+      "rank": 1
+    },
+    {
+      "id": "es-15",
+      "searched": true,
+      "query": "variables de entorno archivo .env configuración",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "spoken",
+      "rank": 1
+    },
+    {
+      "id": "es-16",
+      "searched": true,
+      "query": "plantillas Jinja2 respuestas HTML",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "written",
+      "rank": 2
+    },
+    {
+      "id": "es-17",
+      "searched": true,
+      "query": "set cookie in response",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "spoken",
+      "rank": 4
+    },
+    {
+      "id": "es-18",
+      "searched": true,
+      "query": "testing dependencies override",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "written",
+      "rank": 1
+    },
+    {
+      "id": "es-19",
+      "searched": true,
+      "query": "webhooks",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "spoken",
+      "rank": 4
+    },
+    {
+      "id": "es-20",
+      "searched": true,
+      "query": "Swagger UI self-hosted static files CDN",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "written",
+      "rank": 1
+    },
+    {
+      "id": "es-21",
+      "searched": true,
+      "query": "migrar Pydantic v1 a v2 herramienta",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "spoken",
+      "rank": 2
+    },
+    {
+      "id": "es-22",
+      "searched": true,
+      "query": "fijar versión de FastAPI dependencias",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "written",
+      "rank": 1
+    },
+    {
+      "id": "es-23",
+      "searched": true,
+      "query": "reiniciar servidor automáticamente despliegue",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "spoken",
+      "rank": 2
+    },
+    {
+      "id": "es-24",
+      "searched": true,
+      "query": "entorno virtual crear",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "written",
+      "rank": 1
+    },
+    {
+      "id": "es-25",
+      "searched": true,
+      "query": "variables de entorno",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "answerable",
+      "lang": "es",
+      "style": "written",
+      "rank": 2
+    },
+    {
+      "id": "un-en-01",
+      "searched": true,
+      "query": "deploy FastAPI AWS Lambda Mangum",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "unanswerable",
+      "lang": "en",
+      "style": "spoken",
+      "rank": null
+    },
+    {
+      "id": "un-en-02",
+      "searched": true,
+      "query": "Stripe payments integration",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "unanswerable",
+      "lang": "en",
+      "style": "spoken",
+      "rank": null
+    },
+    {
+      "id": "un-en-03",
+      "searched": true,
+      "query": "rate limiting",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "unanswerable",
+      "lang": "en",
+      "style": "written",
+      "rank": null
+    },
+    {
+      "id": "un-en-04",
+      "searched": true,
+      "query": "background tasks send email after signup",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "unanswerable",
+      "lang": "en",
+      "style": "spoken",
+      "rank": null
+    },
+    {
+      "id": "un-en-05",
+      "searched": true,
+      "query": "Sentry error monitoring alerts",
+      "query_lang": "en",
+      "said": "Let me check the docs.",
+      "kind": "unanswerable",
+      "lang": "en",
+      "style": "written",
+      "rank": null
+    },
+    {
+      "id": "un-es-01",
+      "searched": true,
+      "query": "desplegar FastAPI en Azure App Service",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "unanswerable",
+      "lang": "es",
+      "style": "spoken",
+      "rank": null
+    },
+    {
+      "id": "un-es-02",
+      "searched": true,
+      "query": "desplegar FastAPI en Heroku",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "unanswerable",
+      "lang": "es",
+      "style": "spoken",
+      "rank": null
+    },
+    {
+      "id": "un-es-03",
+      "searched": true,
+      "query": "consumir mensajes Kafka",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "unanswerable",
+      "lang": "es",
+      "style": "written",
+      "rank": null
+    },
+    {
+      "id": "un-es-04",
+      "searched": true,
+      "query": "Prometheus métricas Grafana",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "unanswerable",
+      "lang": "es",
+      "style": "spoken",
+      "rank": null
+    },
+    {
+      "id": "un-es-05",
+      "searched": true,
+      "query": "pruebas de carga Locust",
+      "query_lang": "es",
+      "said": "Déjame revisar la documentación.",
+      "kind": "unanswerable",
+      "lang": "es",
+      "style": "written",
+      "rank": null
+    },
+    {
+      "id": "st-en-01",
+      "searched": false,
+      "query": null,
+      "query_lang": null,
+      "said": "Hi there! What would you like to know about FastAPI?",
+      "kind": "smalltalk",
+      "lang": "en",
+      "style": "spoken",
+      "rank": null
+    },
+    {
+      "id": "st-en-02",
+      "searched": false,
+      "query": null,
+      "query_lang": null,
+      "said": "You're welcome! Glad I could help. Feel free to ask anything else about FastAPI anytime.",
+      "kind": "smalltalk",
+      "lang": "en",
+      "style": "spoken",
+      "rank": null
+    },
+    {
+      "id": "st-en-03",
+      "searched": false,
+      "query": null,
+      "query_lang": null,
+      "said": "Yes, I can hear you fine. What would you like to know about FastAPI?",
+      "kind": "smalltalk",
+      "lang": "en",
+      "style": "spoken",
+      "rank": null
+    },
+    {
+      "id": "st-en-04",
+      "searched": false,
+      "query": null,
+      "query_lang": null,
+      "said": "I can help you with questions about FastAPI, the Python framework for building web APIs. I answer using only the official FastAPI documentation, so you can ask about things like routes, request bodies, dependencies, or how to run an app. What would you like to know?",
+      "kind": "smalltalk",
+      "lang": "en",
+      "style": "spoken",
+      "rank": null
+    },
+    {
+      "id": "st-es-01",
+      "searched": false,
+      "query": null,
+      "query_lang": null,
+      "said": "¡Hola, buenos días! ¿En qué te puedo ayudar con FastAPI?",
+      "kind": "smalltalk",
+      "lang": "es",
+      "style": "spoken",
+      "rank": null
+    },
+    {
+      "id": "st-es-02",
+      "searched": false,
+      "query": null,
+      "query_lang": null,
+      "said": "¡De nada! Que tengas un buen día.",
+      "kind": "smalltalk",
+      "lang": "es",
+      "style": "spoken",
+      "rank": null
+    },
+    {
+      "id": "st-es-03",
+      "searched": false,
+      "query": null,
+      "query_lang": null,
+      "said": "Sí, te escucho bien. ¿En qué te puedo ayudar sobre FastAPI?",
+      "kind": "smalltalk",
+      "lang": "es",
+      "style": "spoken",
+      "rank": null
+    },
+    {
+      "id": "st-es-04",
+      "searched": false,
+      "query": null,
+      "query_lang": null,
+      "said": "Puedo ayudarte con preguntas sobre FastAPI usando solo su documentación oficial. Por ejemplo, cómo crear rutas, cómo validar datos, cómo manejar errores o cómo usar dependencias. Dime qué quieres saber y busco la parte de la documentación que lo explique.",
+      "kind": "smalltalk",
+      "lang": "es",
+      "style": "spoken",
+      "rank": null
+    }
+  ]
+}
