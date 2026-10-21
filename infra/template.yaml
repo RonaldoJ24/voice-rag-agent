@@ -1,0 +1,108 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Voice RAG agent proxy. FastAPI runs unchanged on Lambda through the Lambda Web
+  Adapter, and a public Function URL streams the answer back to ElevenLabs.
+
+Parameters:
+  Retriever:
+    Type: String
+    Default: bm25
+    AllowedValues: [bm25, aws]
+    Description: bm25 needs nothing else. aws adds Titan embeddings and S3 Vectors.
+  VectorBucket:
+    Type: String
+    Default: ""
+    Description: S3 Vectors bucket name, only used when Retriever=aws.
+  AgentModel:
+    Type: String
+    Default: claude-haiku-5-5
+  SpendPauseUsd:
+    Type: String
+    Default: "5"
+    Description: The deployed demo stops calling Claude once it has spent this much.
+
+Resources:
+  # One table for trace events (pk "trace") and the spend total (pk "spend").
+  # 5 read and 5 write units stay inside the DynamoDB always-free tier.
+  StateTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      BillingMode: PROVISIONED
+      ProvisionedThroughput: { ReadCapacityUnits: 5, WriteCapacityUnits: 5 }
+      AttributeDefinitions:
+        - { AttributeName: pk, AttributeType: S }
+        - { AttributeName: sk, AttributeType: S }
+      KeySchema:
+        - { AttributeName: pk, KeyType: HASH }
+        - { AttributeName: sk, KeyType: RANGE }
+      TimeToLiveSpecification: { AttributeName: expires_at, Enabled: true }
+
+  ProxyLogs:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /voice-rag-agent/proxy
+      RetentionInDays: 7
+
+  ProxyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../build/lambda
+      Handler: run.sh
+      Runtime: python3.13
+      Architectures: [arm64]
+      MemorySize: 1024
+      Timeout: 60
+      Layers:
+        - !Sub arn:aws:lambda:${AWS::Region}:753240598075:layer:LambdaAdapterLayerArm64:30
+      LoggingConfig:
+        LogGroup: !Ref ProxyLogs
+      Environment:
+        Variables:
+          AWS_LAMBDA_EXEC_WRAPPER: /opt/bootstrap
+          AWS_LWA_INVOKE_MODE: response_stream
+          AWS_LWA_PORT: "8080"
+          # The page itself, so a DynamoDB or IAM problem shows up as a clear error
+          # on the first request instead of a silent init timeout.
+          AWS_LWA_READINESS_CHECK_PATH: /
+          SSM_SECRETS_PREFIX: /voice-rag-agent/
+          STATE_BACKEND: dynamodb
+          DYNAMODB_TABLE: !Ref StateTable
+          RETRIEVER: !Ref Retriever
+          S3VECTORS_BUCKET: !Ref VectorBucket
+          AGENT_MODEL: !Ref AgentModel
+          SPEND_PAUSE_USD: !Ref SpendPauseUsd
+      FunctionUrlConfig:
+        AuthType: NONE
+        InvokeMode: RESPONSE_STREAM
+      Policies:
+        - DynamoDBCrudPolicy: { TableName: !Ref StateTable }
+        - Statement:
+            - Effect: Allow
+              Action: ssm:GetParametersByPath
+              Resource:
+                - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/voice-rag-agent
+                - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/voice-rag-agent/*
+            - Effect: Allow
+              Action: bedrock:InvokeModel
+              Resource: !Sub arn:aws:bedrock:${AWS::Region}::foundation-model/amazon.titan-embed-text-v2:0
+            - Effect: Allow
+              Action: s3vectors:QueryVectors
+              Resource: !Sub arn:aws:s3vectors:${AWS::Region}:${AWS::AccountId}:bucket/*
+
+  # Public function URLs need lambda:InvokeFunction as well as lambda:InvokeFunctionUrl.
+  # SAM adds the second one; this adds the first, limited to calls through the URL.
+  PublicInvokeViaUrl:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref ProxyFunction
+      Principal: "*"
+      InvokedViaFunctionUrl: true
+
+Outputs:
+  FunctionUrl:
+    Description: Public URL of the proxy and demo page
+    Value: !GetAtt ProxyFunctionUrl.FunctionUrl
+  StateTableName:
+    Value: !Ref StateTable
