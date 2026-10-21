@@ -10,6 +10,7 @@ from pathlib import Path
 
 import boto3
 import numpy as np
+from botocore.config import Config
 
 from .local import BM25, POOL, LocalHybridRetriever, load_text_index, rrf, tokenize
 
@@ -19,7 +20,11 @@ DIMENSIONS = 256
 
 class TitanEmbedder:
     def __init__(self, region: str, dimensions: int = DIMENSIONS):
-        self.client = boto3.client("bedrock-runtime", region_name=region)
+        # Adaptive retries back off on ThrottlingException; new accounts get low quotas.
+        retries = Config(retries={"max_attempts": 10, "mode": "adaptive"})
+        self.client = boto3.client(
+            "bedrock-runtime", region_name=region, config=retries
+        )
         self.dimensions = dimensions
 
     def __call__(self, text: str) -> np.ndarray:

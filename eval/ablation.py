@@ -79,13 +79,17 @@ def main() -> None:
             mean, lo, hi = bootstrap_ci(values)
             row[label] = {"mean": round(mean, 3), "ci95": [round(lo, 3), round(hi, 3)]}
         if name != base:
-            diff, lo, hi = paired_bootstrap_diff(
-                scores(rs, 5), scores(results[base]["ranks"], 5)
-            )
-            row[f"recall@5_minus_{base}"] = {
-                "diff": round(diff, 3),
-                "ci95": [round(lo, 3), round(hi, 3)],
-            }
+            br = results[base]["ranks"]
+            for label, a, b in (
+                ("recall@1", scores(rs, 1), scores(br, 1)),
+                ("recall@5", scores(rs, 5), scores(br, 5)),
+                ("mrr@10", mrr(rs), mrr(br)),
+            ):
+                diff, lo, hi = paired_bootstrap_diff(a, b)
+                row[f"{label}_minus_{base}"] = {
+                    "diff": round(diff, 3),
+                    "ci95": [round(lo, 3), round(hi, 3)],
+                }
         table.append(row)
 
     out = ROOT / f"eval/results/ablation_{args.model}.json"
@@ -107,19 +111,18 @@ def main() -> None:
         )
     )
 
-    print(
-        f"{'retriever':<12} {'recall@1':<20} {'recall@5':<20} {'mrr@10':<20} vs {base}"
-    )
+    metrics = ("recall@1", "recall@5", "mrr@10")
+    print(f"{'retriever':<12} {'recall@1':<20} {'recall@5':<20} mrr@10")
     for row in table:
-        cells = {
-            m: f"{row[m]['mean']:.2f} {row[m]['ci95']}"
-            for m in ("recall@1", "recall@5", "mrr@10")
-        }
-        gap = row.get(f"recall@5_minus_{base}")
-        print(
-            f"{row['retriever']:<12} {cells['recall@1']:<20} {cells['recall@5']:<20} {cells['mrr@10']:<20} "
-            + (f"{gap['diff']:+.2f} {gap['ci95']}" if gap else "-")
-        )
+        cells = [f"{row[m]['mean']:.2f} {row[m]['ci95']}" for m in metrics]
+        print(f"{row['retriever']:<12} {cells[0]:<20} {cells[1]:<20} {cells[2]}")
+    print(f"\nPaired differences against {base} (95% bootstrap interval):")
+    for row in table[1:]:
+        gaps = [
+            f"{m} {row[f'{m}_minus_{base}']['diff']:+.2f} {row[f'{m}_minus_{base}']['ci95']}"
+            for m in metrics
+        ]
+        print(f"  {row['retriever']:<10} " + "   ".join(gaps))
     print(f"-> {out.relative_to(ROOT)}")
 
 

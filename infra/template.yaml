@@ -8,8 +8,8 @@ Parameters:
   Retriever:
     Type: String
     Default: bm25
-    AllowedValues: [bm25, aws]
-    Description: bm25 needs nothing else. aws adds Titan embeddings and S3 Vectors.
+    AllowedValues: [bm25, aws, aws-dense]
+    Description: bm25 needs nothing else. aws-dense uses Titan embeddings in S3 Vectors (best in eval/ablation.py); aws fuses them with BM25.
   VectorBucket:
     Type: String
     Default: ""
