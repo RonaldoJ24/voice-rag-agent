@@ -4,10 +4,11 @@ A bilingual (English and Spanish) voice agent that answers questions from the Fa
 
 ElevenLabs handles the voice. Claude decides, searches and answers through a small FastAPI proxy on AWS Lambda. Retrieval uses Titan V2 embeddings in S3 Vectors.
 
-> **Draft numbers.** Every result below comes from the 68-row gold set before its review and freeze (`eval-freeze-v1`). They will be re-run after the freeze.
+All results below use the frozen 68-row gold set (tag `eval-freeze-v1`). The full list of misses and their causes is in [FAILURES.md](FAILURES.md).
 
 | | |
 |---|---|
+| Answers the judge passes (Opus 5.5, blind) | 61 of 68 (0.90 [0.82, 0.96]) with Haiku 5.5, 65 of 68 with Sonnet 5.5 |
 | Right doc section in the top 5 | 0.96 [0.90, 1.00] on 50 answerable questions |
 | Right doc section ranked first | 0.64 [0.50, 0.76], +0.20 [0.02, 0.38] over the local hybrid baseline |
 | Searches when it should / skips when it should | 60 of 60 doc questions / 8 of 8 small-talk turns |
@@ -49,6 +50,8 @@ sequenceDiagram
 
 ## Results
 
+### Retrieval
+
 All retrievers are scored on the same queries Claude wrote for the 50 answerable questions (`eval/ablation.py`), so the differences are paired. Intervals are 95% bootstrap.
 
 | Retriever | Recall@1 | Recall@5 | MRR@10 |
@@ -63,7 +66,26 @@ All retrievers are scored on the same queries Claude wrote for the 50 answerable
 - Adding BM25 to Titan doesn't help here: recall@1 −0.06 [−0.20, 0.10].
 - Letting Claude rewrite the question into a search query matters more than the retriever. With the raw question, the local hybrid reaches recall@5 0.78 [0.66, 0.88], and spoken-style questions only 0.65.
 
-How the gold set was built: 25 English and 25 Spanish answerable questions written in pairs (spoken and written styles), 10 unanswerable and 8 small-talk turns. Each answerable row lists the doc sections (`page#anchor`, shared across languages) that answer it and a reference answer. `eval/validate_gold.py` checks every section exists in both languages. A 20-row sample is under human review before the freeze.
+### Answer quality
+
+Every gold row was run through the full agent loop (same prompt, tools and greeting as the live call, `aws-dense` retrieval). Claude Opus 5.5 judged each answer without knowing the model. It saw the question, the reference answer and the retrieved sections, and decided whether the answer was correct and grounded in those sections (`eval/answer_eval.py`).
+
+| | Haiku 5.5 (deployed) | Sonnet 5.5 |
+|---|---|---|
+| Judge pass, 68 rows | 0.90 [0.82, 0.96] | 0.96 [0.90, 1.00] |
+| Correct, 50 answerable rows | 0.98 [0.94, 1.00] | 0.98 [0.94, 1.00] |
+| Grounded in retrieved text | 0.92 [0.84, 0.98] | 0.96 [0.90, 1.00] |
+| Unanswerable rows passed | 8 of 10 | 10 of 10 |
+| Small talk answered without searching | 8 of 8 | 8 of 8 |
+| Claude cost per turn | $0.00057 | $0.0198 |
+
+- Sonnet minus Haiku on judge pass is +0.06 [−0.015, 0.13]. That isn't distinguishable on 68 rows, and Sonnet costs 35 times more per turn, so Haiku stays deployed.
+- Most failures are correct answers with one detail the retrieved text doesn't back. The chunker replaces code examples with placeholders, so the model fills the gap from memory. See [FAILURES.md](FAILURES.md).
+- The judge's own error is not measured yet. 30 random judgments are waiting for human review in `eval/review/judge_spotcheck_v1.md`.
+
+### Gold set
+
+How the gold set was built: 25 English and 25 Spanish answerable questions written in pairs (spoken and written styles), 10 unanswerable and 8 small-talk turns. Each answerable row lists the doc sections (`page#anchor`, shared across languages) that answer it and a reference answer. `eval/validate_gold.py` checks every section exists in both languages. A random 20-row sample was reviewed by hand (all 20 accepted) before the set was frozen. `tests/test_gold_freeze.py` fails if the file changes.
 
 ## Latency and cost
 
@@ -87,9 +109,12 @@ How the gold set was built: 25 English and 25 Spanish answerable questions writt
 
 ## Failures and limits
 
-- **Misses outside the top 5 (Titan):** en-02 "How do I make a route need a login?" (Claude searched "route requires authentication dependency security", and the gold sections are in the OAuth2 first-steps page) and es-12 (a login form question where the gold section is the form-data page).
+Details, causes and fixes are in [FAILURES.md](FAILURES.md).
+
+- **Code examples are missing from the chunks.** 677 of 1607 chunks have a placeholder where the code was, which accounts for most "not grounded" judge failures.
+- **Retrieval misses outside the top 5 (Titan):** en-02 "How do I make a route need a login?" and es-12, a form login question. In both, the OAuth2 pages outrank the general ones.
 - **Interruptions.** ElevenLabs sends an interrupted answer cut short, and internal tool calls never appear in the history it sends. Early on Claude apologized for "cut-off answers" and claimed it never searched. The prompt now tells it to ignore both.
-- **Not measured yet:** answer correctness (judge eval), p50 and p95 latency over many calls, and credits per minute of voice.
+- **Not measured yet:** the judge's error rate (pending human spot-check), p50 and p95 latency over many calls, and credits per minute of voice.
 - **Small sample.** 50 answerable questions give wide intervals. Most gaps between retrievers are not distinguishable from noise.
 - **Spanish corpus.** The FastAPI Spanish docs are machine-translated by the FastAPI project (`scripts/translate.py`).
 - **Region.** The AWS account allows regional services only in us-east-2, so everything runs there.
@@ -103,7 +128,7 @@ uv run python scripts/fetch_corpus.py && uv run python scripts/build_chunks.py &
 uv run uvicorn voice_rag_agent.app:app --port 8000
 ```
 
-- Evals: `uv run python eval/agent_query_eval.py --retriever local`, then `uv run python eval/ablation.py --retrievers local,dense,bm25`.
+- Evals: `uv run python eval/agent_query_eval.py --retriever local`, then `uv run python eval/ablation.py --retrievers local,dense,bm25`. The answer eval is `uv run python eval/answer_eval.py --models claude-haiku-5-5,claude-sonnet-5-5 --retriever aws-dense` (about $3.25 per full run: $0.04 of Haiku turns, $1.35 of Sonnet turns, the rest for the Opus judge).
 - AWS: `scripts/build_s3vectors.py --bucket <name>` builds the vector index, and `RETRIEVER=aws-dense S3VECTORS_BUCKET=<name> scripts/deploy.sh` deploys the stack (`infra/template.yaml`).
 - CI runs lint, tests, gold-set validation and a CloudFormation lint on every push.
 
