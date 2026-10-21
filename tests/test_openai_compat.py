@@ -62,8 +62,17 @@ def test_speakable_drops_markdown_marks():
     assert speakable("use `app.add_middleware` **now**") == "use app.add middleware now"
 
 
-def test_agent_answers_after_recording_sources_first():
-    """Sonnet sometimes calls record_sources before speaking; the loop must let it answer."""
+def _tool(id_, name, **input_):
+    from types import SimpleNamespace
+
+    return SimpleNamespace(type="tool_use", id=id_, name=name, input=input_)
+
+
+def _run_scripted(rounds, **agent_kw):
+    """Run VoiceAgent against scripted model rounds of (text, tool_uses).
+
+    Returns the TurnResult and the keyword arguments of every model call.
+    """
     import asyncio
     from types import SimpleNamespace
 
@@ -71,34 +80,7 @@ def test_agent_answers_after_recording_sources_first():
     from voice_rag_agent.openai_compat import ChunkWriter
     from voice_rag_agent.trace import MemoryTraceBus, TurnTrace
 
-    def block(kind, **kw):
-        return SimpleNamespace(type=kind, **kw)
-
-    rounds = [
-        (
-            "Let me check the docs.",
-            [
-                block(
-                    "tool_use",
-                    id="t1",
-                    name="search_docs",
-                    input={"query": "cors", "language": "en"},
-                )
-            ],
-        ),
-        (
-            "",
-            [
-                block(
-                    "tool_use",
-                    id="t2",
-                    name="record_sources",
-                    input={"section_ids": ["a#b"], "answered_from_docs": True},
-                )
-            ],
-        ),
-        ("Add CORSMiddleware to your app.", []),
-    ]
+    calls = []
 
     class Stream:
         def __init__(self, text, tools):
@@ -118,18 +100,18 @@ def test_agent_answers_after_recording_sources_first():
             return gen()
 
         async def get_final_message(self):
-            content = (
-                [block("text", text=self.text)] if self.text else []
-            ) + self.tools
+            text = [SimpleNamespace(type="text", text=self.text)] if self.text else []
             return SimpleNamespace(
-                content=content, usage=SimpleNamespace(input_tokens=1, output_tokens=1)
+                content=text + self.tools,
+                usage=SimpleNamespace(input_tokens=1, output_tokens=1),
             )
 
     class Client:
         def __init__(self):
             self.messages = self
 
-        def stream(self, **_):
+        def stream(self, **kw):
+            calls.append(kw)
             return Stream(*rounds.pop(0))
 
     class Ledger:
@@ -145,7 +127,7 @@ def test_agent_answers_after_recording_sources_first():
         def search(self, *_):
             return []
 
-    agent = VoiceAgent(Client(), Retriever(), Ledger(), "claude-sonnet-5-5")
+    agent = VoiceAgent(Client(), Retriever(), Ledger(), "claude-sonnet-5-5", **agent_kw)
     result = TurnResult()
     messages = [{"role": "user", "content": [{"type": "text", "text": "cors?"}]}]
 
@@ -155,5 +137,47 @@ def test_agent_answers_after_recording_sources_first():
             pass
 
     asyncio.run(run())
+    return result, calls
+
+
+def test_agent_answers_after_recording_sources_first():
+    """Sonnet sometimes calls record_sources before speaking; the loop must let it answer."""
+    result, _ = _run_scripted(
+        [
+            (
+                "Let me check the docs.",
+                [_tool("t1", "search_docs", query="cors", language="en")],
+            ),
+            (
+                "",
+                [
+                    _tool(
+                        "t2",
+                        "record_sources",
+                        section_ids=["a#b"],
+                        answered_from_docs=True,
+                    )
+                ],
+            ),
+            ("Add CORSMiddleware to your app.", []),
+        ]
+    )
     assert "CORSMiddleware" in result.text
     assert result.cited == ["a#b"]
+
+
+def test_agent_speaks_after_using_every_tool_round():
+    """Two searches and early sources use up the rounds; a tools-off round still answers."""
+    result, calls = _run_scripted(
+        [
+            ("Let me check.", [_tool("t1", "search_docs", query="forms")]),
+            ("One more look.", [_tool("t2", "search_docs", query="Form data")]),
+            ("", [_tool("t3", "record_sources", section_ids=["f#d"])]),
+            ("Declare the fields with Form.", []),
+        ],
+        max_rounds=3,
+    )
+    assert "Form" in result.text.split("look.")[-1]
+    assert len(calls) == 4
+    assert calls[-1]["tool_choice"] == {"type": "none"}
+    assert all("tool_choice" not in c for c in calls[:-1])

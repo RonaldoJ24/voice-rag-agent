@@ -125,15 +125,19 @@ class VoiceAgent:
         convo = list(messages)
 
         try:
-            for round_no in range(1, self.max_rounds + 1):
+            # One round past the cap with tools off, so a model that spent its rounds on
+            # tool calls still says its answer instead of leaving only the filler.
+            for round_no in range(1, self.max_rounds + 2):
                 self.ledger.check()
                 preamble = ""
+                last_round = round_no > self.max_rounds
                 async with self.client.messages.stream(
                     model=self.model,
                     max_tokens=self.max_tokens,
                     system=system,
                     messages=convo,
                     tools=tools,
+                    **({"tool_choice": {"type": "none"}} if last_round else {}),
                     **model_params(self.model, self.effort),
                 ) as stream:
                     async for event in stream:
