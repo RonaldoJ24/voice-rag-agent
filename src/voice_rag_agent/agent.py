@@ -27,6 +27,15 @@ SPANISH_HINTS = re.compile(
 )
 
 
+# Markdown marks the model sometimes adds anyway. TTS would read them or stumble, and
+# "add_middleware" sounds better as "add middleware".
+SPEAKABLE = str.maketrans({"`": None, "*": None, "#": None, "_": " "})
+
+
+def speakable(text: str) -> str:
+    return text.translate(SPEAKABLE)
+
+
 def guess_language(text: str) -> str:
     return "es" if len(SPANISH_HINTS.findall(text)) >= 2 else "en"
 
@@ -132,9 +141,10 @@ class VoiceAgent:
                             if result.first_token_ms is None:
                                 result.first_token_ms = trace.ms()
                                 trace.emit("llm_first_token", round=round_no)
-                            preamble += event.text
-                            result.text += event.text
-                            yield writer.text(event.text)
+                            spoken = speakable(event.text)
+                            preamble += spoken
+                            result.text += spoken
+                            yield writer.text(spoken)
                     final = await stream.get_final_message()
 
                 usd = self.ledger.record(self.model, final.usage, purpose="agent_turn")

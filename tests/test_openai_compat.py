@@ -54,3 +54,9 @@ def test_tools_and_chunks_have_openai_shape():
     assert first["choices"][0]["delta"] == {"role": "assistant", "content": "Hola"}
     tail = w.finish("stop")
     assert tail.endswith("data: [DONE]\n\n")
+
+
+def test_speakable_drops_markdown_marks():
+    from voice_rag_agent.agent import speakable
+
+    assert speakable("use `app.add_middleware` **now**") == "use app.add middleware now"
