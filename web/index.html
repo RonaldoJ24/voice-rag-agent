@@ -4,70 +4,515 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FastAPI Docs Voice Agent</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cdefs%3E%3CradialGradient id=%27g%27 cx=%2735%25%27 cy=%2730%25%27%3E%3Cstop offset=%270%27 stop-color=%27%23cdeeff%27/%3E%3Cstop offset=%271%27 stop-color=%27%234c7dff%27/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2714%27 fill=%27url(%23g)%27/%3E%3C/svg%3E">
+<meta name="description" content="Ask the FastAPI docs out loud, in English or Spanish. Claude searches the docs, answers by voice, and shows every step.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f7f7f5; --panel: #ffffff; --ink: #1d1d1b; --muted: #6b6b66; --line: #e4e4df;
-    --accent: #0f766e; --accent-ink: #ffffff; --user: #eef6f5; --warn: #b45309; --err: #b91c1c;
+    --bg: #0b0d14; --bg-glow-a: rgba(76, 125, 255, .16); --bg-glow-b: rgba(184, 107, 255, .12);
+    --surface: rgba(20, 24, 36, .72); --surface-2: rgba(255, 255, 255, .045);
+    --line: #232938; --line-2: #2f3648;
+    --ink: #e8ecf5; --muted: #8a93a8; --faint: #5f6880;
+    --accent: #5ad1ff; --accent-2: #b86bff; --brand: #4c7dff; --ok: #3ddc97; --warn: #ffb454; --err: #ff6b6b;
+    --user: rgba(76, 125, 255, .16); --shadow: 0 24px 60px rgba(0, 0, 0, .45);
   }
-  @media (prefers-color-scheme: dark) {
-    :root { --bg: #141413; --panel: #1d1d1b; --ink: #ecece8; --muted: #9c9c95; --line: #2e2e2b;
-            --accent: #2dd4bf; --accent-ink: #0b1f1d; --user: #17302d; --warn: #f59e0b; --err: #f87171; }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #f7f8fc; --bg-glow-a: rgba(62, 106, 239, .14); --bg-glow-b: rgba(124, 58, 237, .10);
+      --surface: rgba(255, 255, 255, .86); --surface-2: rgba(14, 18, 32, .04);
+      --line: #e3e6ef; --line-2: #d3d8e4;
+      --ink: #0e1220; --muted: #5b6478; --faint: #8a93a8;
+      --accent: #0a8fc4; --accent-2: #7c3aed; --brand: #2f5bea; --ok: #0e9f6e; --warn: #b7791f; --err: #d14343;
+      --user: rgba(47, 91, 234, .09); --shadow: 0 20px 50px rgba(14, 18, 32, .08);
+    }
   }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
-  header { padding: 20px 24px 8px; }
-  h1 { font-size: 20px; margin: 0; }
-  header p { margin: 4px 0 0; color: var(--muted); }
-  main { display: grid; grid-template-columns: minmax(280px, 1fr) minmax(320px, 1.3fr); gap: 16px; padding: 16px 24px 24px; }
-  @media (max-width: 820px) { main { grid-template-columns: 1fr; padding: 12px 16px; } header { padding: 16px 16px 4px; } }
-  section { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; min-height: 420px; display: flex; flex-direction: column; }
-  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 12px; }
-  .controls { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
-  button { background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 999px; padding: 10px 20px; font-weight: 600; cursor: pointer; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; color: var(--ink); background: var(--bg);
+    background-image: radial-gradient(900px 520px at 18% -8%, var(--bg-glow-a), transparent 70%),
+                      radial-gradient(800px 520px at 92% 4%, var(--bg-glow-b), transparent 70%);
+    background-attachment: fixed;
+    font: 15px/1.55 Geist, Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  .mono { font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; letter-spacing: -.01em; }
+  .brand i { width: 22px; height: 22px; border-radius: 50%; display: block;
+             background: radial-gradient(circle at 35% 30%, #e9f1ff, #5ad1ff 40%, #4c7dff 72%, #b86bff); box-shadow: 0 0 18px rgba(90, 209, 255, .5); }
+  .nav-links { display: flex; gap: 22px; font-size: 14px; color: var(--muted); }
+  .nav-links a { text-decoration: none; }
+  .nav-links a:hover { color: var(--ink); }
+
+  .hero { text-align: center; padding: 34px 0 26px; }
+  .eyebrow { display: inline-flex; gap: 8px; align-items: center; font-size: 12.5px; color: var(--muted);
+             border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 5px 12px; }
+  .eyebrow b { color: var(--ink); font-weight: 600; }
+  h1 { font-size: clamp(34px, 5.4vw, 60px); line-height: 1.03; letter-spacing: -.04em; margin: 18px auto 14px; max-width: 820px; font-weight: 700; text-wrap: balance; }
+  h1 span { white-space: nowrap; }
+  h1 span { background: linear-gradient(92deg, var(--accent), var(--brand) 45%, var(--accent-2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lede { color: var(--muted); font-size: 17px; max-width: 620px; margin: 0 auto; }
+
+  .app { display: grid; grid-template-columns: minmax(330px, 5fr) minmax(0, 7fr); gap: 18px; margin-top: 30px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow);
+          backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+  .stage { padding: 22px; display: flex; flex-direction: column; align-items: center; min-height: 620px; }
+  .orb-box { position: relative; width: 260px; height: 260px; margin: 6px 0 4px; }
+  #orb { width: 100%; height: 100%; display: block; }
+  .pill { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); max-width: 100%;
+          border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; background: var(--surface-2); min-height: 30px; }
+  .pill #status { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pill .dot { flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--faint); }
+  .pill[data-state="listening"] .dot { background: var(--ok); box-shadow: 0 0 10px var(--ok); }
+  .pill[data-state="speaking"] .dot { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+  .pill[data-state="thinking"] .dot { background: var(--accent-2); box-shadow: 0 0 10px var(--accent-2); animation: blink 1s infinite; }
+  .pill[data-state="error"] .dot { background: var(--err); }
+  @keyframes blink { 50% { opacity: .35; } }
+
+  .controls { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 18px 0 6px; }
+  button { font: inherit; cursor: pointer; border-radius: 999px; border: 1px solid var(--line-2); background: var(--surface-2);
+           color: var(--ink); padding: 10px 16px; display: inline-flex; align-items: center; gap: 8px; font-weight: 500; transition: transform .12s, background .2s, border-color .2s; }
+  button:hover { border-color: var(--accent); }
+  button:active { transform: scale(.97); }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   button[disabled] { opacity: .5; cursor: default; }
-  #status { color: var(--muted); font-size: 14px; }
-  #transcript, #trace { overflow-y: auto; flex: 1; }
-  .msg { padding: 8px 12px; border-radius: 10px; margin: 6px 0; max-width: 92%; }
-  .msg.user { background: var(--user); margin-left: auto; }
-  .msg.ai { border: 1px solid var(--line); }
-  .turn { border-left: 2px solid var(--line); padding: 2px 0 6px 12px; margin-bottom: 14px; }
-  .ev { display: grid; grid-template-columns: 64px 1fr; gap: 8px; padding: 3px 0; font-size: 14px; }
-  .t { color: var(--muted); font-variant-numeric: tabular-nums; text-align: right; }
+  .primary { background: linear-gradient(92deg, #2f8cff, #4c7dff 45%, #8b5cf6); border-color: transparent; color: #fff; font-weight: 600; padding: 11px 20px;
+             box-shadow: 0 8px 28px rgba(76, 125, 255, .38); }
+  .primary:hover { border-color: transparent; filter: brightness(1.08); }
+  .primary.live { background: #ef4444; box-shadow: 0 8px 28px rgba(239, 68, 68, .35); }
+  .seg { display: inline-flex; border: 1px solid var(--line-2); border-radius: 999px; overflow: hidden; }
+  .seg button { border: 0; border-radius: 0; background: transparent; padding: 10px 13px; }
+  .seg button[aria-pressed="true"] { background: var(--surface-2); color: var(--accent); }
+  .seg button + button { border-left: 1px solid var(--line-2); }
+  .seg span { padding: 10px 4px 10px 14px; color: var(--muted); font-size: 14px; display: inline-flex; align-items: center; }
+  .hint { color: var(--faint); font-size: 12.5px; margin: 4px 0 0; text-align: center; }
+
+  .typebox { display: none; width: 100%; gap: 8px; margin-top: 12px; }
+  .typebox.on { display: flex; }
+  .typebox input { flex: 1; min-width: 0; font: inherit; color: var(--ink); background: var(--surface-2); border: 1px solid var(--line-2);
+                   border-radius: 999px; padding: 10px 14px; }
+  .typebox input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  .banner { display: none; width: 100%; font-size: 13px; color: var(--muted); background: var(--surface-2); border: 1px dashed var(--line-2);
+            border-radius: 12px; padding: 9px 12px; margin-top: 12px; }
+  .banner.on { display: block; }
+  .banner b { color: var(--ink); }
+
+  #transcript { width: 100%; margin-top: 14px; flex: 1; overflow-y: auto; max-height: 300px; display: flex; flex-direction: column; gap: 8px; padding-right: 2px;
+    -webkit-mask-image: linear-gradient(transparent, #000 18px); mask-image: linear-gradient(transparent, #000 18px); padding-top: 10px; }
+  .msg { padding: 9px 13px; border-radius: 16px; max-width: 90%; font-size: 14.5px; animation: rise .25s ease-out; }
+  .msg.user { background: var(--user); align-self: flex-end; border-bottom-right-radius: 6px; }
+  .msg.ai { border: 1px solid var(--line); align-self: flex-start; border-bottom-left-radius: 6px; }
+  @keyframes rise { from { opacity: 0; transform: translateY(4px); } }
+
+  .trace-card { padding: 0; display: flex; flex-direction: column; min-height: 620px; max-height: 760px; }
+  .trace-head { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid var(--line); }
+  .trace-head h2 { font-size: 14px; margin: 0; font-weight: 600; letter-spacing: -.01em; }
+  .trace-head p { margin: 2px 0 0; font-size: 12.5px; color: var(--muted); }
+  .live-tag { font-size: 11.5px; color: var(--muted); display: inline-flex; gap: 6px; align-items: center; }
+  .live-tag i { width: 6px; height: 6px; border-radius: 50%; background: var(--faint); }
+  .live-tag.on i { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+  #trace { overflow-y: auto; padding: 14px 20px 20px; flex: 1; }
+  .empty-state { display: grid; gap: 12px; margin-top: 8px; }
+  .empty-state div { display: flex; gap: 10px; align-items: flex-start; font-size: 13.5px; color: var(--muted); }
+  .empty-state b { color: var(--ink); font-weight: 600; }
+
+  .turn { border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px 8px; margin-bottom: 12px; background: var(--surface-2); animation: rise .25s ease-out; }
+  .turn-q { font-weight: 600; font-size: 14px; margin-bottom: 8px; }
+  .ev { display: grid; grid-template-columns: 22px 1fr auto; gap: 10px; align-items: start; padding: 6px 0; font-size: 13.5px; position: relative; animation: rise .2s ease-out; }
+  .ev + .ev::before { content: ""; position: absolute; left: 10px; top: -6px; height: 12px; border-left: 1px solid var(--line-2); }
+  .ico { flex: none; width: 22px; height: 22px; border-radius: 7px; display: grid; place-items: center; background: var(--surface); border: 1px solid var(--line); color: var(--muted); }
+  .ico svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .ev[data-kind="search"] .ico { color: var(--accent-2); }
+  .ev[data-kind="hits"] .ico { color: var(--accent); }
+  .ev[data-kind="first"] .ico, .ev[data-kind="done"] .ico { color: var(--ok); }
+  .ev[data-kind="error"] .ico { color: var(--err); }
+  .t { color: var(--faint); font-size: 12px; padding-top: 2px; white-space: nowrap; }
   .kind { font-weight: 600; }
-  .hits { margin: 4px 0 0; padding-left: 18px; color: var(--muted); }
-  .hits a { color: var(--accent); text-decoration: none; }
-  .hits a:hover { text-decoration: underline; }
+  .muted { color: var(--muted); }
+  .tag { display: inline-block; font-size: 11.5px; border: 1px solid var(--line-2); border-radius: 6px; padding: 0 6px; margin-left: 4px; color: var(--muted); line-height: 18px; vertical-align: 1px; }
+  .q-text { font-family: "Geist Mono", ui-monospace, monospace; font-size: 12.5px; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; overflow-wrap: anywhere; }
+  .hits { list-style: none; margin: 8px 0 2px; padding: 0; display: grid; gap: 5px; }
+  .hits li { display: grid; grid-template-columns: minmax(0, 1fr) 64px; gap: 10px; align-items: center; font-size: 12.5px; }
+  .hits a { text-decoration: none; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .hits a:hover { color: var(--accent); }
+  .hits a .muted { margin-left: 6px; }
+  .bar { height: 5px; border-radius: 3px; background: var(--line); overflow: hidden; }
+  .bar i { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--brand), var(--accent-2)); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .chip { font-size: 11.5px; border-radius: 999px; padding: 2px 9px; background: var(--surface); border: 1px solid var(--line); color: var(--muted); }
+  .chip b { color: var(--ink); font-weight: 600; }
   .err { color: var(--err); }
-  .tag { font-size: 12px; border: 1px solid var(--line); border-radius: 6px; padding: 0 6px; margin-left: 6px; color: var(--muted); }
-  .empty { color: var(--muted); }
+
+  section.block { margin: 64px 0 0; }
+  section.block h2 { font-size: 26px; letter-spacing: -.025em; margin: 0 0 6px; }
+  section.block > p { color: var(--muted); margin: 0 0 20px; max-width: 720px; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .stat { padding: 18px; }
+  .stat .v { font-size: 30px; font-weight: 600; letter-spacing: -.03em; }
+  .stat .l { color: var(--muted); font-size: 13.5px; margin-top: 2px; }
+  .note { color: var(--faint); font-size: 12.5px; margin-top: 12px; }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; counter-reset: s; }
+  .step { padding: 18px; }
+  .step::before { counter-increment: s; content: counter(s); display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 8px;
+                  font-size: 13px; font-weight: 600; color: #fff; background: linear-gradient(135deg, #2f8cff, #8b5cf6); margin-bottom: 10px; }
+  .step h3 { margin: 0 0 4px; font-size: 15px; }
+  .step p { margin: 0; color: var(--muted); font-size: 13.5px; }
+  footer { color: var(--faint); font-size: 13px; padding: 48px 0 40px; text-align: center; }
+
+  @media (max-width: 980px) {
+    .app { grid-template-columns: 1fr; }
+    .stage, .trace-card { min-height: 0; }
+    .trace-card { max-height: none; }
+    #trace { max-height: 560px; }
+    .stats, .steps { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .wrap { padding: 0 16px; }
+    .nav-links { display: none; }
+    .hero { padding-top: 18px; }
+    .lede { font-size: 15.5px; }
+    .orb-box { width: 210px; height: 210px; }
+    .stage { padding: 18px 14px; }
+    .trace-head, #trace { padding-left: 14px; padding-right: 14px; }
+    .stats, .steps { grid-template-columns: 1fr; }
+    .hits li { grid-template-columns: minmax(0, 1fr) 40px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; scroll-behavior: auto !important; }
+  }
 </style>
 </head>
 <body>
-<header>
-  <h1>FastAPI Docs Voice Agent</h1>
-  <p>Ask about FastAPI in English or Spanish. The voice says only the answer. The panel on the right shows every step behind it.</p>
-</header>
-<main>
-  <section>
-    <h2>Conversation</h2>
-    <div class="controls">
-      <button id="toggle">Start call</button>
-      <span id="status">Idle</span>
-    </div>
-    <div id="transcript"><p class="empty">Press start and allow the microphone.</p></div>
-  </section>
-  <section>
-    <h2>Live trace</h2>
-    <div id="trace"><p class="empty">Events from each turn appear here as they happen.</p></div>
-  </section>
-</main>
-<script type="module">
-  import { Conversation } from "https://cdn.jsdelivr.net/npm/@elevenlabs/client@1.26.0/+esm";
+<div class="wrap">
+  <nav>
+    <div class="brand"><i aria-hidden="true"></i>FastAPI Docs Voice Agent</div>
+    <div class="nav-links"><a href="#how">How it works</a><a href="#results">Results</a></div>
+  </nav>
 
+  <header class="hero">
+    <span class="eyebrow"><b>Voice RAG</b> · English &amp; Español · Claude + AWS</span>
+    <h1>Ask the FastAPI docs <span>out loud.</span></h1>
+    <p class="lede">Claude decides when to search the docs, answers by voice in your language, and the panel shows every step it took, with timings and cost.</p>
+  </header>
+
+  <main class="app">
+    <section class="card stage" aria-label="Voice call">
+      <div class="orb-box"><canvas id="orb" role="img" aria-label="Voice orb that moves with the voice"></canvas></div>
+      <div class="pill" id="pill" data-state="idle"><span class="dot" aria-hidden="true"></span><span id="status">Ready</span></div>
+      <div class="sr" id="announce" role="status" aria-live="polite"></div>
+      <div class="controls">
+        <button class="primary" id="toggle">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+          <span>Start a call</span>
+        </button>
+        <div class="seg" role="group" aria-label="Watch a recorded call">
+          <span>Replay</span>
+          <button data-replay="en" title="Watch a recorded English call">EN</button>
+          <button data-replay="es" title="Watch a recorded Spanish call">ES</button>
+        </div>
+      </div>
+      <p class="hint" id="hint">Live calls need a demo code. Replays are free and need no microphone.</p>
+      <div class="banner" id="banner"></div>
+      <form class="typebox" id="typebox" autocomplete="off">
+        <input id="typed" placeholder="Or type a question…" aria-label="Type a question">
+        <button type="submit">Send</button>
+      </form>
+      <div id="transcript" role="log" aria-label="Conversation"></div>
+    </section>
+
+    <section class="card trace-card" aria-label="Live trace">
+      <div class="trace-head">
+        <div><h2>Live trace</h2><p>What the agent did on each turn, as it happened</p></div>
+        <span class="live-tag" id="liveTag"><i></i><span>idle</span></span>
+      </div>
+      <div id="trace">
+        <div class="empty-state">
+          <div><span class="ico"><svg viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="3"/></svg></span><span><b>Decision.</b> Claude chooses to search or to answer directly. Small talk skips retrieval.</span></div>
+          <div><span class="ico"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></span><span><b>Search.</b> It writes its own query in the caller's language, and Titan embeddings in S3 Vectors return doc sections.</span></div>
+          <div><span class="ico"><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg></span><span><b>Answer.</b> First words, cited sections, tokens and cost per turn.</span></div>
+          <div><span class="ico"><svg viewBox="0 0 24 24"><path d="M5 4l14 8-14 8z"/></svg></span><span><b>No code?</b> Press a Replay button to watch a recorded session.</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <section class="block" id="how">
+    <h2>How one turn works</h2>
+    <p>ElevenLabs handles speech. A FastAPI proxy on AWS Lambda speaks the OpenAI streaming format to ElevenLabs and runs Claude with two tools.</p>
+    <div class="steps">
+      <div class="card step"><h3>You speak</h3><p>ElevenLabs transcribes the question and sends it to the proxy as a chat completion.</p></div>
+      <div class="card step"><h3>Claude decides</h3><p>Haiku 5.5 says a short filler, then calls <span class="mono">search_docs</span> with a query it writes.</p></div>
+      <div class="card step"><h3>Retrieval</h3><p>Titan V2 embeddings in S3 Vectors return the closest doc sections, in the caller's language when possible.</p></div>
+      <div class="card step"><h3>Voice answer</h3><p>Answer tokens stream to the Eleven v4 voice as they arrive. Citations are logged by a hidden tool and never read aloud.</p></div>
+    </div>
+  </section>
+
+  <section class="block" id="results">
+    <h2>Measured, not guessed</h2>
+    <p>Numbers for the deployed setup on a frozen 68-question set (50 answerable, 10 not in the docs, 8 small talk), English and Spanish.</p>
+    <div class="stats">
+      <div class="card stat"><div class="v mono">95%</div><div class="l">answers pass a blind Claude Opus judge (mean of two runs)</div></div>
+      <div class="card stat"><div class="v mono">0.75</div><div class="l">MRR@10 for the right doc section (Titan V2 + S3 Vectors)</div></div>
+      <div class="card stat"><div class="v mono">0.6 s</div><div class="l">to Claude's first words, median, measured in the proxy</div></div>
+      <div class="card stat"><div class="v mono">$0.0006</div><div class="l">Claude cost per turn with Haiku 5.5</div></div>
+    </div>
+    <p class="note">The question set and reference answers were written by the author, and the judge is a Claude model whose own error is not measured yet. Failures, causes and fixes are documented in the repository.</p>
+  </section>
+
+  <footer>Built by Ronaldo Ruiz · Docs content from FastAPI (MIT) · Spanish docs are machine-translated by the FastAPI project</footer>
+</div>
+
+<script type="module">
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
-  let conversation = null, polling = false;
+  const plain = (s) => String(s ?? "").replaceAll("`", "");
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // ---------------------------------------------------------------- orb
+  // A WebGL blob whose size and edge ripple follow the voice level, with colors and swirl
+  // speed set by the call state. Canvas 2D draws a plain glowing circle without WebGL.
+  const PALETTES = {
+    idle:      [[0.22, 0.47, 0.98], [0.50, 0.83, 1.00], [0.96, 0.98, 1.00]],
+    listening: [[0.10, 0.62, 0.62], [0.36, 0.90, 0.72], [0.92, 1.00, 0.97]],
+    thinking:  [[0.44, 0.30, 0.95], [0.74, 0.52, 1.00], [0.98, 0.92, 1.00]],
+    speaking:  [[0.20, 0.52, 1.00], [0.45, 0.88, 1.00], [1.00, 1.00, 1.00]],
+  };
+  const orb = { state: "idle", level: 0, colors: PALETTES.idle.map((c) => c.slice()), swirl: 0 };
+  const breath = (t) => 0.06 + 0.03 * Math.sin(t * 1.6);
+  const fakeVoice = (t) => Math.max(0, 0.35 + 0.3 * Math.sin(t * 9.1) * Math.sin(t * 2.3) + 0.15 * Math.sin(t * 17.3));
+  // Where the level comes from: the real microphone or voice during a call, a speech-like
+  // envelope during a replay, and a slow breath otherwise.
+  let levelSource = breath;
+
+  const FRAG = `
+    #ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #else
+    precision mediump float;
+    #endif
+    uniform vec2 res; uniform float t, lv, sw; uniform vec3 ca, cb, cc;
+    // A hash without large constants, so it stays finite at medium precision too.
+    float h(vec2 p) { p = fract(p * vec2(123.34, 456.21)); p += dot(p, p + 45.32); return fract(p.x * p.y); }
+    float n(vec2 p) {
+      vec2 i = floor(p), f = fract(p); f = f * f * (3.0 - 2.0 * f);
+      return mix(mix(h(i), h(i + vec2(1, 0)), f.x), mix(h(i + vec2(0, 1)), h(i + vec2(1, 1)), f.x), f.y);
+    }
+    float fbm(vec2 p) {
+      float v = 0.0, a = 0.5;
+      for (int i = 0; i < 5; i++) { v += a * n(p); p = p * 2.03 + vec2(1.7, 9.2); a *= 0.5; }
+      return v;
+    }
+    void main() {
+      vec2 uv = (gl_FragCoord.xy - 0.5 * res) / min(res.x, res.y);
+      float d = length(uv), ang = atan(uv.y, uv.x);
+      // Noise sampled on a circle, so the rim ripples without a seam.
+      float wob = fbm(vec2(cos(ang), sin(ang)) * 1.6 + t * (0.25 + sw)) - 0.5;
+      float R = 0.30 + 0.06 * lv + 0.010 * sin(t * 1.3) + wob * (0.018 + 0.07 * lv);
+      float inside = 1.0 - smoothstep(R - 0.012, R, d);
+      // Soft clouds drifting through a sky gradient: light on top, deeper blue below.
+      vec2 q = uv * 1.7;
+      float f = fbm(q + vec2(t * 0.12, -t * 0.08) + fbm(q * 1.4 - t * (0.15 + sw)) * 1.3);
+      float g = clamp(0.45 + 0.5 * uv.y / R + (f - 0.5) * 1.1, 0.0, 1.0);
+      vec3 col = mix(ca, cb, g);
+      float cloud = smoothstep(0.38, 0.78, fbm(q * 1.2 + vec2(-t * 0.18, t * 0.1)));
+      col = mix(col, cc, cloud * (0.62 + 0.3 * lv) * (0.4 + 0.6 * g));
+      float light = 1.0 - smoothstep(0.0, R * 1.2, length(uv - vec2(-0.08, 0.12)));
+      col = col * (0.88 + 0.22 * light) + 0.12 * lv;
+      // The glow fades to zero before the canvas edge, so no square shows around the orb.
+      float glow = exp(-max(d - R, 0.0) * 11.0) * (0.30 + 0.55 * lv) * (1.0 - inside)
+                 * (1.0 - smoothstep(0.38, 0.49, d));
+      vec3 rgb = col * inside + mix(ca, cb, 0.6) * glow;
+      float a = clamp(inside + glow, 0.0, 1.0);
+      gl_FragColor = vec4(min(rgb, vec3(a)), a); // premultiplied: color never exceeds alpha
+    }`;
+
+  function startOrb() {
+    const canvas = $("orb");
+    const gl = canvas.getContext("webgl", { alpha: true, premultipliedAlpha: true, antialias: true });
+    const fit = () => {
+      const dpr = Math.min(devicePixelRatio || 1, 2);
+      canvas.width = canvas.clientWidth * dpr; canvas.height = canvas.clientHeight * dpr;
+    };
+    fit(); addEventListener("resize", fit);
+
+    let draw = null;
+    if (gl) {
+      const sh = (type, src) => { const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return s; };
+      const prog = gl.createProgram();
+      gl.attachShader(prog, sh(gl.VERTEX_SHADER, "attribute vec2 p; void main() { gl_Position = vec4(p, 0.0, 1.0); }"));
+      gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FRAG));
+      gl.linkProgram(prog);
+      if (gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+        gl.useProgram(prog);
+        gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+        const loc = gl.getAttribLocation(prog, "p");
+        gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+        const u = Object.fromEntries(["res", "t", "lv", "sw", "ca", "cb", "cc"].map((k) => [k, gl.getUniformLocation(prog, k)]));
+        draw = (time) => {
+          gl.viewport(0, 0, canvas.width, canvas.height);
+          gl.clearColor(0, 0, 0, 0); gl.clear(gl.COLOR_BUFFER_BIT);
+          gl.uniform2f(u.res, canvas.width, canvas.height);
+          gl.uniform1f(u.t, time); gl.uniform1f(u.lv, orb.level); gl.uniform1f(u.sw, orb.swirl);
+          gl.uniform3fv(u.ca, orb.colors[0]); gl.uniform3fv(u.cb, orb.colors[1]); gl.uniform3fv(u.cc, orb.colors[2]);
+          gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+        };
+      }
+    }
+    if (!draw) {
+      const ctx = canvas.getContext("2d");
+      const rgb = (c) => `rgb(${c.map((x) => Math.round(x * 255)).join(",")})`;
+      draw = (time) => {
+        const w = canvas.width, hgt = canvas.height, r = Math.min(w, hgt) * (0.30 + 0.06 * orb.level + 0.01 * Math.sin(time * 1.3));
+        ctx.clearRect(0, 0, w, hgt);
+        const g = ctx.createRadialGradient(w * 0.42, hgt * 0.38, r * 0.1, w / 2, hgt / 2, r);
+        g.addColorStop(0, rgb(orb.colors[2])); g.addColorStop(0.5, rgb(orb.colors[1])); g.addColorStop(1, rgb(orb.colors[0]));
+        ctx.shadowColor = rgb(orb.colors[1]); ctx.shadowBlur = r * (0.4 + orb.level);
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(w / 2, hgt / 2, r, 0, Math.PI * 2); ctx.fill();
+      };
+    }
+
+    const speed = reduceMotion ? 0.2 : 1;
+    let last = performance.now(), clock = 0;
+    const frame = (now) => {
+      const dt = Math.min((now - last) / 1000, 0.05); last = now; clock += dt * speed;
+      const target = Math.min(1, Math.max(0, levelSource(clock))) * (reduceMotion ? 0.3 : 1);
+      // Rise fast and fall slowly, like a VU meter, so speech reads as one shape.
+      orb.level += (target - orb.level) * Math.min(1, dt * (target > orb.level ? 16 : 5));
+      const pal = PALETTES[orb.state] ?? PALETTES.idle;
+      orb.colors.forEach((c, i) => c.forEach((_, j) => { c[j] += (pal[i][j] - c[j]) * Math.min(1, dt * 3); }));
+      orb.swirl += ((orb.state === "thinking" ? 0.9 : 0) - orb.swirl) * Math.min(1, dt * 2);
+      draw(clock);
+      requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+  }
+
+  // ---------------------------------------------------------------- status and transcript
+  const STATUS = { idle: "Ready", connecting: "Connecting…", listening: "Listening", thinking: "Searching the docs…", speaking: "Speaking", error: "Error" };
+  let announced = "";
+  function setStatus(state, text) {
+    const label = text ?? STATUS[state] ?? state;
+    $("pill").dataset.state = state;
+    $("status").textContent = label;
+    orb.state = state === "connecting" || state === "error" ? "idle" : state;
+    if (label !== announced) { announced = label; $("announce").textContent = label; }
+  }
+  function setLive(on, label) {
+    $("liveTag").classList.toggle("on", on);
+    $("liveTag").querySelector("span").textContent = label;
+  }
+  function addMessage(source, text) {
+    const box = $("transcript");
+    const div = document.createElement("div");
+    div.className = `msg ${source === "user" ? "user" : "ai"}`;
+    div.textContent = text;
+    box.appendChild(div);
+    box.scrollTop = box.scrollHeight;
+    return div;
+  }
+
+  // ---------------------------------------------------------------- trace
+  const ICONS = {
+    heard: '<path d="M12 3a3 3 0 0 1 3 3v6a3 3 0 0 1-6 0V6a3 3 0 0 1 3-3z"/><path d="M5 11a7 7 0 0 0 14 0"/>',
+    decide: '<path d="M12 3v3M12 18v3M3 12h3M18 12h3"/><circle cx="12" cy="12" r="3"/>',
+    search: '<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',
+    hits: '<path d="M4 6h16M4 12h16M4 18h10"/>',
+    first: '<path d="M4 12h3l3-7 4 14 3-7h3"/>',
+    done: '<path d="M5 12l5 5L20 7"/>',
+    tool: '<path d="M14 7l3 3-7 7H7v-3z"/>',
+    error: '<path d="M12 8v5M12 16h.01"/><circle cx="12" cy="12" r="9"/>',
+  };
+  const icon = (k) => `<span class="ico"><svg viewBox="0 0 24 24">${ICONS[k]}</svg></span>`;
+  let traceMode = "live";
+
+  // Returns [icon, kind, html] for one trace event.
+  function describe(e) {
+    switch (e.type) {
+      case "user_utterance":
+        return ["heard", "heard", `<span class="kind">${traceMode === "replay" ? "Asked" : "Heard"}</span> <span class="tag">${esc(e.language)}</span>`];
+      case "decision":
+        return e.action === "search"
+          ? ["decide", "decide", `<span class="kind">Decided to search</span>${e.said ? ` <span class="muted">and said “${esc(e.said)}”</span>` : ""}`]
+          : ["decide", "decide", `<span class="kind">Answered directly</span> <span class="muted">no search needed</span>`];
+      case "tool_call":
+        return ["search", "search", `<span class="kind">search_docs</span> <span class="q-text">${esc(e.query)}</span> <span class="tag">${esc(e.language ?? "any")}</span>`];
+      case "retrieval_hits": {
+        const top = Math.max(...e.hits.map((h) => h.score), 1e-9);
+        const rows = e.hits.map((h) => `<li><a href="${esc(h.url)}" target="_blank" rel="noopener">${esc(plain(h.title))} › ${esc(plain(h.heading))}<span class="muted">${esc(h.lang)}</span></a>`
+          + `<span class="bar" title="score ${h.score}"><i style="width:${Math.round((h.score / top) * 100)}%"></i></span></li>`).join("");
+        return ["hits", "hits", `<span class="kind">${e.hits.length} sections</span> <span class="muted">from ${esc(e.retriever)} in ${e.ms} ms</span><ol class="hits">${rows}</ol>`];
+      }
+      case "llm_first_token":
+        return ["first", "first", `<span class="kind">First words</span> <span class="muted">from Claude</span>`];
+      case "external_tool":
+        return ["tool", "tool", `<span class="kind">Platform tool</span> ${e.calls.map((c) => esc(c.name)).join(", ")}`];
+      case "answer_done": {
+        const chips = [
+          e.answered_from_docs === false ? `<span class="chip"><b>not in the docs</b></span>` : "",
+          e.cited?.length ? `<span class="chip">cited <b>${e.cited.length}</b></span>` : "",
+          e.first_token_ms != null ? `<span class="chip">first words <b>${e.first_token_ms} ms</b></span>` : "",
+          `<span class="chip"><b>${(e.input_tokens + e.output_tokens).toLocaleString("en-US")}</b> tokens</span>`,
+          `<span class="chip"><b>$${e.usd.toFixed(5)}</b></span>`,
+        ].join("");
+        return ["done", "done", `<span class="kind">Answer done</span><div class="chips">${chips}</div>`];
+      }
+      case "error":
+        return ["error", "error", `<span class="kind err">Error</span> ${esc(e.message)}`];
+      default:
+        return ["decide", "decide", esc(e.type)];
+    }
+  }
+
+  const turns = new Map();
+  const seen = new Set();
+  let conversation = null, polling = false, searching = false, callMode = "listening";
+
+  function addEvent(e) {
+    if (seen.has(e.cursor)) return; // a retried poll can return events already drawn
+    seen.add(e.cursor);
+    const box = $("trace");
+    box.querySelector(".empty-state")?.remove();
+    let turn = turns.get(e.turn_id);
+    if (!turn) {
+      turn = document.createElement("div");
+      turn.className = "turn";
+      turn.innerHTML = `<div class="turn-q">…</div>`;
+      turns.set(e.turn_id, turn);
+      box.appendChild(turn);
+    }
+    if (e.type === "user_utterance") turn.querySelector(".turn-q").textContent = `“${e.text}”`;
+    const [ico, kind, html] = describe(e);
+    const row = document.createElement("div");
+    row.className = "ev";
+    row.dataset.kind = kind;
+    row.innerHTML = `${icon(ico)}<div>${html}</div><span class="t mono">${e.t_ms} ms</span>`;
+    turn.appendChild(row);
+    box.scrollTop = box.scrollHeight;
+
+    // The trace also tells the orb when the agent is looking things up.
+    if (e.type === "tool_call") { searching = true; setStatus("thinking", `Searching: ${e.query}`); }
+    if (e.type === "retrieval_hits" || e.type === "answer_done" || e.type === "error") {
+      searching = false;
+      if ($("pill").dataset.state === "thinking") setStatus(callMode === "speaking" ? "speaking" : "listening");
+    }
+  }
+
+  function resetPanels() {
+    turns.clear(); seen.clear(); searching = false;
+    $("trace").innerHTML = ""; $("transcript").innerHTML = "";
+  }
+
+  // ---------------------------------------------------------------- live call
   // Poll the trace endpoint instead of holding a stream open. On Lambda each poll can
   // land on a different instance, and the shared store keeps them consistent.
   async function follow(sessionId, cursor) {
@@ -84,7 +529,7 @@
       } catch (err) {
         console.warn("trace poll failed", err); // keep polling; one failure is not worth stopping for
       }
-      await new Promise((r) => setTimeout(r, 600));
+      await sleep(600);
     }
   }
 
@@ -114,77 +559,51 @@
     }
     throw new Error("wrong demo code");
   }
-  const turns = new Map();
 
-  function addMessage(source, text) {
-    const box = $("transcript");
-    box.querySelector(".empty")?.remove();
-    const div = document.createElement("div");
-    div.className = `msg ${source === "user" ? "user" : "ai"}`;
-    div.textContent = text;
-    box.appendChild(div);
-    box.scrollTop = box.scrollHeight;
-  }
-
-  function describe(e) {
-    switch (e.type) {
-      case "user_utterance": return `<span class="kind">Heard</span> "${esc(e.text)}" <span class="tag">${esc(e.language)}</span>`;
-      case "decision": return e.action === "search"
-        ? `<span class="kind">Decided to search</span>${e.said ? ` and said "${esc(e.said)}"` : ""}`
-        : `<span class="kind">Answered directly</span> (no search needed)`;
-      case "tool_call": return `<span class="kind">search_docs</span> "${esc(e.query)}" <span class="tag">${esc(e.language)}</span>`;
-      case "retrieval_hits": return `<span class="kind">${e.hits.length} sections</span> in ${e.ms} ms <span class="tag">${esc(e.retriever)}</span>`
-        + `<ol class="hits">${e.hits.map((h) => `<li><a href="${esc(h.url)}" target="_blank" rel="noopener">${esc(h.title)} › ${esc(h.heading)}</a> <span class="tag">${esc(h.lang)} · ${h.score}</span></li>`).join("")}</ol>`;
-      case "llm_first_token": return `<span class="kind">First words</span> from Claude`;
-      case "external_tool": return `<span class="kind">Platform tool</span> ${e.calls.map((c) => esc(c.name)).join(", ")}`;
-      case "answer_done": return `<span class="kind">Answer done</span>`
-        + (e.answered_from_docs === false ? ` <span class="tag">not in the docs</span>` : "")
-        + (e.cited?.length ? ` · cited ${e.cited.map(esc).join(", ")}` : "")
-        + ` <span class="tag">${e.input_tokens + e.output_tokens} tokens · $${e.usd.toFixed(5)}</span>`;
-      case "error": return `<span class="kind err">Error</span> ${esc(e.message)}`;
-      default: return esc(e.type);
-    }
-  }
-
-  const seen = new Set();
-  function addEvent(e) {
-    if (seen.has(e.cursor)) return; // a retried poll can return events already drawn
-    seen.add(e.cursor);
-    const box = $("trace");
-    box.querySelector(".empty")?.remove();
-    let turn = turns.get(e.turn_id);
-    if (!turn) {
-      turn = document.createElement("div");
-      turn.className = "turn";
-      turns.set(e.turn_id, turn);
-      box.appendChild(turn);
-    }
-    const row = document.createElement("div");
-    row.className = "ev";
-    row.innerHTML = `<span class="t">${e.t_ms} ms</span><span>${describe(e)}</span>`;
-    turn.appendChild(row);
-    box.scrollTop = box.scrollHeight;
+  const IDLE_HINT = "Live calls need a demo code. Replays are free and need no microphone.";
+  function setCallButton(live) {
+    $("toggle").classList.toggle("live", live);
+    $("toggle").querySelector("span").textContent = live ? "End call" : "Start a call";
   }
 
   async function start() {
+    stopReplay();
     $("toggle").disabled = true;
-    $("status").textContent = "Connecting…";
+    setStatus("connecting");
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
       warmUp();
-      const { signed_url, session_id, cursor } = await getSession();
+      // The SDK loads only when a call starts, so the page and replays never wait on it.
+      const [{ Conversation }, session] = await Promise.all([
+        import("https://cdn.jsdelivr.net/npm/@elevenlabs/client@1.26.0/+esm"),
+        getSession(),
+      ]);
+      const { signed_url, session_id, cursor } = session;
+      resetPanels(); traceMode = "live"; $("banner").classList.remove("on");
       follow(session_id, cursor);
       conversation = await Conversation.startSession({
         signedUrl: signed_url,
         customLlmExtraBody: { session_id },
-        onConnect: () => { $("status").textContent = "Listening"; $("toggle").textContent = "End call"; },
+        onConnect: () => {
+          setStatus("listening"); setCallButton(true); setLive(true, "live");
+          $("typebox").classList.add("on");
+          $("hint").textContent = "Speak in English or Spanish. You can also type below.";
+        },
         onDisconnect: stop,
-        onModeChange: ({ mode }) => { $("status").textContent = mode === "speaking" ? "Speaking" : "Listening"; },
+        onModeChange: ({ mode }) => {
+          callMode = mode;
+          if (!searching) setStatus(mode === "speaking" ? "speaking" : "listening");
+        },
         onMessage: ({ source, message }) => addMessage(source, message),
-        onError: (err) => { $("status").textContent = `Error: ${err}`; },
+        onError: (err) => setStatus("error", `Error: ${err}`),
       });
+      levelSource = () => {
+        if (!conversation) return 0.05;
+        const v = callMode === "speaking" ? conversation.getOutputVolume() : conversation.getInputVolume();
+        return (v || 0) * 1.6;
+      };
     } catch (err) {
-      $("status").textContent = `Could not start: ${err.message ?? err}`;
+      setStatus("error", `Could not start: ${err.message ?? err}`);
       polling = false;
     } finally {
       $("toggle").disabled = false;
@@ -196,11 +615,99 @@
     conversation = null;
     if (c) await c.endSession();
     setTimeout(() => { polling = false; }, 3000);
-    $("status").textContent = "Call ended";
-    $("toggle").textContent = "Start call";
+    levelSource = breath;
+    setStatus("idle", "Call ended"); setCallButton(false); setLive(false, "idle");
+    $("typebox").classList.remove("on");
+    $("hint").textContent = IDLE_HINT;
   }
 
   $("toggle").addEventListener("click", () => (conversation ? stop() : start()));
+  $("typebox").addEventListener("submit", (ev) => {
+    ev.preventDefault();
+    const text = $("typed").value.trim();
+    if (!text || !conversation) return;
+    conversation.sendUserMessage(text);
+    addMessage("user", text); // typed messages are not echoed back like transcripts
+    $("typed").value = "";
+  });
+
+  // ---------------------------------------------------------------- replay
+  // Plays back a session recorded through the real proxy (scripts/record_replay.py):
+  // real Claude output, real retrieval and the recorded timings. No microphone, no cost.
+  let replayRun = 0;
+  const pressReplay = (lang) => document.querySelectorAll("[data-replay]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.replay === lang)));
+
+  function stopReplay() {
+    replayRun++;
+    pressReplay(null);
+  }
+
+  async function playReplay(lang) {
+    if (conversation) await stop();
+    const run = ++replayRun;
+    const current = () => run === replayRun;
+    pressReplay(lang);
+    let data;
+    try {
+      const res = await fetch(`/replays/${lang}.json`);
+      if (!res.ok) throw new Error(res.status);
+      data = await res.json();
+    } catch {
+      setStatus("error", "Replay not available"); return;
+    }
+    resetPanels(); traceMode = "replay";
+    $("banner").classList.add("on");
+    $("banner").innerHTML = `<b>Replay.</b> ${lang === "es" ? "A Spanish" : "An English"} session recorded on ${esc(data.recorded.date)} through the real proxy with ${esc(data.recorded.model)}. The questions were typed, so speech recognition is not part of it. Captions and trace keep the recorded timings, and the orb imitates the voice.`;
+    setLive(true, "replay");
+    addMessage("ai", data.greeting);
+
+    for (const turn of data.turns) {
+      if (!current()) return;
+      setStatus("listening", "Caller asking");
+      levelSource = (t) => 0.55 * fakeVoice(t);
+      const userDiv = addMessage("user", "");
+      for (const ch of turn.user) {
+        if (!current()) return;
+        userDiv.textContent += ch;
+        if (!reduceMotion) await sleep(22);
+      }
+      levelSource = breath;
+      await sleep(350);
+
+      // Trace events and streamed text, merged on the recording's clock.
+      const timeline = [
+        ...turn.events.map((e) => ({ at: e.t_ms, ev: e })),
+        ...turn.chunks.map(([at, text]) => ({ at, text })),
+      ].sort((a, b) => a.at - b.at);
+      const t0 = performance.now();
+      let aiDiv = null, spoken = "";
+      for (const item of timeline) {
+        const wait = item.at - (performance.now() - t0);
+        if (wait > 0) await sleep(wait);
+        if (!current()) return;
+        if (item.ev) { addEvent(item.ev); continue; }
+        if (!searching) setStatus("speaking");
+        levelSource = fakeVoice;
+        aiDiv ??= addMessage("ai", "");
+        spoken += item.text;
+        aiDiv.textContent = spoken.trim();
+        $("transcript").scrollTop = $("transcript").scrollHeight;
+      }
+      // Speech runs longer than the text stream, so let the voice finish before the next turn.
+      await sleep(Math.min(2500, 300 + spoken.split(/\s+/).length * 12));
+      if (!current()) return;
+      levelSource = breath;
+      setStatus("idle", "Waiting for the next question");
+      await sleep(900);
+    }
+    if (current()) {
+      setStatus("idle", "Replay finished"); setLive(false, "idle");
+      pressReplay(null);
+    }
+  }
+
+  document.querySelectorAll("[data-replay]").forEach((b) => b.addEventListener("click", () => playReplay(b.dataset.replay)));
+  startOrb();
 </script>
 </body>
 </html>
