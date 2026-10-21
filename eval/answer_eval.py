@@ -241,6 +241,11 @@ async def main() -> None:
     parser.add_argument(
         "--limit", type=int, default=0, help="Only the first N rows (pilot)"
     )
+    parser.add_argument(
+        "--tag",
+        default="",
+        help="Variant name, e.g. code. Writes separate result files and no spot-check sheet.",
+    )
     args = parser.parse_args()
 
     s = get_settings()
@@ -268,7 +273,7 @@ async def main() -> None:
     for model in models:
         turns = await asyncio.gather(*(one(model, r) for r in rows))
         by_model[model] = turns
-        suffix = "_pilot" if args.limit else ""
+        suffix = "_pilot" if args.limit else (f"_{args.tag}" if args.tag else "")
         path = ROOT / f"eval/results/answers_{model}{suffix}.jsonl"
         path.write_text(
             "".join(json.dumps(t, ensure_ascii=False) + "\n" for t in turns)
@@ -277,6 +282,8 @@ async def main() -> None:
     summary = {
         "gold": "eval-freeze-v1",
         "retriever": retriever.name,
+        "index_dir": str(s.index_dir),
+        "s3vectors_index": s.s3vectors_index,
         "judge": JUDGE_MODEL,
         "rows": len(rows),
         "models": {m: summarize(t) for m, t in by_model.items()},
@@ -294,9 +301,11 @@ async def main() -> None:
         }
 
     if not args.limit:
-        (ROOT / "eval/results/answer_eval_summary.json").write_text(
+        tag = f"_{args.tag}" if args.tag else ""
+        (ROOT / f"eval/results/answer_eval_summary{tag}.json").write_text(
             json.dumps(summary, indent=2)
         )
+    if not args.limit and not args.tag:
         # Spot-check sheet: 30 judgments across both models for a human to confirm.
         pool = [t for turns in by_model.values() for t in turns]
         sample = random.Random(20261020).sample(pool, min(30, len(pool)))

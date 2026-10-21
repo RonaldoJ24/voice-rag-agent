@@ -46,6 +46,9 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default=get_settings().agent_model)
     parser.add_argument("--retrievers", default="local,dense,bm25")
+    parser.add_argument(
+        "--tag", default="", help="suffix for the results file, e.g. code"
+    )
     args = parser.parse_args()
 
     gold = [
@@ -92,11 +95,13 @@ def main() -> None:
                 }
         table.append(row)
 
-    out = ROOT / f"eval/results/ablation_{args.model}.json"
+    suffix = f"_{args.tag}" if args.tag else ""
+    out = ROOT / f"eval/results/ablation_{args.model}{suffix}.json"
     out.write_text(
         json.dumps(
             {
                 "model": args.model,
+                "index_dir": str(get_settings().index_dir),
                 "queries": str(cache.relative_to(ROOT)),
                 "note": "Same Claude-written queries for every retriever. Answerable gold rows only.",
                 "table": table,
