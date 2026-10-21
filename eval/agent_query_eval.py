@@ -5,6 +5,10 @@ to search and with what query), then searches with that query. It also scores th
 decision: doc questions should search, small talk should not.
 
     uv run python eval/agent_query_eval.py [--model claude-haiku-5-5] [--retriever local]
+        [--reuse-queries]
+
+Claude's queries are saved to eval/results/queries_<model>.jsonl, so other retrievers can
+be scored on exactly the same queries (see eval/ablation.py).
 
 Cost on Haiku 5.5: about $0.01 for the 68 rows.
 """
@@ -79,6 +83,11 @@ async def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--model", default=get_settings().agent_model)
     parser.add_argument("--retriever", default="local")
+    parser.add_argument(
+        "--reuse-queries",
+        action="store_true",
+        help="Score the queries Claude wrote last time instead of asking again",
+    )
     args = parser.parse_args()
 
     s = get_settings()
@@ -87,12 +96,20 @@ async def main() -> None:
         for line in (ROOT / "eval/gold.jsonl").read_text().splitlines()
         if line.strip()
     ]
-    client = anthropic.AsyncAnthropic(api_key=s.anthropic_api_key or None)
     ledger = Ledger(s.spend_ledger, s.spend_pause_usd)
-    sem = asyncio.Semaphore(8)
-    decisions = await asyncio.gather(
-        *(first_round(client, ledger, args.model, r, sem) for r in rows)
-    )
+    cache = ROOT / f"eval/results/queries_{args.model}.jsonl"
+    if args.reuse_queries and cache.exists():
+        decisions = [json.loads(x) for x in cache.read_text().splitlines() if x]
+        print(f"Reusing {len(decisions)} cached queries from {cache.relative_to(ROOT)}")
+    else:
+        client = anthropic.AsyncAnthropic(api_key=s.anthropic_api_key or None)
+        sem = asyncio.Semaphore(8)
+        decisions = await asyncio.gather(
+            *(first_round(client, ledger, args.model, r, sem) for r in rows)
+        )
+        cache.write_text(
+            "".join(json.dumps(d, ensure_ascii=False) + "\n" for d in decisions)
+        )
     retriever = build_retriever(args.retriever)
 
     per_row = []

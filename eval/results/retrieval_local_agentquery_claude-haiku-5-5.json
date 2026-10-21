@@ -37,19 +37,19 @@
         "slice": "overall",
         "metric": "recall@1",
         "n": 50,
-        "mean": 0.48,
+        "mean": 0.44,
         "ci95": [
-          0.34,
-          0.62
+          0.3,
+          0.58
         ]
       },
       {
         "slice": "overall",
         "metric": "recall@5",
         "n": 50,
-        "mean": 0.94,
+        "mean": 0.96,
         "ci95": [
-          0.86,
+          0.9,
           1.0
         ]
       },
@@ -57,20 +57,20 @@
         "slice": "overall",
         "metric": "mrr@10",
         "n": 50,
-        "mean": 0.677,
+        "mean": 0.657,
         "ci95": [
-          0.584,
-          0.765
+          0.566,
+          0.748
         ]
       },
       {
         "slice": "lang=en",
         "metric": "recall@1",
         "n": 25,
-        "mean": 0.56,
+        "mean": 0.48,
         "ci95": [
-          0.36,
-          0.76
+          0.28,
+          0.68
         ]
       },
       {
@@ -87,10 +87,10 @@
         "slice": "lang=en",
         "metric": "mrr@10",
         "n": 25,
-        "mean": 0.724,
+        "mean": 0.667,
         "ci95": [
-          0.594,
-          0.847
+          0.539,
+          0.793
         ]
       },
       {
@@ -107,9 +107,9 @@
         "slice": "lang=es",
         "metric": "recall@5",
         "n": 25,
-        "mean": 0.92,
+        "mean": 0.96,
         "ci95": [
-          0.8,
+          0.88,
           1.0
         ]
       },
@@ -117,10 +117,10 @@
         "slice": "lang=es",
         "metric": "mrr@10",
         "n": 25,
-        "mean": 0.63,
+        "mean": 0.647,
         "ci95": [
-          0.503,
-          0.76
+          0.53,
+          0.77
         ]
       },
       {
@@ -137,9 +137,9 @@
         "slice": "style=spoken",
         "metric": "recall@5",
         "n": 31,
-        "mean": 0.903,
+        "mean": 0.935,
         "ci95": [
-          0.774,
+          0.839,
           1.0
         ]
       },
@@ -147,20 +147,20 @@
         "slice": "style=spoken",
         "metric": "mrr@10",
         "n": 31,
-        "mean": 0.581,
+        "mean": 0.589,
         "ci95": [
-          0.466,
-          0.703
+          0.481,
+          0.705
         ]
       },
       {
         "slice": "style=written",
         "metric": "recall@1",
         "n": 19,
-        "mean": 0.684,
+        "mean": 0.579,
         "ci95": [
-          0.474,
-          0.895
+          0.368,
+          0.789
         ]
       },
       {
@@ -177,10 +177,10 @@
         "slice": "style=written",
         "metric": "mrr@10",
         "n": 19,
-        "mean": 0.833,
+        "mean": 0.768,
         "ci95": [
-          0.719,
-          0.939
+          0.64,
+          0.886
         ]
       }
     ]
@@ -189,46 +189,46 @@
     {
       "id": "en-01",
       "searched": true,
-      "query": "upload files request files",
+      "query": "file upload UploadFile",
       "query_lang": "en",
       "said": "Let me check the docs.",
       "kind": "answerable",
       "lang": "en",
       "style": "spoken",
-      "rank": 2
+      "rank": 3
     },
     {
       "id": "en-02",
       "searched": true,
-      "query": "require login route security dependency",
+      "query": "route requires authentication dependency security",
       "query_lang": "en",
       "said": "Let me check the docs.",
+      "kind": "answerable",
+      "lang": "en",
+      "style": "spoken",
+      "rank": 1
+    },
+    {
+      "id": "en-03",
+      "searched": true,
+      "query": "background tasks",
+      "query_lang": "en",
+      "said": "You can send the response right away and run the slow work in the background. In FastAPI, you add a background task parameter to your path operation function, and then call its add task method with the function you want to run later. The client gets the response immediately, and the slow function runs after it's sent. Let me check the docs for the exact details.",
       "kind": "answerable",
       "lang": "en",
       "style": "spoken",
       "rank": 2
     },
     {
-      "id": "en-03",
+      "id": "en-04",
       "searched": true,
-      "query": "background tasks respond before slow work finishes",
+      "query": "CORS cross-origin requests frontend",
       "query_lang": "en",
       "said": "Let me check the docs on that.",
       "kind": "answerable",
       "lang": "en",
       "style": "spoken",
-      "rank": 1
-    },
-    {
-      "id": "en-04",
-      "searched": true,
-      "query": "CORS middleware allow origins",
-      "query_lang": "en",
-      "said": "Let me check the docs.",
-      "kind": "answerable",
-      "lang": "en",
-      "style": "spoken",
-      "rank": 1
+      "rank": 2
     },
     {
       "id": "en-05",
@@ -255,7 +255,7 @@
     {
       "id": "en-07",
       "searched": true,
-      "query": "dependencies with yield close database session after request",
+      "query": "dependency with yield close database session after request",
       "query_lang": "en",
       "said": "Let me check the docs.",
       "kind": "answerable",
@@ -321,7 +321,7 @@
     {
       "id": "en-13",
       "searched": true,
-      "query": "WebSockets two-way real time communication",
+      "query": "WebSockets real-time two-way communication",
       "query_lang": "en",
       "said": "Let me check the docs.",
       "kind": "answerable",
@@ -332,24 +332,24 @@
     {
       "id": "en-14",
       "searched": true,
-      "query": "lifespan startup code load model before application starts",
+      "query": "lifespan startup code load model",
       "query_lang": "en",
       "said": "Let me check the docs.",
       "kind": "answerable",
       "lang": "en",
       "style": "written",
-      "rank": 1
+      "rank": 4
     },
     {
       "id": "en-15",
       "searched": true,
-      "query": "return HTML response custom response class",
+      "query": "return HTML response from endpoint",
       "query_lang": "en",
       "said": "Let me check the docs.",
       "kind": "answerable",
       "lang": "en",
       "style": "spoken",
-      "rank": 2
+      "rank": 1
     },
     {
       "id": "en-16",
@@ -365,13 +365,13 @@
     {
       "id": "en-17",
       "searched": true,
-      "query": "HTTP Basic auth secrets compare_digest timing attacks",
+      "query": "HTTP Basic auth secrets compare_digest",
       "query_lang": "en",
       "said": "Let me check the docs.",
       "kind": "answerable",
       "lang": "en",
       "style": "written",
-      "rank": 1
+      "rank": 2
     },
     {
       "id": "en-18",
@@ -431,7 +431,7 @@
     {
       "id": "en-23",
       "searched": true,
-      "query": "HTTPS certificates",
+      "query": "HTTPS certificates Let's Encrypt",
       "query_lang": "en",
       "said": "Let me check the docs.",
       "kind": "answerable",
@@ -464,7 +464,7 @@
     {
       "id": "es-01",
       "searched": true,
-      "query": "subir archivos request files",
+      "query": "subir archivos File UploadFile",
       "query_lang": "es",
       "said": "Déjame revisar la documentación.",
       "kind": "answerable",
@@ -475,7 +475,7 @@
     {
       "id": "es-02",
       "searched": true,
-      "query": "background tasks respond before finishing",
+      "query": "tareas en segundo plano background tasks",
       "query_lang": "es",
       "said": "Déjame revisar la documentación.",
       "kind": "answerable",
@@ -486,13 +486,13 @@
     {
       "id": "es-03",
       "searched": true,
-      "query": "CORS middleware origins",
+      "query": "CORS middleware frontend origin",
       "query_lang": "es",
       "said": "Déjame revisar la documentación.",
       "kind": "answerable",
       "lang": "es",
       "style": "spoken",
-      "rank": 2
+      "rank": 3
     },
     {
       "id": "es-04",
@@ -508,7 +508,7 @@
     {
       "id": "es-05",
       "searched": true,
-      "query": "response model excluir contraseña",
+      "query": "response model excluir contraseña campo salida",
       "query_lang": "es",
       "said": "Déjame revisar la documentación.",
       "kind": "answerable",
@@ -519,18 +519,18 @@
     {
       "id": "es-06",
       "searched": true,
-      "query": "desactivar docs en producción docs_url",
+      "query": "deshabilitar docs en producción openapi_url",
       "query_lang": "es",
       "said": "Déjame revisar la documentación.",
       "kind": "answerable",
       "lang": "es",
       "style": "spoken",
-      "rank": null
+      "rank": 3
     },
     {
       "id": "es-07",
       "searched": true,
-      "query": "conectar FastAPI con base de datos SQL SQLite",
+      "query": "SQL databases SQLModel SQLite FastAPI",
       "query_lang": "es",
       "said": "Déjame revisar la documentación.",
       "kind": "answerable",
@@ -552,13 +552,13 @@
     {
       "id": "es-09",
       "searched": true,
-      "query": "Header parameters underscore convert",
+      "query": "Header parameters convert underscore hyphen user-agent",
       "query_lang": "es",
       "said": "Déjame revisar la documentación.",
       "kind": "answerable",
       "lang": "es",
       "style": "written",
-      "rank": 2
+      "rank": 1
     },
     {
       "id": "es-10",
@@ -596,7 +596,7 @@
     {
       "id": "es-13",
       "searched": true,
-      "query": "código de estado de respuesta en la ruta status_code",
+      "query": "código de estado de respuesta status_code",
       "query_lang": "es",
       "said": "Déjame revisar la documentación.",
       "kind": "answerable",
@@ -607,7 +607,7 @@
     {
       "id": "es-14",
       "searched": true,
-      "query": "server-sent events streaming respuesta",
+      "query": "server-sent events streaming",
       "query_lang": "es",
       "said": "Déjame revisar la documentación.",
       "kind": "answerable",
@@ -662,24 +662,24 @@
     {
       "id": "es-19",
       "searched": true,
-      "query": "webhooks",
+      "query": "webhooks callbacks notificar a otros sistemas",
       "query_lang": "es",
       "said": "Déjame revisar la documentación.",
       "kind": "answerable",
       "lang": "es",
       "style": "spoken",
-      "rank": 4
+      "rank": 2
     },
     {
       "id": "es-20",
       "searched": true,
-      "query": "Swagger UI self-hosted static files CDN",
-      "query_lang": "es",
+      "query": "Swagger UI self-hosted static files CDN offline docs",
+      "query_lang": "en",
       "said": "Déjame revisar la documentación.",
       "kind": "answerable",
       "lang": "es",
       "style": "written",
-      "rank": 1
+      "rank": 2
     },
     {
       "id": "es-21",
@@ -695,7 +695,7 @@
     {
       "id": "es-22",
       "searched": true,
-      "query": "fijar versión de FastAPI dependencias",
+      "query": "fijar versión FastAPI dependencias",
       "query_lang": "es",
       "said": "Déjame revisar la documentación.",
       "kind": "answerable",
@@ -783,7 +783,7 @@
     {
       "id": "un-en-05",
       "searched": true,
-      "query": "Sentry error monitoring alerts",
+      "query": "Sentry error monitoring",
       "query_lang": "en",
       "said": "Let me check the docs.",
       "kind": "unanswerable",
@@ -794,7 +794,7 @@
     {
       "id": "un-es-01",
       "searched": true,
-      "query": "desplegar FastAPI en Azure App Service",
+      "query": "desplegar FastAPI Azure App Service",
       "query_lang": "es",
       "said": "Déjame revisar la documentación.",
       "kind": "unanswerable",
@@ -827,7 +827,7 @@
     {
       "id": "un-es-04",
       "searched": true,
-      "query": "Prometheus métricas Grafana",
+      "query": "métricas Prometheus Grafana",
       "query_lang": "es",
       "said": "Déjame revisar la documentación.",
       "kind": "unanswerable",
@@ -862,7 +862,7 @@
       "searched": false,
       "query": null,
       "query_lang": null,
-      "said": "You're welcome! Glad I could help. Feel free to ask anything else about FastAPI anytime.",
+      "said": "You're welcome! Glad it helped. Feel free to ask me anything else about FastAPI whenever you like.",
       "kind": "smalltalk",
       "lang": "en",
       "style": "spoken",
@@ -873,7 +873,7 @@
       "searched": false,
       "query": null,
       "query_lang": null,
-      "said": "Yes, I can hear you fine. What would you like to know about FastAPI?",
+      "said": "Yes, I can hear you just fine! What would you like to know about FastAPI?",
       "kind": "smalltalk",
       "lang": "en",
       "style": "spoken",
@@ -884,7 +884,7 @@
       "searched": false,
       "query": null,
       "query_lang": null,
-      "said": "I can help you with questions about FastAPI, the Python framework for building web APIs. I answer using only the official FastAPI documentation, so you can ask about things like routes, request bodies, dependencies, or how to run an app. What would you like to know?",
+      "said": "I can answer questions about FastAPI using its official documentation. You can ask me how to define routes, handle request data, use dependencies, or anything else covered in the docs. What would you like to know?",
       "kind": "smalltalk",
       "lang": "en",
       "style": "spoken",
@@ -895,7 +895,7 @@
       "searched": false,
       "query": null,
       "query_lang": null,
-      "said": "¡Hola, buenos días! ¿En qué te puedo ayudar con FastAPI?",
+      "said": "¡Hola, buenos días! ¿En qué te puedo ayudar con FastAPI hoy?",
       "kind": "smalltalk",
       "lang": "es",
       "style": "spoken",
@@ -928,7 +928,7 @@
       "searched": false,
       "query": null,
       "query_lang": null,
-      "said": "Puedo ayudarte con preguntas sobre FastAPI usando solo su documentación oficial. Por ejemplo, cómo crear rutas, cómo validar datos, cómo manejar errores o cómo usar dependencias. Dime qué quieres saber y busco la parte de la documentación que lo explique.",
+      "said": "Puedo ayudarte con preguntas sobre FastAPI usando la documentación oficial. Por ejemplo, cómo crear rutas, validar datos, manejar parámetros o usar dependencias. Dime qué quieres aprender y lo busco en la documentación.",
       "kind": "smalltalk",
       "lang": "es",
       "style": "spoken",

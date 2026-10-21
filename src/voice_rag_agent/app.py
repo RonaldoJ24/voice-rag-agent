@@ -28,11 +28,16 @@ def build_retriever(name: str) -> Retriever:
         from .retrieval.local import Bm25Retriever
 
         return Bm25Retriever.load(get_settings().index_dir)
-    if name == "aws":
-        from .retrieval.aws import AwsHybridRetriever
+    if name == "dense":
+        from .retrieval.local import DenseRetriever
+
+        return DenseRetriever.load(get_settings().index_dir)
+    if name in ("aws", "aws-dense"):
+        from .retrieval.aws import AwsDenseRetriever, AwsHybridRetriever
 
         s = get_settings()
-        return AwsHybridRetriever.load(
+        cls = AwsHybridRetriever if name == "aws" else AwsDenseRetriever
+        return cls.load(
             s.index_dir, s.s3vectors_bucket, s.s3vectors_index, s.aws_region
         )
     raise ValueError(f"Unknown retriever {name!r}")

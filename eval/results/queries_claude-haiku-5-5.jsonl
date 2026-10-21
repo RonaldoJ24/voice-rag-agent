@@ -1,0 +1,68 @@
+{"id": "en-01", "searched": true, "query": "file upload UploadFile", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-02", "searched": true, "query": "route requires authentication dependency security", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-03", "searched": true, "query": "background tasks", "query_lang": "en", "said": "You can send the response right away and run the slow work in the background. In FastAPI, you add a background task parameter to your path operation function, and then call its add task method with the function you want to run later. The client gets the response immediately, and the slow function runs after it's sent. Let me check the docs for the exact details."}
+{"id": "en-04", "searched": true, "query": "CORS cross-origin requests frontend", "query_lang": "en", "said": "Let me check the docs on that."}
+{"id": "en-05", "searched": true, "query": "raise HTTPException 404 not found", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-06", "searched": true, "query": "query parameters string validations min_length regex", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-07", "searched": true, "query": "dependency with yield close database session after request", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-08", "searched": true, "query": "APIRouter split routes into multiple files", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-09", "searched": true, "query": "serve static files images CSS", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-10", "searched": true, "query": "response_model exclude password from output", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-11", "searched": true, "query": "path order fixed path before path parameter", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-12", "searched": true, "query": "partial updates with exclude_unset", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-13", "searched": true, "query": "WebSockets real-time two-way communication", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-14", "searched": true, "query": "lifespan startup code load model", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-15", "searched": true, "query": "return HTML response from endpoint", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-16", "searched": true, "query": "behind a proxy root_path path prefix", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-17", "searched": true, "query": "HTTP Basic auth secrets compare_digest", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-18", "searched": true, "query": "disable docs in production", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-19", "searched": true, "query": "Swagger UI syntax highlighting turn off", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-20", "searched": true, "query": "GraphQL", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-21", "searched": true, "query": "Dockerfile FastAPI", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-22", "searched": true, "query": "run multiple workers CPU cores", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-23", "searched": true, "query": "HTTPS certificates Let's Encrypt", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-24", "searched": true, "query": "async def or def path operation functions", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "en-25", "searched": true, "query": "fastapi dev vs fastapi run", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "es-01", "searched": true, "query": "subir archivos File UploadFile", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-02", "searched": true, "query": "tareas en segundo plano background tasks", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-03", "searched": true, "query": "CORS middleware frontend origin", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-04", "searched": true, "query": "dividir rutas en varios archivos APIRouter", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-05", "searched": true, "query": "response model excluir contraseña campo salida", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-06", "searched": true, "query": "deshabilitar docs en producción openapi_url", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-07", "searched": true, "query": "SQL databases SQLModel SQLite FastAPI", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-08", "searched": true, "query": "probar endpoints pruebas TestClient", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-09", "searched": true, "query": "Header parameters convert underscore hyphen user-agent", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-10", "searched": true, "query": "middleware ejecutar código en cada petición", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-11", "searched": true, "query": "dependencias globales para todas las rutas", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-12", "searched": true, "query": "formulario usuario contraseña Form", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-13", "searched": true, "query": "código de estado de respuesta status_code", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-14", "searched": true, "query": "server-sent events streaming", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-15", "searched": true, "query": "variables de entorno archivo .env configuración", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-16", "searched": true, "query": "plantillas Jinja2 respuestas HTML", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-17", "searched": true, "query": "set cookie in response", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-18", "searched": true, "query": "testing dependencies override", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-19", "searched": true, "query": "webhooks callbacks notificar a otros sistemas", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-20", "searched": true, "query": "Swagger UI self-hosted static files CDN offline docs", "query_lang": "en", "said": "Déjame revisar la documentación."}
+{"id": "es-21", "searched": true, "query": "migrar Pydantic v1 a v2 herramienta", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-22", "searched": true, "query": "fijar versión FastAPI dependencias", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-23", "searched": true, "query": "reiniciar servidor automáticamente despliegue", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-24", "searched": true, "query": "entorno virtual crear", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "es-25", "searched": true, "query": "variables de entorno", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "un-en-01", "searched": true, "query": "deploy FastAPI AWS Lambda Mangum", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "un-en-02", "searched": true, "query": "Stripe payments integration", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "un-en-03", "searched": true, "query": "rate limiting", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "un-en-04", "searched": true, "query": "background tasks send email after signup", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "un-en-05", "searched": true, "query": "Sentry error monitoring", "query_lang": "en", "said": "Let me check the docs."}
+{"id": "un-es-01", "searched": true, "query": "desplegar FastAPI Azure App Service", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "un-es-02", "searched": true, "query": "desplegar FastAPI en Heroku", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "un-es-03", "searched": true, "query": "consumir mensajes Kafka", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "un-es-04", "searched": true, "query": "métricas Prometheus Grafana", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "un-es-05", "searched": true, "query": "pruebas de carga Locust", "query_lang": "es", "said": "Déjame revisar la documentación."}
+{"id": "st-en-01", "searched": false, "query": null, "query_lang": null, "said": "Hi there! What would you like to know about FastAPI?"}
+{"id": "st-en-02", "searched": false, "query": null, "query_lang": null, "said": "You're welcome! Glad it helped. Feel free to ask me anything else about FastAPI whenever you like."}
+{"id": "st-en-03", "searched": false, "query": null, "query_lang": null, "said": "Yes, I can hear you just fine! What would you like to know about FastAPI?"}
+{"id": "st-en-04", "searched": false, "query": null, "query_lang": null, "said": "I can answer questions about FastAPI using its official documentation. You can ask me how to define routes, handle request data, use dependencies, or anything else covered in the docs. What would you like to know?"}
+{"id": "st-es-01", "searched": false, "query": null, "query_lang": null, "said": "¡Hola, buenos días! ¿En qué te puedo ayudar con FastAPI hoy?"}
+{"id": "st-es-02", "searched": false, "query": null, "query_lang": null, "said": "¡De nada! Que tengas un buen día."}
+{"id": "st-es-03", "searched": false, "query": null, "query_lang": null, "said": "Sí, te escucho bien. ¿En qué te puedo ayudar sobre FastAPI?"}
+{"id": "st-es-04", "searched": false, "query": null, "query_lang": null, "said": "Puedo ayudarte con preguntas sobre FastAPI usando la documentación oficial. Por ejemplo, cómo crear rutas, validar datos, manejar parámetros o usar dependencias. Dime qué quieres aprender y lo busco en la documentación."}

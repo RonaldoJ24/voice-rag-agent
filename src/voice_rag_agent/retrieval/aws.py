@@ -36,6 +36,7 @@ class TitanEmbedder:
 
 class AwsHybridRetriever(LocalHybridRetriever):
     name = "aws-titan-s3vectors"
+    use_bm25 = True
 
     def __init__(
         self, chunks: list[dict], bm25: BM25, bucket: str, index: str, region: str
@@ -70,6 +71,15 @@ class AwsHybridRetriever(LocalHybridRetriever):
             if i is not None:
                 dense_rank.append(i)
                 dense[i] = 1.0 - float(v["distance"])  # cosine distance -> similarity
+        if not self.use_bm25:
+            return rrf([dense_rank]), dense
         sparse = self.bm25.scores(tokenize(query))
         sparse_rank = [int(i) for i in np.argsort(-sparse)[:POOL] if sparse[i] > 0]
         return rrf([dense_rank, sparse_rank]), dense
+
+
+class AwsDenseRetriever(AwsHybridRetriever):
+    """Titan + S3 Vectors only, no BM25. Exists for the retrieval ablation."""
+
+    name = "aws-titan-dense"
+    use_bm25 = False

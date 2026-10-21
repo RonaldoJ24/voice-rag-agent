@@ -308,3 +308,13 @@ class Bm25Retriever(LocalHybridRetriever):
         ranking = [int(i) for i in np.argsort(-sparse)[:POOL] if sparse[i] > 0]
         # BM25 scores stand in for dense ones when picking a same-language chunk.
         return rrf([ranking]), sparse
+
+
+class DenseRetriever(LocalHybridRetriever):
+    """Embeddings only, no BM25. Exists for the retrieval ablation."""
+
+    name = "dense-minilm"
+
+    def _candidates(self, query: str) -> tuple[dict[int, float], np.ndarray]:
+        dense = self.doc_vectors @ self.embed_query(query)
+        return rrf([np.argsort(-dense)[:POOL].tolist()]), dense
